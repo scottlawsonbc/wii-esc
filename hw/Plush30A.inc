@@ -114,6 +114,10 @@
 ;*************************
 ; Timings                *
 ;*************************
+
+.equ	CHANGE_TIMEOUT	= 0x01
+.equ	CHANGE_TOT_LOW	= 0x01
+
 .equ    MIN_DUTY        = 3*POWER_RANGE/100     ; Min power 3%
 
 .equ    PWR_MAX_RPM1    = POWER_RANGE/4
@@ -128,4 +132,4 @@
 .equ    PWR_RANGE1      = 0x40      ; ( ~2400 RPM )
 .equ    PWR_RANGE2      = 0x20
 
-.equ    ENOUGH_GOODIES  = 60
+.equ	ENOUGH_GOODIES	= 60
