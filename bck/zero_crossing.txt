@@ -1,0 +1,71 @@
+.if CLK_SCALE==2
+  .macro __waitp
+                nop
+                nop
+                nop
+  .endmacro
+.else
+  .macro __waitp
+  .endmacro
+.endif
+
+
+wait_for_low:   sbrs    flags0, OCT1_PENDING
+                ret
+                clr     temp1
+                clr     temp2
+                
+                sbic    ACSR, ACO
+                inc     temp1
+                nop
+                __waitp
+                sbic    ACSR, ACO
+                inc     temp1
+                inc     temp2
+                __waitp
+                sbic    ACSR, ACO
+                inc     temp1
+                nop
+                __waitp
+                sbic    ACSR, ACO
+                inc     temp1
+                inc     temp2
+                __waitp
+                sbic    ACSR, ACO
+                inc     temp1
+                inc     temp2
+                __waitp
+
+                cp      temp2, temp1
+                brcc    wait_for_low 
+                ret
+                
+wait_for_high:  sbrs    flags0, OCT1_PENDING
+		ret
+                clr     temp1
+                clr     temp2
+                
+                sbis    ACSR, ACO
+                inc     temp1
+                nop
+                __waitp
+                sbis    ACSR, ACO
+                inc     temp1
+                inc     temp2
+                __waitp
+                sbis    ACSR, ACO
+                inc     temp1
+                nop
+                __waitp
+                sbis    ACSR, ACO
+                inc     temp1
+                inc     temp2
+                __waitp
+                sbis    ACSR, ACO
+                inc     temp1
+                inc     temp2
+                __waitp
+                
+                cp      temp2, temp1
+                brcc    wait_for_high
+                ret

@@ -32,10 +32,10 @@
 ; Register Definitions
 .def	i_sreg		 = r1	; status register save in interrupts
 .def	tcnt0_power_on	 = r2	; timer0 counts nFETs are switched on
-;.def	...              = r3	; 
+.def	tcnt0_change_tot = r3	; when zero, tcnt0_power_on is changed by one (inc or dec)
 ;.def	...	 	 = r4	; upper 8bit timer1 (software-) register
 .def	uart_cnt	 = r5
-.def    tcnt0_pwroff     = r6   ; timer0 counts nFETs are switched off
+.def	tcnt0_pwron_next = r6
 
 .def	start_rcpuls_l	 = r7
 .def	start_rcpuls_h	 = r8
@@ -198,25 +198,6 @@ version:	.db	0x0d, 0x0a
 		.db	"bk",Typ,"410r06"
 		.db	0x0d, 0x0a
 
-;******************************************************************************
-;* MACRO
-;*	SetPWMi
-;* DECRIPTION
-;*	Set PWM immidiate
-;* USAGE
-;*	SetPWMi(val)
-;* STATISTICS
-;*      Register usage: none
-;******************************************************************************
-.macro SetPWMi
-                push    temp1
-                ldi     temp1, @0
-                com     temp1
-                rcall   set_pwm
-;                rcall   eval_power_state
-                pop     temp1
-.endmacro
-
 
 ;-----bko-----------------------------------------------------------------
 ; init after reset
@@ -301,7 +282,11 @@ clear_ram:	st	X+, temp1
 		rcall	wait30ms
 
 control_start:	; init variables
-                SetPWMi(MIN_DUTY-1)
+		ldi	temp1, CHANGE_TIMEOUT
+		mov	tcnt0_change_tot, temp1
+		ldi	temp1, NO_POWER
+		mov	tcnt0_power_on, temp1
+
 		ldi	temp1, 0		; reset error counters
 		mov	current_err,temp1
 		mov	sys_control, temp1
@@ -447,13 +432,157 @@ t1ovfl_99:	out	SREG, i_sreg
 		reti
 ;-----bko-----------------------------------------------------------------
 ; timer0 overflow interrupt
-t0ovfl_int:     in	i_sreg, SREG
-;                DbgLEDOff
-                sbrc    flags0, I_OFF_CYCLE
-                rjmp    t0_on_cycle
+/*
+t0ovfl_int:     in      i_sreg, SREG
+		sbrc	flags0, I_OFF_CYCLE
+		rjmp	t0_on_cycle
 
-t0_off_cycle:   
-		out	TCNT0, tcnt0_pwroff	; reload t0
+t0_off_cycle:	sbr	flags2, (1<<COMP_SAVE)
+		sbic	ACSR, ACO		; mirror inverted ACO to bit-var
+		cbr	flags2, (1<<COMP_SAVE)
+
+	; changes in PWM ?
+		mov	i_temp1, tcnt0_power_on
+		mov	i_temp2, tcnt0_pwron_next
+		cp	i_temp2, i_temp1
+		brsh	lower_pwm		; next power-on-time is lower or same
+higher_pwm:	dec	tcnt0_change_tot	; change-timeout passed ?
+		brne	nFET_off		; .. no
+		ldi	i_temp2, CHANGE_TIMEOUT	; .. yes - change-timeout for more power
+		mov	tcnt0_change_tot, i_temp2 ; reset change-timeout and decrement
+		dec	i_temp1			; <dec> increases power-on-time
+		rjmp	set_next_pwm
+
+lower_pwm:	breq	nFET_off		; pwm is unchanged
+		dec	tcnt0_change_tot	; change-timeout passed ?
+		brne	nFET_off		; .. no
+		ldi	i_temp2, CHANGE_TOT_LOW ; .. yes - change-timeout for lower power
+		mov	tcnt0_change_tot, i_temp2 ; reset change-timeout and increment
+		inc	i_temp1			; <inc> decreases power-on-time
+
+set_next_pwm:	mov	tcnt0_power_on, i_temp1
+
+nFET_off:	sbr	flags0, (1<<I_OFF_CYCLE) ; PWM state = off cycle
+
+	; switch appropriate nFET off
+		sbrs	flags0, C_FET
+		rjmp	test_AnFET
+
+; C_FET is active
+		sbrs	flags1, FULL_POWER
+		CnFET_off		; Cn off
+		rjmp	reload_t0_off_cycle
+
+test_AnFET:	sbrs	flags0, A_FET
+		rjmp	switch_BnFET
+
+; A_FET is active
+switch_AnFET:	sbrs	flags1, FULL_POWER
+		AnFET_off		; An off
+		rjmp	reload_t0_off_cycle
+
+; B_FET is active
+switch_BnFET:	sbrs	flags1, FULL_POWER
+		BnFET_off		; Bn off
+
+	; reload timer0 with the appropriate value
+reload_t0_off_cycle:
+		mov	i_temp1, tcnt0_power_on
+		subi	i_temp1, -POWER_RANGE	; adi i_temp1, POWER_RANGE
+		com	i_temp1			; timer0 increments
+		out	TCNT0, i_temp1
+
+		rjmp	t0_int_exit
+
+; reload timer90 + switch appropriate nFET on
+t0_on_cycle:	mov	i_temp1, tcnt0_power_on
+		out	TCNT0, i_temp1		; reload t0
+		cbr	flags0, (1<<I_OFF_CYCLE) ; PWM state = on cycle (no off cycle)
+
+; switch appropriate nFET on
+nFET_on:	sbrs	flags0, C_FET		; is Cn choppered ?
+		rjmp	test_AnFET_on			; .. no - test An
+		sbrs	flags1, POWER_OFF
+		CnFET_on		; Cn on
+		rjmp	eval_power_state
+test_AnFET_on:	sbrs	flags0, A_FET		; is An choppered ?
+		rjmp	sw_BnFET_on			; .. no - Bn has to be choppered
+		sbrs	flags1, POWER_OFF
+		AnFET_on		; An on
+		rjmp	eval_power_state
+sw_BnFET_on:	sbrs	flags1, POWER_OFF
+		BnFET_on		; Bn on
+
+	; evaluate power state
+eval_power_state:
+		cpi	i_temp1, MAX_POWER+1
+		brsh	not_full_power
+	; FULL POWER
+		sbr	flags1, (1<<FULL_POWER)	; tcnt0_power_on = MAX_POWER means FULL_POWER
+                cbr     flags1, (1<<POWER_OFF)
+                ;DbgLEDOn
+		rjmp	t0_int_exit
+not_full_power:	cpi	i_temp1, NO_POWER
+		brlo	neither_full_nor_off
+	; POWER OFF
+		cbr	flags1, (1<<FULL_POWER)	; tcnt0_power_on = NO_POWER means power off
+                sbr     flags1, (1<<POWER_OFF)
+                ;DbgLEDOff
+		rjmp	t0_int_exit
+neither_full_nor_off:
+		cbr	flags1, (1<<FULL_POWER)	; tcnt0_power_on = MAX_POWER means FULL_POWER
+		cbr	flags1, (1<<POWER_OFF)
+                ;DbgLEDOff
+
+t0_int_exit:	sbrc	flags2, POFF_CYCLE
+		sbr	flags1, (1<<POWER_OFF)
+		out	SREG, i_sreg
+                reti
+*/                
+t0ovfl_int:     in      i_sreg, SREG
+		sbrs	flags0, I_OFF_CYCLE
+		rjmp	t0_off_cycle
+
+t0_on_cycle:    
+                ; switch appropriate nFET on as soon as possible
+		sbrs	flags0, C_FET		; is Cn choppered ?
+		rjmp	test_AnFET_on			; .. no - test An
+		sbrs	flags1, POWER_OFF
+		CnFET_on		        ; Cn on
+		rjmp	eval_power_state
+test_AnFET_on:	sbrs	flags0, A_FET		; is An choppered ?
+		rjmp	sw_BnFET_on			; .. no - Bn has to be choppered
+		sbrs	flags1, POWER_OFF
+		AnFET_on		        ; An on
+		rjmp	eval_power_state
+sw_BnFET_on:	sbrs	flags1, POWER_OFF
+		BnFET_on		        ; Bn on
+eval_power_state:
+	        ; evaluate power state               
+                mov     tcnt0_power_on, tcnt0_pwron_next 
+		cbr	flags0, (1<<I_OFF_CYCLE); PWM state = on cycle
+		cbr	flags1, (1<<FULL_POWER)
+		sbr	flags1, (1<<POWER_OFF)
+                mov     i_temp1, tcnt0_power_on
+                cpi     i_temp1, NO_POWER 
+                brsh    reload_t0_on_cycle
+;		sbrs	flags2, POFF_CYCLE
+		cbr	flags1, (1<<POWER_OFF)
+                cpi     i_temp1, MAX_POWER 
+                brsh    reload_t0_on_cycle      ; not a full power 
+                sbr     flags1, (1<<FULL_POWER)
+                sbr     flags0, (1<<I_OFF_CYCLE); PWM state = off cycle
+reload_t0_on_cycle:
+                out     SREG, i_sreg
+                out     TCNT0, tcnt0_power_on   ; reload t0
+                reti
+               
+t0_off_cycle:
+	        ; reload timer0 with the appropriate value
+                mov     i_temp1, tcnt0_power_on
+                subi    i_temp1, -POWER_RANGE   ; adi i_temp1, POWER_RANGE
+                com     i_temp1                 ; timer0 increments
+		out	TCNT0, i_temp1	        ; reload t0
                 ; mirror inverted ACO to bit-var
 		sbr	flags2, (1<<COMP_SAVE)
 		sbic	ACSR, ACO		
@@ -465,62 +594,10 @@ t0_off_cycle:
 		CnFET_off
 		AnFET_off
                 BnFET_off
-
-
-                mov     i_temp1, tcnt0_pwroff
-                cpi     i_temp1, 0
-                breq    t0_on_cycle_t1
-                cpi     i_temp1, 1
-                breq    t0_on_cycle_t0
-
                 out     SREG, i_sreg
-                reti
+		reti
 
-t0_on_cycle_t1:
-                nop
-                nop                
-                nop
-                nop                
-                nop
-;                nop                
-;                nop
-;                nop                
                 
-                
-t0_on_cycle_t0:
-;                nop
-;                nop      
-;                nop
-;                nop      
-;                DbgLEDOn          
-
-
-t0_on_cycle:
-                sbrc    flags1, POWER_OFF
-                rjmp    t0_on_cycle_tcnt
-                ; switch appropriate nFET on as soon as possible
-		sbrs	flags0, C_FET		; is Cn choppered ?
-		rjmp	test_AnFET_on			; .. no - test An
-		CnFET_on		        ; Cn on
-		rjmp	t0_on_cycle_tcnt
-test_AnFET_on:	sbrs	flags0, A_FET		; is An choppered ?
-		rjmp	sw_BnFET_on			; .. no - Bn has to be choppered
-		AnFET_on		        ; An on
-		rjmp	t0_on_cycle_tcnt
-sw_BnFET_on:    
-                BnFET_on                        ; Bn on
-t0_on_cycle_tcnt:
-                cbr     flags0, (1<<I_OFF_CYCLE); PWM state = on cycle
-                mov     i_temp1, tcnt0_power_on
-                cbr     flags1, (1<<FULL_POWER)
-                cpi     i_temp1, MAX_POWER
-                brsh    t0_on_cycle_not_full_power
-                sbr     flags1, (1<<FULL_POWER)
-                sbr     flags0, (1<<I_OFF_CYCLE)
-t0_on_cycle_not_full_power:
-                out     TCNT0, tcnt0_power_on   ; reload t0
-                out     SREG, i_sreg
-                reti                   
 ;-----bko-----------------------------------------------------------------
 ; beeper: timer0 is set to 1µs/count
 beep_f1:	ldi	temp4, 200
@@ -585,7 +662,7 @@ beep2_BpCn22:	in	temp1, TCNT0
 		brne	beep2_BpCn21
 		dec	temp2
 		brne	beep2_BpCn20
-                ret                
+		ret
 ;-----bko-----------------------------------------------------------------
 tcnt1_to_temp:	ldi	temp4, EXT0_DIS		; disable ext0int
 		out	GIMSK, temp4
@@ -624,131 +701,69 @@ eval_sys_i_ok:	tst	current_err
 		breq	eval_sys_ub
 		dec	current_err
 
-eval_sys_ub:	
+	; control voltage
+eval_sys_ub:	rjmp	eval_sys_ub_ok
+
+		mov	i_temp1, sys_control
+		cpi	i_temp1, POWER_RANGE
+		brcc	eval_sys_s99
+		inc	sys_control
+		rjmp	eval_sys_s99
+
+eval_sys_ub_ok:	tst	sys_control
+		breq	eval_sys_s99
+		dec	sys_control
+		
 eval_sys_s99:	ret
 
 panic_exit:	; !!!!!! OVERCURRENT !!!!!!!!
 		cli
 		rjmp	reset
 ;-----bko-----------------------------------------------------------------
-;******************************************************************************
-;* FUNCTION
-;*	set_pwm
-;* DECRIPTION
-;*	Calculates tcnt0 values for ON and off cycles.
-;*	Performs PWM correction.
-;* USAGE
-;*	temp1
-;* STATISTICS
-;*	Register usage: temp1
-;******************************************************************************
-set_pwm:
-;                inc     temp1                   ; Make it shorter by 3 cycles
-;                inc     temp1
-;                inc     temp1
+set_new_duty:   mov   temp1, ZH
+                sub   temp1, sys_control
+                brcc   set_new_duty10
+                ldi   temp1, MIN_DUTY-1       ; evaluate RPM range
+set_new_duty10: lds   temp2, timing_x
+                tst   temp2
+                brne   set_new_duty12
+                lds   temp2, timing_h         ; get actual RPM reference high
+                cpi   temp2, PWR_RANGE1*CLK_SCALE ; lower range1 ?
+                brcs   set_new_duty20         ; on carry - test next range ; lower as range1
+set_new_duty12: sbr   flags2, (1<<RPM_RANGE1)
+                sbr   flags2, (1<<RPM_RANGE2)
+                ldi   temp2, PWR_MAX_RPM1     ; higher than range1 power max ?
+                cp   temp1, temp2
+                brcs   set_new_duty40         ; on carry - not higher, no restriction
+                mov   temp1, temp2            ; low (range1) RPM - set PWR_MAX_RPM1
+                rjmp   set_new_duty40         ; higher as range1
+set_new_duty20: cpi   temp2, PWR_RANGE2*CLK_SCALE; lower range2 ?
+                brcs   set_new_duty30         ; on carry - not lower, no restriction
+set_new_duty22: cbr   flags2, (1<<RPM_RANGE1)
+                sbr   flags2, (1<<RPM_RANGE2)
+                ldi   temp2, PWR_MAX_RPM2     ; higher than range2 power max ?
+                cp   temp1, temp2
+                brcs   set_new_duty40         ; on carry - not higher, no restriction
+                mov   temp1, temp2            ; low (range2) RPM - set PWR_MAX_RPM2
+                rjmp   set_new_duty40         ; higher as range2
+set_new_duty30: cbr   flags2, (1<<RPM_RANGE1)+(1<<RPM_RANGE2)  ; range limits are evaluated - look for STARTUP conditions
+set_new_duty40: sbrs   flags2, STARTUP
+                rjmp   set_new_duty50
+                ldi   temp3, PWR_STARTUP      ; at least PWR_STARTUP ?
+                cp   temp1, temp3
+                brcc   set_new_duty42         ; on no carry - higher than PWR_STARTUP, test PWR_MAX_STARTUP
+                ldi   temp1, PWR_STARTUP      ; lower - set to PWR_STARTUP
+                rjmp   set_new_duty50
+set_new_duty42: ldi   temp3, PWR_MAX_STARTUP  ; limit power in startup phase
+                cp   temp1, temp3
+                brcs   set_new_duty50         ; on carry - not higher, test range 2
+                mov   temp1, temp3            ; set PWR_MAX_STARTUP limit
+set_new_duty50: com   temp1                   ; down-count to up-count (T0)
+                mov   tcnt0_pwron_next, temp1 ; save in next
+   ; tcnt0_power_on is updated to tcnt0_pwron_next in acceptable steps
+;!!!!!
                 mov     tcnt0_power_on, temp1
-                subi    temp1, -POWER_RANGE     
-                com     temp1   
-                inc     temp1            
-                inc     temp1            
-                mov     tcnt0_pwroff, temp1
-                ret
-
-;******************************************************************************
-;* FUNCTION
-;*	eval_power_state
-;* DECRIPTION
-;*	Evaluates current state
-;* USAGE
-;*	temp1
-;* STATISTICS
-;*	Register usage: none
-;******************************************************************************
-eval_power_state:
-                cpi     temp1, MAX_POWER+1
-                brsh    not_full_power
-                ; FULL POWER
-;		sbr	flags1, (1<<FULL_POWER)	; tcnt0_power_on = MAX_POWER means FULL_POWER
-                cbr     flags1, (1<<POWER_OFF)
-                ;DbgLEDOn
-		rjmp	eval_power_state_exit
-not_full_power:	cpi	temp1, NO_POWER
-		brlo	neither_full_nor_off
-	; POWER OFF
-;		cbr	flags1, (1<<FULL_POWER)	; tcnt0_power_on = NO_POWER means power off
-                sbr     flags1, (1<<POWER_OFF)
-                ;DbgLEDOff
-		rjmp	eval_power_state_exit
-neither_full_nor_off:
-;		cbr	flags1, (1<<FULL_POWER)	; tcnt0_power_on = MAX_POWER means FULL_POWER
-                cbr     flags1, (1<<POWER_OFF)
-                ;DbgLEDOff
-eval_power_state_exit:    
-                sbrc    flags2, POFF_CYCLE
-		sbr	flags1, (1<<POWER_OFF)
-                ret
-;******************************************************************************
-;* FUNCTION
-;*	set_new_duty
-;* DECRIPTION
-;*     1) Evaluates duty cycle
-;*     2) Limits power to sys_control
-;*     3) Limits starup power
-;*     4) Limits RPM ranges power
-;*     5) Increments sys_control up to POWER_RANGE
-;* USAGE
-;*      ZH (0-POWER_RANGE)
-;* STATISTICS
-;*      Register usage: temp1, temp2, temp3 
-;******************************************************************************
-set_new_duty:   
-                mov     temp1, ZH
-		mov	temp2, sys_control	; Limit PWM to sys_control
-		cp	temp1, temp2
-		brcs	set_new_duty10
-		mov	temp1, temp2
-                cpi     temp2, POWER_RANGE
-		breq	set_new_duty10
-                inc     sys_control             ; Build up sys_control to POWER_RANGE
-set_new_duty10: lds     temp2, timing_x
-                tst     temp2
-                brne    set_new_duty12
-                lds     temp2, timing_h         ; get actual RPM reference high
-                cpi     temp2, PWR_RANGE1*CLK_SCALE ; lower range1 ?
-                brcs    set_new_duty20          ; on carry - test next range ; lower as range1
-set_new_duty12: sbr     flags2, (1<<RPM_RANGE1)
-                sbr     flags2, (1<<RPM_RANGE2)
-                ldi     temp2, PWR_MAX_RPM1     ; higher than range1 power max ?
-                cp      temp1, temp2
-                brcs    set_new_duty40          ; on carry - not higher, no restriction
-                mov     temp1, temp2            ; low (range1) RPM - set PWR_MAX_RPM1
-                rjmp    set_new_duty40          ; higher as range1
-set_new_duty20: cpi     temp2, PWR_RANGE2*CLK_SCALE; lower range2 ?
-                brcs    set_new_duty30          ; on carry - not lower, no restriction
-set_new_duty22: cbr     flags2, (1<<RPM_RANGE1)
-                sbr     flags2, (1<<RPM_RANGE2)
-                ldi     temp2, PWR_MAX_RPM2     ; higher than range2 power max ?
-                cp      temp1, temp2
-                brcs    set_new_duty40          ; on carry - not higher, no restriction
-                mov     temp1, temp2            ; low (range2) RPM - set PWR_MAX_RPM2
-                rjmp    set_new_duty40          ; higher as range2
-set_new_duty30: cbr     flags2, (1<<RPM_RANGE1)+(1<<RPM_RANGE2)  ; range limits are evaluated - look for STARTUP conditions
-set_new_duty40: sbrs    flags2, STARTUP
-                rjmp    set_new_duty50
-                ldi     temp3, PWR_STARTUP      ; at least PWR_STARTUP ?
-                cp      temp1, temp3
-                brcc    set_new_duty42          ; on no carry - higher than PWR_STARTUP, test PWR_MAX_STARTUP
-                ldi     temp1, PWR_STARTUP      ; lower - set to PWR_STARTUP
-                rjmp    set_new_duty50
-set_new_duty42: ldi     temp3, PWR_MAX_STARTUP  ; limit power in startup phase
-                cp      temp1, temp3
-                brcs    set_new_duty50          ; on carry - not higher, test range 2
-                mov     temp1, temp3            ; set PWR_MAX_STARTUP limit
-set_new_duty50: com     temp1                   ; down-count to up-count (T0)
-                cli 
-                rcall   eval_power_state        ; evaluate power state
-                rcall   set_pwm                 ; set new PWM
-                sei
+;!!!!!                
                 ret
 ;-----bko-----------------------------------------------------------------
 evaluate_rpm:	cbr	flags1, (1<<EVAL_RPM)
@@ -886,17 +901,12 @@ update_t00:
 		cpi	temp3, 0x4c*CLK_SCALE	; 120.000 RPM
 		brcc	update_t90
 	; set RPM to 120.000
-
-update_t10:
-                ldi     temp1, PWR_MAX_RPM2
-                mov     sys_control, temp1
-
-;update_t10:    ldi     temp4, 0x01*CLK_SCALE
-;		ldi	temp3, 0x4c*CLK_SCALE
-;		tst	run_control 
-;		brne	update_t90		; just active
-;		ldi	temp1, 0xff		; not active - reactivate
-;		mov	run_control, temp1
+update_t10:	ldi	temp4, 0x01*CLK_SCALE
+		ldi	temp3, 0x4c*CLK_SCALE
+		tst	run_control 
+		brne	update_t90		; just active
+		ldi	temp1, 0xff		; not active - reactivate
+		mov	run_control, temp1
 
 update_t90:	sts	timing_l, temp3
 		sts	timing_h, temp4
@@ -1017,10 +1027,9 @@ set_tot2:
 ;-----bko-----------------------------------------------------------------
 switch_power_off:
 		ldi	ZH, MIN_DUTY-1		; ZH is new_duty
-                SetPWMi(MIN_DUTY-1)
-
-                ldi     temp1, 0                ; reset limiter
-		mov	sys_control, temp1
+		ldi	temp1, NO_POWER		; lowest tcnt0_power_on value
+		mov	tcnt0_power_on, temp1
+		mov	tcnt0_pwron_next, temp1
 
                 ldi     temp1, INIT_PB          ; all off
                 out     PORTB, temp1
@@ -1029,6 +1038,9 @@ switch_power_off:
                 ldi     temp1, INIT_PD          ; all off
 		out	PORTD, temp1
 
+
+                ldi     temp1, CHANGE_TIMEOUT   ; reset change-timeout
+		mov	tcnt0_change_tot, temp1
 		sbr	flags1, (1<<POWER_OFF)	; disable power on
 		cbr	flags2, (1<<POFF_CYCLE)
 		sbr	flags2, (1<<STARTUP)
@@ -1075,8 +1087,15 @@ mot_brk90:
                 ret
 
 
-wait64ms:
-                ldi     temp1, 1*CLK_SCALE
+.macro SetPWM
+                ldi     temp1, @0
+                com     temp1
+                mov     tcnt0_pwron_next, temp1
+                mov     tcnt0_power_on, temp1
+.endmacro
+
+wait120ms:
+                ldi     temp1, 1
                 mov     t1_timeout, temp1
 wait120ms_wait_for_t1:    
                 tst     t1_timeout
@@ -1092,30 +1111,32 @@ pre_align:      ldi     temp1, INIT_PB  ; all off
                 ldi     temp1, 20*CLK_SCALE
 pp_FETs_off_wt: dec     temp1
                 brne    pp_FETs_off_wt
-                cbr     flags1, (1<<POWER_OFF)  ; enable power
-                ldi     temp1, PWR_STARTUP      ; set limiter
-		mov	sys_control, temp1
-                SetPWMi(PWR_STARTUP*1/4);
+                SetPWM(PWR_STARTUP*1/4);
                 rcall   com5com6
                 rcall   com6com1
-                rcall   wait64ms
-                rcall   wait64ms
-                SetPWMi(PWR_STARTUP*2/4);
-                rcall   wait64ms
-                SetPWMi(PWR_STARTUP*3/4);
-                rcall   wait64ms
-                SetPWMi(PWR_STARTUP);               
+                rcall   wait120ms
+                SetPWM(PWR_STARTUP*2/4);
+                rcall   wait120ms
+                SetPWM(PWR_STARTUP*3/4);
+                rcall   wait120ms
+                SetPWM(PWR_STARTUP);               
+                rcall   wait120ms
                 ret                
+                
+                
 ;-----bko-----------------------------------------------------------------
 ; **** startup loop ****
 init_startup:	rcall	switch_power_off
 		rcall	motor_brake
 wait_for_power_on:
 		rcall	evaluate_rc_puls
-		cpi	ZH, MIN_DUTY + 1
+		cpi	ZH, MIN_DUTY
 		brcs	wait_for_power_on
                 AcInit
                 rcall   pre_align
+
+                DbgLEDOn
+
                 cbr     flags2, (1<<SCAN_TIMEOUT)
 		ldi	temp1, 0
 		sts	goodies, temp1
@@ -1333,10 +1354,6 @@ s6_run1:	ldi	temp1, 0xff
 		rcall	calc_next_timing
 		rcall	set_OCT1_tot
 
-                ldi     temp1, 1                ; set limiter, soft transition to run
-		mov	sys_control, temp1
-
-
                 DbgLEDOff
 
 		cbr	flags2, (1<<STARTUP)
@@ -1444,7 +1461,7 @@ run6:		rcall	wait_for_high
 		breq	run6_2			; higher than 610 RPM if equ 1
 run_to_start:	sbr	flags2, (1<<STARTUP)
 		cbr	flags2, (1<<POFF_CYCLE)
-                rjmp    wait_for_power_on
+		rjmp	wait_for_power_on
 
 run6_2:		cbr	flags2, (1<<POFF_CYCLE)
 		tst	run_control		; only once !

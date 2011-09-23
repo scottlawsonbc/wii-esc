@@ -122,14 +122,13 @@
 ;*************************
 ; Timings                *
 ;*************************
-.equ    MIN_DUTY        = 3*POWER_RANGE/100     ; Min power 3%
+.equ    MIN_DUTY        = 5*POWER_RANGE/100     ; Min power 5%
 
-.equ    PWR_MAX_RPM1    = POWER_RANGE/4
-.equ    PWR_MAX_RPM2    = POWER_RANGE/2
+.equ	PWR_MAX_RPM1	= POWER_RANGE/4
+.equ	PWR_MAX_RPM2	= POWER_RANGE/2
 
-.equ	PWR_STARTUP	= 5*POWER_RANGE/100     ;  5%
-.equ    PWR_MAX_STARTUP = 12*POWER_RANGE/100    ; 15%
-
+.equ	PWR_STARTUP	= MIN_DUTY
+.equ    PWR_MAX_STARTUP = MIN_DUTY + 2*POWER_RANGE/100
 
 .equ	timeoutSTART	= 65000
 .equ	timeoutMIN	= 48000
