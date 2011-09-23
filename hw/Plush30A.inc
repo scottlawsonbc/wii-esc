@@ -128,4 +128,4 @@
 .equ    PWR_RANGE1      = 0x40      ; ( ~2400 RPM )
 .equ    PWR_RANGE2      = 0x20
 
-.equ    ENOUGH_GOODIES  = 60
+.equ	ENOUGH_GOODIES	= 60
