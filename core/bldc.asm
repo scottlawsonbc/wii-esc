@@ -1482,83 +1482,39 @@ restart_control:
 
 ;-----bko-----------------------------------------------------------------
 ; *** scan comparator utilities ***
-.if CLK_SCALE==2
-  .macro __waitp
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-  .endmacro
-.else
-  .macro __waitp
-                nop
-                nop
-                nop
-  .endmacro
-.endif
-
-wait_for_low:   sbrs    flags0, OCT1_PENDING
+.macro __wait_for_filter
+                clc
+                sbis    ACSR, ACO
+                sec
+                brcc    wait_for_filter_1
+                inc     temp2
+wait_for_filter_1:
+                rol     temp1
+                brcc    wait_for_filter_2
+                dec     temp2
+wait_for_filter_2:
+.endmacro
+                                
+wait_for_low:   
+                ldi     temp1, 0xFF
+                ldi     temp2, 8
+wait_for_low_loop:
+                sbrs    flags0, OCT1_PENDING
                 ret
-                clr     temp1
-                clr     temp2
-                
-                sbic    ACSR, ACO
-                inc     temp1
-                __waitp
-                sbic    ACSR, ACO
-                inc     temp1
-                inc     temp2
-                __waitp
-                sbic    ACSR, ACO
-                inc     temp1
-                __waitp
-                sbic    ACSR, ACO
-                inc     temp1
-                inc     temp2
-                __waitp
-                sbic    ACSR, ACO
-                inc     temp1
-                __waitp
-                sbic    ACSR, ACO
-                inc     temp1
-                inc     temp2
-                __waitp
-
-                cp      temp2, temp1
-                brcc    wait_for_low
+                __wait_for_filter
+                cpi     temp2, 4
+                brcc    wait_for_low_loop
                 ret
-                
-wait_for_high:  sbrs    flags0, OCT1_PENDING
-		ret
-                clr     temp1
-                clr     temp2
-                
-                sbis    ACSR, ACO
-                inc     temp1
-                __waitp
-                sbis    ACSR, ACO
-                inc     temp1
-                inc     temp2
-                __waitp
-                sbis    ACSR, ACO
-                inc     temp1
-                __waitp
-                sbis    ACSR, ACO
-                inc     temp1
-                inc     temp2
-                __waitp
-                sbis    ACSR, ACO
-                inc     temp1
-                __waitp
-                sbis    ACSR, ACO
-                inc     temp1
-                inc     temp2
-                __waitp
-
-                cp      temp2, temp1
-                brcc    wait_for_high
+                               
+wait_for_high:   
+                ldi     temp1, 0x0
+                ldi     temp2, 0
+wait_for_high_loop:
+                sbrs    flags0, OCT1_PENDING
+                ret
+                __wait_for_filter
+                cpi     temp2, 5
+                brcs    wait_for_high_loop
                 ret
 ;-----bko-----------------------------------------------------------------
 ; *** commutation utilities ***
