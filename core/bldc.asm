@@ -26,8 +26,6 @@
 
 .equ    T1STOP     = 0x00
 .equ    T1CK8      = 0x02
-.equ    EXT0_DIS   = 0x00       ; disable ext0int
-.equ    EXT0_EN    = 0x40       ; enable ext0int
 
 ;**** **** **** **** ****
 ; Register Definitions
@@ -171,25 +169,38 @@ uart_data:      .byte   100             ; only for debug requirements
 
 ;-----bko-----------------------------------------------------------------
 ; reset and interrupt jump table
+
+#if !defined(__ext_int0)
+ #define __ext_int0 reti 
+ .macro __ext_int0_isr
+ .endmacro
+#endif
+
+#if !defined(__ext_int1)
+ #define __ext_int1 reti 
+ .macro __ext_int1_isr
+ .endmacro
+#endif
+
                 rjmp    reset
-                rjmp    ext_int0
-                nop     ; ext_int1
-                nop     ; t2oc_int
-                nop     ; t2ovfl_int
-                nop     ; icp1
+                __ext_int0          ; ext_int0
+                __ext_int1          ; ext_int1
+                reti                ; t2oc_int
+                reti                ; t2ovfl_int
+                reti                ; icp1
                 rjmp    t1oca_int
-                nop     ; t1ocb_int
+                reti                ; t1ocb_int
                 rjmp    t1ovfl_int
                 rjmp    t0ovfl_int
-                nop     ; spi_int
-                nop     ; urxc
-                nop     ; udre
-                nop     ; utxc
-; not used      nop     ; adc_int
-; not used      nop     ; eep_int
-; not used      nop     ; aci_int
-; not used      nop     ; wire2_int
-; not used      nop     ; spmc_int
+                reti                ; spi_int
+                reti                ; urxc
+                reti                ; udre
+                reti                ; utxc
+                reti                ; adc_int
+                reti                ; eep_int
+                reti                ; aci_int
+                reti                ; wire2_int
+                reti                ; spmc_int
 
 
 version:        .db     0x0d, 0x0a
@@ -311,11 +322,7 @@ control_start:  ; init variables
 
                 sei                             ; enable all interrupts
 
-; init rc-puls
-                ldi     temp1, (1<<ISC01)+(1<<ISC00)
-                out     MCUCR, temp1            ; set next int0 to rising edge
-                ldi     temp1, EXT0_EN          ; enable ext0int
-                out     GIMSK, temp1
+                init_input
 i_rc_puls1:     ldi     temp3, 10               ; wait for this count of receiving power off
 i_rc_puls2:     sbrs    flags1, RC_PULS_UPDATED
                 rjmp    i_rc_puls2
@@ -339,87 +346,9 @@ i_rc_puls2:     sbrs    flags1, RC_PULS_UPDATED
                 rcall   set_all_timings
 
                 rjmp    init_startup
-                
 ;-----bko-----------------------------------------------------------------
-; external interrupt0 = rc pulse input
-ext_int0:       in      i_sreg, SREG
-                clr     i_temp1                 ; disable extint edge may be changed
-                out     GIMSK, i_temp1
-
-; evaluate edge of this interrupt
-                in      i_temp1, MCUCR
-                sbrs    i_temp1, ISC00
-                rjmp    falling_edge            ; bit is clear = falling edge
-
-; should be rising edge - test rc impuls level state for possible jitter
-                sbis    PIND, rcp_in
-                rjmp    extint1_exit            ; jump, if low state
-
-; rc impuls is at high state
-                ldi     i_temp1, (1<<ISC01)
-                out     MCUCR, i_temp1          ; set next int0 to falling edge
-
-; get timer1 values
-                in      i_temp1, TCNT1L
-                in      i_temp2, TCNT1H
-                mov     start_rcpuls_l, i_temp1
-                mov     start_rcpuls_h, i_temp2
-; test rcpulse interval
-                cbr     flags2, (1<<RC_INTERVAL_OK) ; preset to not ok
-                lds     i_temp3, stop_rcpuls_l
-                sub     i_temp1, i_temp3
-                lds     i_temp3, stop_rcpuls_h
-                sbc     i_temp2, i_temp3
-                cpi     i_temp1, low (MAX_INT_FR*CLK_SCALE)
-                ldi     i_temp3, high(MAX_INT_FR*CLK_SCALE)       ; test range high
-                cpc     i_temp2, i_temp3
-                brsh    extint1_fail                              ; through away
-                cpi     i_temp1, low (MIN_INT_FR*CLK_SCALE)
-                ldi     i_temp3, high(MIN_INT_FR*CLK_SCALE)      ; test range low
-                cpc     i_temp2, i_temp3
-                brlo    extint1_fail                              ; through away
-                sbr     flags2, (1<<RC_INTERVAL_OK) ; set to rc impuls value is ok !
-                rjmp    extint1_exit
-extint1_fail:   tst     control_timeout
-                breq    extint1_exit
-                dec     control_timeout
-                rjmp    extint1_exit
-; rc impuls is at low state
-falling_edge:   sbic    PIND, rcp_in            ; test level of rc impuls
-                rjmp    extint1_exit            ; seems to be a spike
-                ldi     i_temp1, (1<<ISC01)+(1<<ISC00)
-                out     MCUCR, i_temp1          ; set next int0 to rising edge
-                sbrc    flags1, RC_PULS_UPDATED
-                rjmp    extint1_exit
-; get timer1 values
-                in      i_temp1, TCNT1L
-                in      i_temp2, TCNT1H
-                sts     stop_rcpuls_l, i_temp1  ; prepare next interval evaluation
-                sts     stop_rcpuls_h, i_temp2
-                sbrs    flags2, RC_INTERVAL_OK
-                rjmp    extint1_exit
-                cbr     flags2, (1<<RC_INTERVAL_OK) ; flag is evaluated
-                sub     i_temp1, start_rcpuls_l
-                sbc     i_temp2, start_rcpuls_h
-        ; save impuls length
-                sts     new_rcpuls_l, i_temp1
-                sts     new_rcpuls_h, i_temp2
-                cpi     i_temp1, low (MAX_INT_RF*CLK_SCALE)
-                ldi     i_temp3, high(MAX_INT_RF*CLK_SCALE)     ; test range high
-                cpc     i_temp2, i_temp3
-                brsh    extint1_fail            ; through away
-                cpi     i_temp1, low (MIN_INT_RF*CLK_SCALE)
-                ldi     i_temp3, high(MIN_INT_RF*CLK_SCALE)    ; test range low
-                cpc     i_temp2, i_temp3
-                brlo    extint1_fail            ; through away
-                sbr     flags1, (1<<RC_PULS_UPDATED) ; set to rc impuls value is ok !
-                ldi     i_temp1, CONTROL_TOT*CLK_SCALE
-                mov     control_timeout, i_temp1
-; enable int1 again -  also entry for spike detect
-extint1_exit:   ldi     i_temp2, EXT0_EN
-                out     GIMSK, i_temp2
-                out     SREG, i_sreg
-                reti
+ext_int0_isr:   __ext_int0_isr
+ext_int1_isr:   __ext_int1_isr
 ;-----bko-----------------------------------------------------------------
 ; output compare timer1 interrupt
 t1oca_int:      in      i_sreg, SREG
@@ -585,8 +514,8 @@ beep2_BpCn22:   in      temp1, TCNT0
                 brne    beep2_BpCn20
                 ret                
 ;-----bko-----------------------------------------------------------------
-tcnt1_to_temp:  ldi     temp4, EXT0_DIS         ; disable ext0int
-                out     GIMSK, temp4
+tcnt1_to_temp:  
+                disable_input
                 ldi     temp4, T1STOP           ; stop timer1
                 out     TCCR1B, temp4
                 ldi     temp4, T1CK8            ; preload temp with restart timer1
@@ -828,8 +757,7 @@ update_timing:  rcall   tcnt1_to_temp
                 sbr     flags0, (1<<OCT1_PENDING)
                 ldi     temp4, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0) ; enable interrupt again
                 out     TIMSK, temp4
-                ldi     temp4, EXT0_EN          ; ext0int enable
-                out     GIMSK, temp4            ; enable ext0int
+                enable_input
 
         ; calculate next waiting times - timing(-l-h-x) holds the time of 4 commutations
                 lds     temp1, timing_l
@@ -963,9 +891,7 @@ set_OCT1_tot:   AcInit
                 sbr     flags0, (1<<OCT1_PENDING)
                 ldi     temp4, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0)
                 out     TIMSK, temp4
-                ldi     temp4, EXT0_EN          ; ext0int enable
-                out     GIMSK, temp4            ; enable ext0int
-
+                enable_input
                 ret
 ;-----bko-----------------------------------------------------------------
 wait_OCT1_before_switch:
@@ -981,8 +907,7 @@ wait_OCT1_before_switch:
                 sbr     flags0, (1<<OCT1_PENDING)
                 ldi     temp3, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0)
                 out     TIMSK, temp3
-                ldi     temp4, EXT0_EN          ; ext0int enable
-                out     GIMSK, temp4            ; enable ext0int
+                enable_input
 
         ; don't waste time while waiting - do some controls, if indicated
                 sbrc    flags1, EVAL_RC_PULS
