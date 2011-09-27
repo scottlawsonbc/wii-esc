@@ -1,3 +1,5 @@
+.include "ppm.inc"
+
 .equ    POWER_RANGE   = 100
 .equ    MIN_RC_PULS   = 1100
 
