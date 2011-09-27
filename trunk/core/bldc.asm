@@ -1426,7 +1426,7 @@ wait_for_low_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
                 __wait_for_filter
-                cpi     temp2, 4
+                cpi     temp2, (8-7) + 1
                 brcc    wait_for_low_loop
                 ret
                                
@@ -1437,7 +1437,7 @@ wait_for_high_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
                 __wait_for_filter
-                cpi     temp2, 5
+                cpi     temp2, 7
                 brcs    wait_for_high_loop
                 ret
 ;-----bko-----------------------------------------------------------------
