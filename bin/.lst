@@ -1,0 +1,57 @@
+
+AVRASM ver. 2.1.12  core\bldc.asm Wed Sep 28 11:48:12 2011
+
+[builtin](2): Including file 'C:\Program Files (x86)\AvrAssembler2\AppNotes\m8def.inc'
+[builtin](3): error: Cannot find include file: ..\input\.inc
+core\bldc.asm(0): '[builtin]' included form here
+[builtin](4): error: Cannot find include file: ..\hw\.inc
+core\bldc.asm(0): '[builtin]' included form here
+core\bldc.asm(20): Including file 'C:\Program Files (x86)\AvrAssembler2\AppNotes\m8def.inc'
+core\bldc.asm(22): warning: Use of undefined or forward referenced symbol 'MIN_DUTY' in .equ/.set
+core\bldc.asm(23): warning: Use of undefined or forward referenced symbol 'POWER_RANGE' in .equ/.set
+core\bldc.asm(238): error: Illegal use of undefined or forward referenced symbol 'READ_CALIBRATION' in conditional
+core\bldc.asm(325): error: init_input: Unknown instruction or macro
+core\bldc.asm(392): error: CnFET_off: Unknown instruction or macro
+core\bldc.asm(393): error: AnFET_off: Unknown instruction or macro
+core\bldc.asm(394): error: BnFET_off: Unknown instruction or macro
+core\bldc.asm(431): error: CnFET_on: Unknown instruction or macro
+core\bldc.asm(435): error: AnFET_on: Unknown instruction or macro
+core\bldc.asm(438): error: BnFET_on: Unknown instruction or macro
+core\bldc.asm(471): error: BpFET_on: Unknown instruction or macro
+core\bldc.asm(472): error: AnFET_on: Unknown instruction or macro
+core\bldc.asm(476): error: BpFET_off: Unknown instruction or macro
+core\bldc.asm(477): error: AnFET_off: Unknown instruction or macro
+core\bldc.asm(518): error: disable_input: Unknown instruction or macro
+core\bldc.asm(531): error: EvaluatePWC: Unknown instruction or macro
+core\bldc.asm(734): error: Illegal use of undefined or forward referenced symbol 'CLK_SCALE' in conditional
+core\bldc.asm(737): error: Illegal use of undefined or forward referenced symbol 'CLK_SCALE' in conditional
+core\bldc.asm(760): error: enable_input: Unknown instruction or macro
+core\bldc.asm(830): error: Illegal use of undefined or forward referenced symbol 'CLK_SCALE' in conditional
+core\bldc.asm(833): error: Illegal use of undefined or forward referenced symbol 'CLK_SCALE' in conditional
+core\bldc.asm(880): error: AcInit: Unknown instruction or macro
+core\bldc.asm(894): error: enable_input: Unknown instruction or macro
+core\bldc.asm(910): error: enable_input: Unknown instruction or macro
+core\bldc.asm(979): error: Illegal use of undefined or forward referenced symbol 'MOT_BRAKE' in conditional
+core\bldc.asm(1046): error: DbgLEDOn: Unknown instruction or macro
+core\bldc.asm(1051): error: AcInit: Unknown instruction or macro
+core\bldc.asm(1054): error: DbgLEDOn: Unknown instruction or macro
+core\bldc.asm(1273): error: DbgLEDOff: Unknown instruction or macro
+core\bldc.asm(1376): error: Illegal use of undefined or forward referenced symbol 'CLK_SCALE' in conditional
+core\bldc.asm(1445): error: BpFET_off: Unknown instruction or macro
+core\bldc.asm(1447): error: ApFET_on: Unknown instruction or macro
+core\bldc.asm(1448): error: AcPhaseB: Unknown instruction or macro
+core\bldc.asm(1460): error: CnFET_off: Unknown instruction or macro
+core\bldc.asm(1462): error: BnFET_on: Unknown instruction or macro
+core\bldc.asm(1465): error: AcPhaseC: Unknown instruction or macro
+core\bldc.asm(1468): error: ApFET_off: Unknown instruction or macro
+core\bldc.asm(1470): error: CpFET_on: Unknown instruction or macro
+core\bldc.asm(1471): error: AcPhaseA: Unknown instruction or macro
+core\bldc.asm(1483): error: BnFET_off: Unknown instruction or macro
+core\bldc.asm(1485): error: AnFET_on: Unknown instruction or macro
+core\bldc.asm(1488): error: AcPhaseB: Unknown instruction or macro
+core\bldc.asm(1491): error: CpFET_off: Unknown instruction or macro
+core\bldc.asm(1493): error: BpFET_on: Unknown instruction or macro
+core\bldc.asm(1494): error: AcPhaseC: Unknown instruction or macro
+core\bldc.asm(1506): error: AnFET_off: Unknown instruction or macro
+core\bldc.asm(1508): error: CnFET_on: Unknown instruction or macro
+core\bldc.asm(1511): error: AcPhaseA: Unknown instruction or macro
