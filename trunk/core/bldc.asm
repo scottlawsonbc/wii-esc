@@ -17,15 +17,20 @@
 ;4. Auch nach den Änderungen sollen die Software weiterhin frei sein, d.h. kostenlos bleiben.
 ;
 ;!! Wer mit den Nutzungbedingungen nicht einverstanden ist, darf die Software nicht nutzen !!
-.include "m8def.inc"
 
-.equ    NO_POWER         = 256-MIN_DUTY         ; (POWER_OFF)
-.equ    MAX_POWER        = 256-POWER_RANGE      ; (FULL_POWER)
+#if defined(_include_ppm_inc_)
+  .include "ppm.inc"
+#endif 
+
+
+.equ    NO_POWER         = 256 - MIN_DUTY       ; (POWER_OFF)
+.equ    MAX_POWER        = 256 - POWER_RANGE    ; (FULL_POWER)
 .equ    CONTROL_TOT      = 50                   ; time = NUMBER x 64ms
 .equ    CURRENT_ERR_MAX  = 3                    ; performs a reset after MAX errors
 
-.equ    T1STOP     = 0x00
-.equ    T1CK8      = 0x02
+.equ    T1STOP           = 0x00
+.equ    T1CK8            = 0x02
+.equ    CLK_SCALE        = F_CPU / 8000000
 
 ;**** **** **** **** ****
 ; Register Definitions
@@ -48,14 +53,14 @@
 .def    run_control      = r15
 
 
-.def    temp1   = r16                   ; main temporary
-.def    temp2   = r17                   ; main temporary
-.def    temp3   = r18                   ; main temporary
-.def    temp4   = r19                   ; main temporary
+.def    temp1            = r16  ; main temporary
+.def    temp2            = r17  ; main temporary
+.def    temp3            = r18  ; main temporary
+.def    temp4            = r19  ; main temporary
 
-.def    i_temp1 = r20                   ; interrupt temporary
-.def    i_temp2 = r21                   ; interrupt temporary
-.def    i_temp3 = r22                   ; interrupt temporary
+.def    i_temp1          = r20  ; interrupt temporary
+.def    i_temp2          = r21  ; interrupt temporary
+.def    i_temp3          = r22  ; interrupt temporary
 
 .def    flags0  = r23   ; state flags
         .equ    OCT1_PENDING    = 0     ; if set, output compare interrunpt is pending
@@ -161,15 +166,7 @@ uart_data:      .byte   100             ; only for debug requirements
 ;.equ   SPMaddr =$012   ; SPM complete Interrupt Vector Address
 ;.equ   SPMRaddr =$012  ; SPM complete Interrupt Vector Address
 ;-----bko-----------------------------------------------------------------
-
-;**** **** **** **** ****
-.cseg
-.org 0
-;**** **** **** **** ****
-
-;-----bko-----------------------------------------------------------------
-; reset and interrupt jump table
-
+; helper macroses
 #if !defined(__ext_int0)
  #define __ext_int0 reti 
  .macro __ext_int0_isr
@@ -181,6 +178,11 @@ uart_data:      .byte   100             ; only for debug requirements
  .macro __ext_int1_isr
  .endmacro
 #endif
+;**** **** **** **** ****
+.cseg
+.org 0
+;-----bko-----------------------------------------------------------------
+; reset and interrupt jump table
 
                 rjmp    reset
                 __ext_int0          ; ext_int0
@@ -235,7 +237,7 @@ reset:          ldi     temp1, high(RAMEND)     ; stack = RAMEND
                 ldi     temp1, low(RAMEND)
                 out     SPL, temp1
 
-.if READ_CALIBRATION == 1
+#ifdef READ_CALIBRATION
                 ; oscillator calibration byte is written into the uppermost position
                 ; of the eeprom - by the script 1n1p.e2s an ponyprog
                 ;CLEARBUFFER
@@ -251,7 +253,7 @@ reset:          ldi     temp1, high(RAMEND)     ; stack = RAMEND
                 sbi     EECR,EERE
                 in      temp1,EEDR
                 out     osccal ,temp1  ;schreiben
-.endif
+#endif
 
         ; portB
                 ldi     temp1, INIT_PB
@@ -976,7 +978,7 @@ wait_for_poweroff:
                 ret
 ;-----bko-----------------------------------------------------------------
 motor_brake:
-.if MOT_BRAKE == 1
+#ifdef MOT_BRAKE
                 ldi     temp2, 40               ; 40 * 0.065ms = 2.6 sec
                 ldi     temp1, BRAKE_PB         ; all N-FETs on
                 out     PORTB, temp1
@@ -1003,7 +1005,7 @@ mot_brk90:
                 out     PORTC, temp1
                 ldi     temp1, INIT_PD          ; all off
                 out     PORTD, temp1
-.endif  ; MOT_BRAKE == 1
+#endif
                 ret
 
 
