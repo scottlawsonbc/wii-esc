@@ -117,6 +117,7 @@
 #undef     MOT_BRAKE      
 #undef     READ_CALIBRATION
 #define    F_CPU           16000000              ; 16Mhz internal RC oscilator 
+#define    ZCF_CONST       7
 
 ;*************************
 ; Timings                *

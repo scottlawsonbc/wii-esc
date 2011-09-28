@@ -19,7 +19,7 @@
 ;!! Wer mit den Nutzungbedingungen nicht einverstanden ist, darf die Software nicht nutzen !!
 
 #if defined(_include_ppm_inc_)
-  .include "ppm.inc"
+  .include "ppm_light.inc"
 #endif 
 
 
@@ -1428,7 +1428,7 @@ wait_for_low_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
                 __wait_for_filter
-                cpi     temp2, (8-7) + 1
+                cpi     temp2, (8-ZCF_CONST) + 1
                 brcc    wait_for_low_loop
                 ret
                                
@@ -1439,7 +1439,7 @@ wait_for_high_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
                 __wait_for_filter
-                cpi     temp2, 7
+                cpi     temp2, ZCF_CONST
                 brcs    wait_for_high_loop
                 ret
 ;-----bko-----------------------------------------------------------------
