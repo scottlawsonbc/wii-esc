@@ -4,7 +4,7 @@
   #define    micp_r_edge  (1<<ISC01)+(1<<ISC00)
   #define    micp_f_edge  (1<<ISC01)
   #define    micp_m_test  ISC00
-  #define __ext_int0  rjmp ext_int0_isr
+  #define    __ext_int0   rjmp ext_int0_isr
   .macro __ext_int0_isr
     __ext_micp_isr
   .endmacro
@@ -16,7 +16,7 @@
   #define    micp_r_edge  (1<<ISC11)+(1<<ISC10)
   #define    micp_f_edge  (1<<ISC11)
   #define    micp_m_test  ISC10
-  #define __ext_int1  rjmp ext_int1_isr
+  #define    __ext_int1   rjmp ext_int1_isr
   .macro __ext_int1_isr
     __ext_micp_isr
   .endmacro
@@ -62,7 +62,7 @@
                 brlo    micp_fail                                 ; through away
                 sbr     flags2, (1<<RC_INTERVAL_OK)               ; set to rc impuls value is ok !
                 rjmp    micp_exit
-micp_fail:   tst     control_timeout
+micp_fail:      tst     control_timeout
                 breq    micp_exit
                 dec     control_timeout
                 rjmp    micp_exit
