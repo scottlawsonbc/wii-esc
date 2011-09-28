@@ -19,7 +19,7 @@
 ;!! Wer mit den Nutzungbedingungen nicht einverstanden ist, darf die Software nicht nutzen !!
 
 #if defined(_include_ppm_inc_)
-  .include "ppm_light.inc"
+  .include "ppm.inc"
 #endif 
 
 
@@ -1424,22 +1424,28 @@ wait_for_filter_2:
 wait_for_low:   
                 ldi     temp1, 0xFF
                 ldi     temp2, 8
+                ldi     temp3, (8-ZCF_CONST) + 1
+                sbrc    flags2, RPM_RANGE1
+                ldi     temp3, (8-8) + 1
 wait_for_low_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
                 __wait_for_filter
-                cpi     temp2, (8-ZCF_CONST) + 1
+                cp      temp2, temp3
                 brcc    wait_for_low_loop
                 ret
                                
 wait_for_high:   
                 ldi     temp1, 0x0
                 ldi     temp2, 0
+                ldi     temp3, ZCF_CONST
+                sbrc    flags2, RPM_RANGE1
+                ldi     temp3, 8
 wait_for_high_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
                 __wait_for_filter
-                cpi     temp2, ZCF_CONST
+                cp      temp2, temp3
                 brcs    wait_for_high_loop
                 ret
 ;-----bko-----------------------------------------------------------------
