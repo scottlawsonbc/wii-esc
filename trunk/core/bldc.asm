@@ -860,13 +860,13 @@ update_t99:     lds     temp1, timing_acc_l
                 sts     zc_wait_time_l, temp3   ; save for zero crossing timeout (Expected time +30 deg)
                 sts     zc_wait_time_h, temp4
                 
-                
                 lsr     ZL
                 ror     temp4
                 ror     temp3
                 lsr     ZL
                 ror     temp4
                 ror     temp3
+
                 sts     zc_blanking_time_l, temp3
                 sts     zc_blanking_time_h, temp4
 
@@ -1279,6 +1279,7 @@ s6_run1:        ldi     temp1, 0xff
                 mov     run_control, temp1
 
                 rcall   calc_next_timing
+                rcall   wait_for_zc_blank
                 rcall   set_zc_timeout
 
                 DbgLEDOff
