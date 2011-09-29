@@ -858,7 +858,7 @@ update_t99:     lds     temp1, timing_acc_l
                 ror     temp3
                 
                 sts     zc_wait_time_l, temp3   ; save for zero crossing timeout (Expected time +30 deg)
-                sts     zc_wait_time_h, temp3
+                sts     zc_wait_time_h, temp4
                 
                 
                 lsr     ZL
