@@ -766,6 +766,7 @@ update_timing:  rcall   tcnt1_to_temp
                 lds     temp2, timing_h
                 lds     ZL, timing_x
 
+/*
                 sts     zc_wait_time_l, temp1        ; save for zero crossing timeout
                 sts     zc_wait_time_h, temp2
                 tst     ZL
@@ -774,6 +775,7 @@ update_timing:  rcall   tcnt1_to_temp
                 sts     zc_wait_time_l, temp4        ; save for zero crossing timeout
                 sts     zc_wait_time_h, temp4
 update_t00:
+*/
                 lsr     ZL                      ; build a quarter
                 ror     temp2
                 ror     temp1
@@ -854,6 +856,11 @@ update_t99:     lds     temp1, timing_acc_l
                 lsr     ZL
                 ror     temp4
                 ror     temp3
+                
+                sts     zc_wait_time_l, temp3   ; save for zero crossing timeout (Expected time +30 deg)
+                sts     zc_wait_time_h, temp3
+                
+                
                 lsr     ZL
                 ror     temp4
                 ror     temp3
