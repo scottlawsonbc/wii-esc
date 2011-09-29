@@ -76,7 +76,7 @@
 .def    flags1  = r24   ; state flags
         .equ    POWER_OFF       = 0     ; switch fets on disabled
         .equ    FULL_POWER      = 1     ; 100% on - don't switch off, but do OFF_CYCLE working
-        .equ    CALC_NEXT_OCT1  = 2     ; calculate OCT1 offset, when wait_OCT1_before_switch is called
+        .equ    CALC_NEXT_OCT1  = 2     ; calculate OCT1 offset, when wait_for_commutation is called
         .equ    RC_PULS_UPDATED = 3     ; new rc-puls value available
         .equ    EVAL_RC_PULS    = 4     ; if set, new rc puls is evaluated, while waiting for OCT1
         .equ    EVAL_SYS_STATE  = 5     ; if set, overcurrent and undervoltage are checked
@@ -119,14 +119,14 @@ rpm_l:          .byte   1       ; holds the average time of 4 commutations
 rpm_h:          .byte   1
 rpm_x:          .byte   1
 
-wt_comp_scan_l: .byte   1       ; time from switch to comparator scan
-wt_comp_scan_h: .byte   1       
+zc_blanking_time_l: .byte   1   ; time from switch to comparator scan
+zc_blanking_time_h: .byte   1       
 com_timing_l:   .byte   1       ; time from zero-crossing to switch of the appropriate FET
 com_timing_h:   .byte   1
 wt_OCT1_tot_l:  .byte   1       ; OCT1 waiting time
 wt_OCT1_tot_h:  .byte   1
-zero_wt_l:      .byte   1
-zero_wt_h:      .byte   1
+zc_wait_time_l: .byte   1
+zc_wait_time_h: .byte   1
 last_com_l:     .byte   1
 last_com_h:     .byte   1
 
@@ -728,8 +728,8 @@ set_all_timings:
                 sts     wt_OCT1_tot_h, YH
                 ldi     temp3, 0xff
                 ldi     temp4, 0x1f
-                sts     wt_comp_scan_l, temp3
-                sts     wt_comp_scan_h, temp4
+                sts     zc_blanking_time_l, temp3
+                sts     zc_blanking_time_h, temp4
                 sts     com_timing_l, temp3
                 sts     com_timing_h, temp4
 set_timing_v:   
@@ -766,13 +766,13 @@ update_timing:  rcall   tcnt1_to_temp
                 lds     temp2, timing_h
                 lds     ZL, timing_x
 
-                sts     zero_wt_l, temp1        ; save for zero crossing timeout
-                sts     zero_wt_h, temp2
+                sts     zc_wait_time_l, temp1        ; save for zero crossing timeout
+                sts     zc_wait_time_h, temp2
                 tst     ZL
                 breq    update_t00
                 ldi     temp4, 0xff
-                sts     zero_wt_l, temp4        ; save for zero crossing timeout
-                sts     zero_wt_h, temp4
+                sts     zc_wait_time_l, temp4        ; save for zero crossing timeout
+                sts     zc_wait_time_h, temp4
 update_t00:
                 lsr     ZL                      ; build a quarter
                 ror     temp2
@@ -860,8 +860,8 @@ update_t99:     lds     temp1, timing_acc_l
                 lsr     ZL
                 ror     temp4
                 ror     temp3
-                sts     wt_comp_scan_l, temp3
-                sts     wt_comp_scan_h, temp4
+                sts     zc_blanking_time_l, temp3
+                sts     zc_blanking_time_h, temp4
 
         ; use the same value for commutation timing (15-)
                 sts     com_timing_l, temp3
@@ -870,19 +870,21 @@ update_t99:     lds     temp1, timing_acc_l
                 ret
 ;-----bko-----------------------------------------------------------------
 calc_next_timing:
-                lds     YL, wt_comp_scan_l      ; holds wait-before-scan value
-                lds     YH, wt_comp_scan_h
+                lds     YL, zc_blanking_time_l      ; holds wait-before-scan value
+                lds     YH, zc_blanking_time_h
                 rcall   update_timing
 
                 ret
 
-wait_OCT1_tot:  sbrc    flags0, OCT1_PENDING
-                rjmp    wait_OCT1_tot
+wait_for_zc_blank:
+                sbrc    flags0, OCT1_PENDING
+                rjmp    wait_for_zc_blank
 
-set_OCT1_tot:   AcInit
+set_zc_timeout:   
+                AcInit
 
-                lds     YH, zero_wt_h
-                lds     YL, zero_wt_l
+                lds     YH, zc_wait_time_h
+                lds     YL, zc_wait_time_l
                 rcall   tcnt1_to_temp
                 add     temp1, YL
                 adc     temp2, YH
@@ -896,7 +898,7 @@ set_OCT1_tot:   AcInit
                 enable_input
                 ret
 ;-----bko-----------------------------------------------------------------
-wait_OCT1_before_switch:
+wait_for_commutation:
                 rcall   tcnt1_to_temp
                 lds     YL, com_timing_l
                 lds     YH, com_timing_h
@@ -1270,7 +1272,7 @@ s6_run1:        ldi     temp1, 0xff
                 mov     run_control, temp1
 
                 rcall   calc_next_timing
-                rcall   set_OCT1_tot
+                rcall   set_zc_timeout
 
                 DbgLEDOff
 
@@ -1293,10 +1295,10 @@ run1:           rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
                 sbr     flags1, (1<<EVAL_RPM)
-                rcall   wait_OCT1_before_switch
+                rcall   wait_for_commutation
                 rcall   com1com2
                 rcall   calc_next_timing
-                rcall   wait_OCT1_tot
+                rcall   wait_for_zc_blank
                 
 ; run 2 = A(p-on) + C(n-choppered) - comparator B evaluated
 ; out_cB changes from high to low
@@ -1308,10 +1310,10 @@ run2:           rcall   wait_for_high
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
                 sbr     flags1, (1<<EVAL_RC_PULS)
-                rcall   wait_OCT1_before_switch
+                rcall   wait_for_commutation
                 rcall   com2com3
                 rcall   calc_next_timing
-                rcall   wait_OCT1_tot
+                rcall   wait_for_zc_blank
 
 ; run 3 = A(p-on) + B(n-choppered) - comparator C evaluated
 ; out_cC changes from low to high
@@ -1323,10 +1325,10 @@ run3:           rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
                 sbr     flags1, (1<<EVAL_PWM)
-                rcall   wait_OCT1_before_switch
+                rcall   wait_for_commutation
                 rcall   com3com4
                 rcall   calc_next_timing
-                rcall   wait_OCT1_tot
+                rcall   wait_for_zc_blank
 
 ; run 4 = C(p-on) + B(n-choppered) - comparator A evaluated
 ; out_cA changes from high to low
@@ -1336,10 +1338,10 @@ run4:           rcall   wait_for_high
                 rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
-                rcall   wait_OCT1_before_switch
+                rcall   wait_for_commutation
                 rcall   com4com5
                 rcall   calc_next_timing
-                rcall   wait_OCT1_tot
+                rcall   wait_for_zc_blank
 
 ; run 5 = C(p-on) + A(n-choppered) - comparator B evaluated
 ; out_cB changes from low to high
@@ -1351,10 +1353,10 @@ run5:           rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
                 sbr     flags1, (1<<EVAL_SYS_STATE)
-                rcall   wait_OCT1_before_switch
+                rcall   wait_for_commutation
                 rcall   com5com6
                 rcall   calc_next_timing
-                rcall   wait_OCT1_tot
+                rcall   wait_for_zc_blank
 
 ; run 6 = B(p-on) + A(n-choppered) - comparator C evaluated
 ; out_cC changes from high to low
@@ -1365,10 +1367,10 @@ run6:           rcall   wait_for_high
                 rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
-                rcall   wait_OCT1_before_switch
+                rcall   wait_for_commutation
                 rcall   com6com1
                 rcall   calc_next_timing
-                rcall   wait_OCT1_tot
+                rcall   wait_for_zc_blank
 
 ;               rjmp    run6_2
 
