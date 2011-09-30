@@ -877,19 +877,19 @@ update_t99:     lds     temp1, timing_acc_l
                 ret
 ;-----bko-----------------------------------------------------------------
 calc_next_timing:
-                lds     YL, zc_blanking_time_l      ; holds wait-before-scan value
-                lds     YH, zc_blanking_time_h
+                lds     YL, com_timing_l
+                lds     YH, com_timing_h
                 rcall   update_timing
 
                 ret
 
-wait_for_zc_blank:
+wait_for_commutation:
                 sbrc    flags0, OCT1_PENDING
-                rjmp    wait_for_zc_blank
+                rjmp    wait_for_commutation
 
-set_zc_timeout:   
-                lds     YH, zc_wait_time_h
-                lds     YL, zc_wait_time_l
+set_zc_blanking_time:
+                lds     YH, zc_blanking_time_h
+                lds     YL, zc_blanking_time_l
                 rcall   tcnt1_to_temp
                 add     temp1, YL
                 adc     temp2, YH
@@ -903,21 +903,7 @@ set_zc_timeout:
                 enable_input
                 ret
 ;-----bko-----------------------------------------------------------------
-wait_for_commutation:
-                rcall   tcnt1_to_temp
-                lds     YL, com_timing_l
-                lds     YH, com_timing_h
-                add     temp1, YL
-                adc     temp2, YH
-                ldi     temp3, (1<<TOIE1)+(1<<TOIE0)
-                out     TIMSK, temp3
-                out     OCR1AH, temp2
-                out     OCR1AL, temp1
-                sbr     flags0, (1<<OCT1_PENDING)
-                ldi     temp3, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0)
-                out     TIMSK, temp3
-                enable_input
-
+wait_for_zc_blank:
         ; don't waste time while waiting - do some controls, if indicated
                 sbrc    flags1, EVAL_RC_PULS
                 rcall   evaluate_rc_puls
@@ -930,8 +916,23 @@ wait_for_commutation:
                 sbrc    flags1, EVAL_RPM
                 rcall   evaluate_rpm
 
-OCT1_wait:      sbrc    flags0, OCT1_PENDING
-                rjmp    OCT1_wait
+wait_for_zc_blank_loop:      
+                sbrc    flags0, OCT1_PENDING
+                rjmp    wait_for_zc_blank_loop
+        ; set ZC timeout
+                lds     YH, zc_wait_time_h
+                lds     YL, zc_wait_time_l
+                rcall   tcnt1_to_temp
+                add     temp1, YL
+                adc     temp2, YH
+                ldi     temp4, (1<<TOIE1)+(1<<TOIE0)
+                out     TIMSK, temp4
+                out     OCR1AH, temp2
+                out     OCR1AL, temp1
+                sbr     flags0, (1<<OCT1_PENDING)
+                ldi     temp4, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0)
+                out     TIMSK, temp4
+                enable_input
                 ret
 ;-----bko-----------------------------------------------------------------
 start_timeout:  lds     YL, wt_OCT1_tot_l
@@ -1277,6 +1278,7 @@ s6_run1:        ldi     temp1, 0xff
                 mov     run_control, temp1
 
                 rcall   calc_next_timing
+                rcall   set_zc_blanking_time
                 rcall   wait_for_zc_blank
 
                 DbgLEDOff
@@ -1300,9 +1302,9 @@ run1:           rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
                 sbr     flags1, (1<<EVAL_RPM)
+                rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com1com2
-                rcall   calc_next_timing
                 rcall   wait_for_zc_blank
                 
 ; run 2 = A(p-on) + C(n-choppered) - comparator B evaluated
@@ -1315,9 +1317,9 @@ run2:           rcall   wait_for_high
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
                 sbr     flags1, (1<<EVAL_RC_PULS)
+                rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com2com3
-                rcall   calc_next_timing
                 rcall   wait_for_zc_blank
 
 ; run 3 = A(p-on) + B(n-choppered) - comparator C evaluated
@@ -1330,9 +1332,9 @@ run3:           rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
                 sbr     flags1, (1<<EVAL_PWM)
+                rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com3com4
-                rcall   calc_next_timing
                 rcall   wait_for_zc_blank
 
 ; run 4 = C(p-on) + B(n-choppered) - comparator A evaluated
@@ -1343,9 +1345,9 @@ run4:           rcall   wait_for_high
                 rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
+                rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com4com5
-                rcall   calc_next_timing
                 rcall   wait_for_zc_blank
 
 ; run 5 = C(p-on) + A(n-choppered) - comparator B evaluated
@@ -1358,9 +1360,9 @@ run5:           rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
                 sbr     flags1, (1<<EVAL_SYS_STATE)
+                rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com5com6
-                rcall   calc_next_timing
                 rcall   wait_for_zc_blank
 
 ; run 6 = B(p-on) + A(n-choppered) - comparator C evaluated
@@ -1372,9 +1374,9 @@ run6:           rcall   wait_for_high
                 rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run_to_start
+                rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com6com1
-                rcall   calc_next_timing
                 rcall   wait_for_zc_blank
 
 ;               rjmp    run6_2
