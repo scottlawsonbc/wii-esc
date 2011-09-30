@@ -1276,6 +1276,7 @@ s6_goodies:     lds     temp1, goodies
 s6_run1:        ldi     temp1, 0xff
                 mov     run_control, temp1
 
+                rcall   wait_for_commutation
                 rcall   calc_next_timing
                 rcall   wait_for_zc_blank
 
