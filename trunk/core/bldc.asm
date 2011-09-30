@@ -1278,8 +1278,8 @@ s6_run1:        ldi     temp1, 0xff
                 mov     run_control, temp1
 
                 rcall   calc_next_timing
-                rcall   set_zc_blanking_time
-                rcall   wait_for_zc_blank
+                rcall   wait_for_commutation    ; needed to align phases 
+                rcall   wait_for_zc_blank       ; the ZC timeout should start at: ZC + comm_time + zc_blank_time
 
                 DbgLEDOff
 
