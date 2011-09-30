@@ -1276,6 +1276,7 @@ s6_goodies:     lds     temp1, goodies
 
 s6_run1:        ldi     temp1, 0xff
                 mov     run_control, temp1
+                mov     sys_control, ZH
 
                 rcall   calc_next_timing
                 rcall   wait_for_commutation    ; needed to align phases 
