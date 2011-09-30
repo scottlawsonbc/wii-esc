@@ -888,8 +888,6 @@ wait_for_zc_blank:
                 rjmp    wait_for_zc_blank
 
 set_zc_timeout:   
-                AcInit
-
                 lds     YH, zc_wait_time_h
                 lds     YL, zc_wait_time_l
                 rcall   tcnt1_to_temp
@@ -1280,7 +1278,6 @@ s6_run1:        ldi     temp1, 0xff
 
                 rcall   calc_next_timing
                 rcall   wait_for_zc_blank
-                rcall   set_zc_timeout
 
                 DbgLEDOff
 
