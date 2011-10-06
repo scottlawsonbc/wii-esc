@@ -79,8 +79,8 @@
         .equ    CALC_NEXT_OCT1  = 2     ; calculate OCT1 offset, when wait_for_commutation is called
         .equ    RC_PULS_UPDATED = 3     ; new rc-puls value available
         .equ    EVAL_RC_PULS    = 4     ; if set, new rc puls is evaluated, while waiting for OCT1
-        .equ    EVAL_SYS_STATE  = 5     ; if set, overcurrent and undervoltage are checked
-        .equ    EVAL_RPM        = 6     ; if set, next PWM on should look for current
+;        .equ                   = 5     ; 
+;        .equ                   = 6     ; 
         .equ    EVAL_PWM        = 7     ; if set, PWM should be updated
 
 .def    flags2  = r25
@@ -103,21 +103,11 @@
 .dseg                                   ;EEPROM segment
 .org SRAM_START
 
-tcnt1_sav_l:    .byte   1       ; actual timer1 value
-tcnt1_sav_h:    .byte   1
 last_tcnt1_l:   .byte   1       ; last timer1 value
 last_tcnt1_h:   .byte   1
 timing_l:       .byte   1       ; holds time of 4 commutations 
 timing_h:       .byte   1
 timing_x:       .byte   1
-
-timing_acc_l:   .byte   1       ; holds the average time of 4 commutations 
-timing_acc_h:   .byte   1
-timing_acc_x:   .byte   1
-
-rpm_l:          .byte   1       ; holds the average time of 4 commutations 
-rpm_h:          .byte   1
-rpm_x:          .byte   1
 
 zc_blanking_time_l: .byte   1   ; time from switch to comparator scan
 zc_blanking_time_h: .byte   1       
@@ -127,18 +117,13 @@ wt_OCT1_tot_l:  .byte   1       ; OCT1 waiting time
 wt_OCT1_tot_h:  .byte   1
 zc_wait_time_l: .byte   1
 zc_wait_time_h: .byte   1
-last_com_l:     .byte   1
-last_com_h:     .byte   1
 
 stop_rcpuls_l:  .byte   1
 stop_rcpuls_h:  .byte   1
 new_rcpuls_l:   .byte   1
 new_rcpuls_h:   .byte   1
 
-duty_offset:    .byte   1
 goodies:        .byte   1
-comp_state:     .byte   1
-uart_command:   .byte   1
 
 uart_data:      .byte   100             ; only for debug requirements
 
@@ -346,9 +331,6 @@ i_rc_puls2:     sbrs    flags1, RC_PULS_UPDATED
                 rcall   beep_f4
                 sei                             ; enable all interrupts
 
-                ldi     temp1, 30
-                sts     duty_offset, temp1
-
                 rcall   set_all_timings
 
                 rjmp    init_startup
@@ -519,49 +501,16 @@ beep2_BpCn22:   in      temp1, TCNT0
                 brne    beep2_BpCn20
                 ret                
 ;-----bko-----------------------------------------------------------------
-tcnt1_to_temp:  
-                disable_input
-                ldi     temp4, T1STOP           ; stop timer1
-                out     TCCR1B, temp4
-                ldi     temp4, T1CK8            ; preload temp with restart timer1
-                in      temp1, TCNT1L           ;  - the preload cycle is needed to complete stop operation
-                in      temp2, TCNT1H
-                out     TCCR1B, temp4
-                ret                             ; !!! ext0int stays disabled - must be enabled again by caller
-        ; there seems to be only one TEMP register in the AVR
-        ; if the ext0int interrupt falls between readad LOW value while HIGH value is captured in TEMP and
-        ; read HIGH value, TEMP register is changed in ext0int routine
-;-----bko-----------------------------------------------------------------
 evaluate_rc_puls:
                 EvaluatePWC
 ;-----bko-----------------------------------------------------------------
 evaluate_sys_state:
-                cbr     flags1, (1<<EVAL_SYS_STATE)
-                sbrs    flags0, T1OVFL_FLAG
-                rjmp    eval_sys_s99
-
-        ; do it not more often as every 32³s
-                cbr     flags0, (1<<T1OVFL_FLAG)
-
-        ; control current
-eval_sys_i:     rjmp    eval_sys_i_ok
-
-                mov     i_temp1, current_err
-                cpi     i_temp1, CURRENT_ERR_MAX
-                brcc    panic_exit
-                inc     current_err
-                rjmp    eval_sys_ub
-
-eval_sys_i_ok:  tst     current_err
-                breq    eval_sys_ub
-                dec     current_err
-
-eval_sys_ub:    
-eval_sys_s99:   ret
-
-panic_exit:     ; !!!!!! OVERCURRENT !!!!!!!!
-                cli
-                rjmp    reset
+                mov     temp1, sys_control      ; Build up sys_control to POWER_RANGE
+                cpi     temp1, POWER_RANGE
+                breq    evaluate_sys_state_exit
+                inc     sys_control             ; 
+evaluate_sys_state_exit:                
+                ret
 ;-----bko-----------------------------------------------------------------
 ;******************************************************************************
 ;* FUNCTION
@@ -581,7 +530,6 @@ set_pwm:
                 subi    temp1, -2               ; Make it shorter by 2 cycles
                 mov     tcnt0_pwroff, temp1
                 ret
-
 ;******************************************************************************
 ;* FUNCTION
 ;*      eval_power_state
@@ -627,9 +575,6 @@ set_new_duty:
                 cp      temp1, temp2
                 brcs    set_new_duty10
                 mov     temp1, temp2
-                cpi     temp2, POWER_RANGE
-                breq    set_new_duty10
-                inc     sys_control             ; Build up sys_control to POWER_RANGE
 set_new_duty10: lds     temp2, timing_x
                 tst     temp2
                 brne    set_new_duty12
@@ -671,47 +616,6 @@ set_new_duty50: com     temp1                   ; down-count to up-count (T0)
                 sei
                 ret
 ;-----bko-----------------------------------------------------------------
-evaluate_rpm:   cbr     flags1, (1<<EVAL_RPM)
-                lds     temp3, rpm_x
-                lds     temp2, rpm_h
-
-                lds     temp1, rpm_l    ; subtract 1/256
-                sub     temp1, temp2
-                sts     rpm_l, temp1
-                lds     temp1, rpm_h
-                sbc     temp1, temp3
-                sts     rpm_h, temp1
-                lds     temp1, rpm_x
-                sbci    temp1, 0
-                sts     rpm_x, temp1
-
-                lds     temp3, timing_acc_x
-                lds     temp2, timing_acc_h
-                lds     temp1, timing_acc_l
-                lsr     temp3           ; make one complete commutation cycle
-                ror     temp2
-                ror     temp1
-                lsr     temp3
-                ror     temp2
-                ror     temp1
-        ; temp3 is zero now - for sure !!
-                sts     timing_acc_x, temp3
-                sts     timing_acc_h, temp3
-                sts     timing_acc_l, temp3
-        ; and add the result as 1/256
-                lds     temp3, rpm_l
-                add     temp3, temp1
-                sts     rpm_l, temp3
-                lds     temp3, rpm_h
-                adc     temp3, temp2
-                sts     rpm_h, temp3
-                ldi     temp1, 0
-                lds     temp3, rpm_x
-                adc     temp3, temp1
-                sts     rpm_x, temp3
-
-                ret
-;-----bko-----------------------------------------------------------------
 set_all_timings:
                 ldi     YL, low  (timeoutSTART)
                 ldi     YH, high (timeoutSTART)
@@ -731,7 +635,6 @@ set_timing_v:
                 sts     timing_h, temp4
                 ldi     temp3, 0xff
                 sts     timing_l, temp3
-
                 ret
 ;-----bko-----------------------------------------------------------------
 update_timing:  
@@ -791,8 +694,9 @@ update_t_normal:
                 cpc     temp5, temp6
                 brcc    update_t90
 
-                ldi     temp1, PWR_MAX_RPM1     ; limit by reducing power
-                mov     sys_control, temp1
+                tst     sys_control
+                breq    update_t90
+                dec     sys_control             ; limit by reducing power
 
 update_t90:     sts     timing_l, temp3
                 sts     timing_h, temp4
@@ -887,33 +791,23 @@ wait_for_zc_blank:
         ; don't waste time while waiting - do some controls, if indicated
                 sbrc    flags1, EVAL_RC_PULS
                 rcall   evaluate_rc_puls
-;                sbrc    flags1, EVAL_SYS_STATE
-;                rcall   evaluate_sys_state
-
                 sbrc    flags1, EVAL_PWM
                 rcall   set_new_duty
-
-;                sbrc    flags1, EVAL_RPM
-;                rcall   evaluate_rpm
-
-
 wait_for_zc_blank_loop:      
                 sbrc    flags0, OCT1_PENDING
                 rjmp    wait_for_zc_blank_loop
         ; set ZC timeout
                 lds     YH, zc_wait_time_h
                 lds     YL, zc_wait_time_l
-                rcall   tcnt1_to_temp
-                add     temp1, YL
-                adc     temp2, YH
-                ldi     temp4, (1<<TOIE1)+(1<<TOIE0)
-                out     TIMSK, temp4
-                out     OCR1AH, temp2
-                out     OCR1AL, temp1
+                cli
+                in      temp1, TCNT1L
+                in      temp2, TCNT1H
+                add     YL, temp1
+                adc     YH, temp2
+                out     OCR1AH, YH
+                out     OCR1AL, YL
+                sei
                 sbr     flags0, (1<<OCT1_PENDING)
-                ldi     temp4, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0)
-                out     TIMSK, temp4
-                enable_input
                 ret
 ;-----bko-----------------------------------------------------------------
 start_timeout:  lds     YL, wt_OCT1_tot_l
@@ -1306,7 +1200,7 @@ run1_fail:
                 sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run4
 run1_1:                
-                sbr     flags1, (1<<EVAL_RPM)
+                sbr     flags1, (1<<EVAL_PWM)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com1com2
@@ -1381,6 +1275,7 @@ run4_fail:
                 sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run1
 run4_1:        
+                sbr     flags1, (1<<EVAL_RC_PULS)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com4com5
@@ -1405,7 +1300,7 @@ run5_fail:
                 sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run2
 run5_1:                
-                sbr     flags1, (1<<EVAL_SYS_STATE)
+                sbr     flags1, (1<<EVAL_PWM)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com5com6
@@ -1431,26 +1326,20 @@ run6_fail:
                 sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run3
 run6_1:                
+                sbr     flags1, (1<<EVAL_RC_PULS)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com6com1
+                rcall   evaluate_sys_state 
                 rcall   wait_for_zc_blank
                 cbr     flags2, (1<<NO_SYNC) 
 ;               rjmp    run6_2
 run6_1_1:                
-
                 lds     temp1, timing_x
                 tst     temp1
                 breq    run6_2                  ; higher than 610 RPM if zero
-.if CLK_SCALE==2                                
-;                dec     temp1
-;                breq    run6_2                  ; higher than 610 RPM if equ 1
-.endif                
 run_to_start:   sbr     flags2, (1<<STARTUP)
                 cbr     flags2, (1<<POFF_CYCLE)
-;                sbrs    flags1, POWER_OFF
-;                rjmp    restart_control
-;                rjmp    wait_for_power_on
                 cpi     ZH, MIN_DUTY + 1
                 brcs    run_to_start_2
                 rjmp    restart_control
