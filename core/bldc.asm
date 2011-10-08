@@ -88,7 +88,7 @@
         .equ    RPM_RANGE2      = 1     ; if set RPM is between 1831 RPM and 3662 RPM
         .equ    SCAN_TIMEOUT    = 2     ; if set a startup timeout occurred
         .equ    POFF_CYCLE      = 3     ; if set one commutation cycle is performed without power
-        .equ    COMP_SAVE       = 4     ; if set ACO was high
+;       .equ    ...             = 4     ; 
         .equ    STARTUP         = 5     ; if set startup-phase is active
         .equ    RC_INTERVAL_OK  = 6     ; 
         .equ    NO_SYNC         = 7     ; 
@@ -368,10 +368,6 @@ t0ovfl_int:     in      i_sreg, SREG
 
 t0_off_cycle:   
                 out     TCNT0, tcnt0_pwroff     ; reload t0
-                ; mirror inverted ACO to bit-var
-                sbr     flags2, (1<<COMP_SAVE)
-                sbic    ACSR, ACO               
-                cbr     flags2, (1<<COMP_SAVE)
                 ; PWM state = off cycle
                 sbr     flags0, (1<<I_OFF_CYCLE)
                 ; We can just turn them all off as we only have one nFET on at a
@@ -379,7 +375,6 @@ t0_off_cycle:
                 CnFET_off
                 AnFET_off
                 BnFET_off
-
 
                 mov     i_temp1, tcnt0_pwroff
                 cpi     i_temp1, 0
@@ -813,19 +808,12 @@ wait_for_zc_blank_loop:
 start_timeout:  lds     YL, wt_OCT1_tot_l
                 lds     YH, wt_OCT1_tot_h
                 rcall   update_timing
-
-                in      temp1, TCNT1L
-                andi    temp1, 0x0f
-                sub     YH, temp1
+                subi    YH, 4
                 cpi     YH, high (timeoutMIN)
                 brcc    set_tot2
                 ldi     YH, high (timeoutSTART)         
 set_tot2:
                 sts     wt_OCT1_tot_h, YH
-
-                rcall   sync_with_poweron       ; wait at least 100+ microseconds
-                rcall   sync_with_poweron       ; for demagnetisation - one sync may be added
-
                 ret
 ;-----bko-----------------------------------------------------------------
 switch_power_off:
@@ -846,11 +834,6 @@ switch_power_off:
                 cbr     flags2, (1<<POFF_CYCLE)
                 sbr     flags2, (1<<STARTUP)
                 ret                             ; motor is off
-;-----bko-----------------------------------------------------------------
-wait_if_spike:  ldi     temp1, 4*CLK_SCALE
-wait_if_spike2: dec     temp1
-                brne    wait_if_spike2
-                ret
 ;-----bko-----------------------------------------------------------------
 sync_with_poweron:
                 sbrc    flags0, I_OFF_CYCLE     ; first wait for power on
@@ -947,8 +930,6 @@ wait_for_power_on:
                 AcInit
                 rcall   pre_align
 
-                DbgLEDOn
-
                 cbr     flags2, (1<<NO_SYNC) 
                 cbr     flags2, (1<<SCAN_TIMEOUT)
                 ldi     temp1, 0
@@ -962,208 +943,97 @@ wait_for_power_on:
 
 ; state 1 = B(p-on) + C(n-choppered) - comparator A evaluated
 ; out_cA changes from low to high
-start1:         sbrs    flags2, COMP_SAVE       ; high ?
-                rjmp    start1_2                ; .. no - loop, while high
-
-start1_0:       sbrc    flags0, OCT1_PENDING
-                rjmp    start1_1
+start1:         
+                rcall   wait_for_low_strt
+                rcall   wait_for_high_strt
+;                rcall   wait_for_test
+                sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start1_9
-start1_1:       rcall   sync_with_poweron
-
-                sbrc    flags2, COMP_SAVE       ; high ?
-                rjmp    start1_0                ; .. no - loop, while high
-
-; do the special 120- switch
-                ldi     temp1, 0
-                sts     goodies, temp1
-                rcall   com1com2
-                rcall   com2com3
-                rcall   com3com4
-                rcall   evaluate_rc_puls
-                rcall   start_timeout
-                rjmp    start4
-        
-start1_2:       sbrc    flags0, OCT1_PENDING
-                rjmp    start1_3
-                sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start1_9
-start1_3:       rcall   sync_with_poweron
-                sbrs    flags2, COMP_SAVE       ; high ?
-                rjmp    start1_2                ; .. no - loop, while low
-
-start1_9:
                 rcall   com1com2
                 rcall   start_timeout
 
 ; state 2 = A(p-on) + C(n-choppered) - comparator B evaluated
 ; out_cB changes from high to low
-
-start2:         sbrc    flags2, COMP_SAVE
-                rjmp    start2_2
-
-start2_0:       sbrc    flags0, OCT1_PENDING
-                rjmp    start2_1
+                rcall   wait_for_high_strt
+                rcall   wait_for_low_strt
+;                rcall   wait_for_test
+                sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start2_9
-start2_1:       rcall   sync_with_poweron
-                sbrs    flags2, COMP_SAVE
-                rjmp    start2_0
-                rjmp    start2_9
-
-start2_2:       sbrc    flags0, OCT1_PENDING
-                rjmp    start2_3
-                sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start2_9
-start2_3:       rcall   sync_with_poweron
-                sbrc    flags2, COMP_SAVE
-                rjmp    start2_2
-
-start2_9:
                 rcall   com2com3
                 rcall   evaluate_rc_puls
                 rcall   start_timeout
 
 ; state 3 = A(p-on) + B(n-choppered) - comparator C evaluated
 ; out_cC changes from low to high
-
-start3:         sbrs    flags2, COMP_SAVE
-                rjmp    start3_2
-
-start3_0:       sbrc    flags0, OCT1_PENDING
-                rjmp    start3_1
+                rcall   wait_for_low_strt
+                rcall   wait_for_high_strt
+;                rcall   wait_for_test
+                sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start3_9
-start3_1:       rcall   sync_with_poweron
-                sbrc    flags2, COMP_SAVE
-                rjmp    start3_0
-                rjmp    start3_9
-
-start3_2:       sbrc    flags0, OCT1_PENDING
-                rjmp    start3_3
-                sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start3_9
-start3_3:       rcall   sync_with_poweron
-                sbrs    flags2, COMP_SAVE
-                rjmp    start3_2
-
-start3_9:
                 rcall   com3com4
                 rcall   set_new_duty
                 rcall   start_timeout
 
 ; state 4 = C(p-on) + B(n-choppered) - comparator A evaluated
 ; out_cA changes from high to low
-
-start4:         sbrc    flags2, COMP_SAVE
-                rjmp    start4_2
-
-start4_0:       sbrc    flags0, OCT1_PENDING
-                rjmp    start4_1
+                rcall   wait_for_high_strt
+                rcall   wait_for_low_strt
+;                rcall   wait_for_test
+                sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start4_9
-start4_1:       rcall   sync_with_poweron
-                sbrs    flags2, COMP_SAVE
-                rjmp    start4_0
-                rjmp    start4_9
-
-start4_2:       sbrc    flags0, OCT1_PENDING
-                rjmp    start4_3
-                sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start4_9
-start4_3:       rcall   sync_with_poweron
-                sbrc    flags2, COMP_SAVE
-                rjmp    start4_2
-
-start4_9:
                 rcall   com4com5
                 rcall   start_timeout
 
-
 ; state 5 = C(p-on) + A(n-choppered) - comparator B evaluated
 ; out_cB changes from low to high
-
-
-start5:         sbrs    flags2, COMP_SAVE
-                rjmp    start5_2
-
-start5_0:       sbrc    flags0, OCT1_PENDING
-                rjmp    start5_1
+                rcall   wait_for_low_strt
+                rcall   wait_for_high_strt
+;                rcall   wait_for_test
+                sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start5_9
-start5_1:       rcall   sync_with_poweron
-                sbrc    flags2, COMP_SAVE
-                rjmp    start5_0
-                rjmp    start5_9
-
-start5_2:       sbrc    flags0, OCT1_PENDING
-                rjmp    start5_3
-                sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start5_9
-start5_3:       rcall   sync_with_poweron
-                sbrs    flags2, COMP_SAVE
-                rjmp    start5_2
-
-start5_9:
                 rcall   com5com6
                 rcall   evaluate_sys_state
                 rcall   start_timeout
 
 ; state 6 = B(p-on) + A(n-choppered) - comparator C evaluated
 ; out_cC changes from high to low
-
-start6:         sbrc    flags2, COMP_SAVE
-                rjmp    start6_2
-
-start6_0:       sbrc    flags0, OCT1_PENDING
-                rjmp    start6_1
+                rcall   wait_for_high_strt
+                rcall   wait_for_low_strt
+;                rcall   wait_for_test
+                sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start6_9
-start6_1:       rcall   sync_with_poweron
-                sbrs    flags2, COMP_SAVE
-                rjmp    start6_0
-                rjmp    start6_9
-
-start6_2:       sbrc    flags0, OCT1_PENDING
-                rjmp    start6_3
-                sbr     flags2, (1<<SCAN_TIMEOUT)
-                rjmp    start6_9
-start6_3:       rcall   sync_with_poweron
-                sbrc    flags2, COMP_SAVE
-                rjmp    start6_2
-
-start6_9:
                 rcall   com6com1
-
-                mov     temp1, tcnt0_power_on
-                cpi     temp1, NO_POWER
-                brne    s6_power_ok
-                rjmp    init_startup
-
-s6_power_ok:    tst     t1_timeout
-                brne    s6_test_rpm
-                rjmp    init_startup            ;-) demich
+                ; no throttle 
+                cpi     ZH, MIN_DUTY + 1
+                brcs    init_startup
+                ; timeout 
+                tst     t1_timeout
+                breq    init_startup
                 
-s6_test_rpm:    lds     temp1, timing_x
-                tst     temp1
-                brne    s6_goodies
-                lds     temp1, timing_h         ; get actual RPM reference high
-;               cpi     temp1, PWR_RANGE1*CLK_SCALE
-                cpi     temp1, PWR_RANGE2*CLK_SCALE
-                brcs    s6_run1
-
-s6_goodies:     lds     temp1, goodies
+                lds     temp1, goodies
                 sbrc    flags2, SCAN_TIMEOUT
                 clr     temp1
                 inc     temp1
                 sts     goodies,  temp1
                 cbr     flags2, (1<<SCAN_TIMEOUT)
                 cpi     temp1, ENOUGH_GOODIES
-                brcs    s6_start1       
+                brcs    s6_start1
+                ; We need some rotations without lost sync, to be able to trust timing..
+                clr     temp2
+                lds     temp1, timing_h             ; get actual RPM reference high
+                cpi     temp1, PWR_RANGE2*CLK_SCALE
+                lds     temp1, timing_x
+                cpc     temp1, temp2
+                brcs    start_to_run
+s6_start1:      
+                rcall   start_timeout           ; need to be here for a correct temp1=comp_state
+                rjmp    start1                  ; go back to state 1
 
-s6_run1:        ldi     temp1, 0xff
+start_to_run:
+                ldi     temp1, 0xff
                 mov     run_control, temp1
-                ;clr     sys_control
+                ldi     temp1, PWR_MAX_STARTUP
+                mov     sys_control, temp1
 
                 rcall   calc_next_timing
                 rcall   wait_for_commutation    ; needed to align phases 
@@ -1174,10 +1044,7 @@ s6_run1:        ldi     temp1, 0xff
                 cbr     flags2, (1<<NO_SYNC) 
                 cbr     flags2, (1<<STARTUP)
                 rjmp    run1                    ; running state begins
-
-s6_start1:      rcall   start_timeout           ; need to be here for a correct temp1=comp_state
-                rjmp    start1                  ; go back to state 1
-
+                
 ;-----bko-----------------------------------------------------------------
 ; **** running control loop ****
 
@@ -1369,6 +1236,15 @@ restart_control:
 
 ;-----bko-----------------------------------------------------------------
 ; *** scan comparator utilities ***
+filter_delay:  
+                push    temp1
+                ldi     temp1, 20*CLK_SCALE
+filter_delay_loop: 
+                dec     temp1
+                brne    filter_delay_loop
+                pop     temp1
+                ret
+
 .macro __wait_for_filter
                 clc
                 sbis    ACSR, ACO
@@ -1404,6 +1280,32 @@ wait_for_high_loop:
                 __wait_for_filter
                 cp      temp2, temp3
                 brcs    wait_for_high_loop
+                ret
+
+wait_for_high_strt:
+                ldi     temp1, 0x0
+                ldi     temp2, 0
+                ldi     temp3, 5
+wait_for_high_strt_loop:
+                sbrs    flags0, OCT1_PENDING
+                ret
+                __wait_for_filter
+                rcall   filter_delay
+                cp      temp2, temp3
+                brcs    wait_for_high_strt_loop
+                ret
+
+wait_for_low_strt:
+                ldi     temp1, 0xFF
+                ldi     temp2, 8
+                ldi     temp3, (8-5) + 1
+wait_for_low_strt_loop:
+                sbrs    flags0, OCT1_PENDING
+                ret
+                __wait_for_filter
+                rcall   filter_delay
+                cp      temp2, temp3
+                brcc    wait_for_low_strt_loop
                 ret
                 
 wait_for_test:
