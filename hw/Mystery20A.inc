@@ -128,12 +128,12 @@
 #define    PWR_MAX_RPM1    POWER_RANGE/4
 #define    PWR_MAX_RPM2    POWER_RANGE/2
 
-#define    PWR_STARTUP     5*POWER_RANGE/100     ;  5%
-#define    PWR_MAX_STARTUP 12*POWER_RANGE/100    ; 15%
+#define    PWR_STARTUP     12*POWER_RANGE/100    ; 12%
+#define    PWR_MAX_STARTUP 15*POWER_RANGE/100    ; 15%
 
 
 #define timeoutSTART       65000
-#define timeoutMIN         48000
+#define timeoutMIN         30000
 
 #define PWR_RANGE1         0x40 ; ( ~2400 RPM )
 #define PWR_RANGE2         0x20 ; ( ~4800 RPM )
