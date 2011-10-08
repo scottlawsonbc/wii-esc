@@ -32,9 +32,10 @@ eval_rc_p00:    lsr     temp2
                 cpi     temp3, POWER_RANGE
                 brcs    eval_rc_p10
                 ldi     temp3, POWER_RANGE
-eval_rc_p10:    cpi     temp3, MIN_DUTY 
-                brcc    eval_rc_p20
-                ldi     temp3, 0
+eval_rc_p10:    
+;                cpi     temp3, MIN_DUTY 
+;                brcc    eval_rc_p20
+;                ldi     temp3, 0
 eval_rc_p20:    mov     ZH, temp3
 eval_rc_p90:    ret
 .endmacro
