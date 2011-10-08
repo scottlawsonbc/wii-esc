@@ -1238,7 +1238,7 @@ restart_control:
 ; *** scan comparator utilities ***
 filter_delay:  
                 push    temp1
-                ldi     temp1, 20*CLK_SCALE
+                ldi     temp1, 32*CLK_SCALE
 filter_delay_loop: 
                 dec     temp1
                 brne    filter_delay_loop
