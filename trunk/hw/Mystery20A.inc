@@ -123,13 +123,13 @@
 ;*************************
 ; Timings                *
 ;*************************
-#define    MIN_DUTY        3*POWER_RANGE/100     ; Min power 3%
+#define    PCT_PWR_MIN         3                 ; Min power 3%
 
-#define    PWR_MAX_RPM1    POWER_RANGE/4
-#define    PWR_MAX_RPM2    POWER_RANGE/2
+#define    PCT_PWR_MAX_RPM1    25
+#define    PCT_PWR_MAX_RPM2    50
 
-#define    PWR_STARTUP     12*POWER_RANGE/100    ; 12%
-#define    PWR_MAX_STARTUP 15*POWER_RANGE/100    ; 15%
+#define    PCT_PWR_STARTUP     12
+#define    PCT_PWR_MAX_STARTUP 15
 
 
 #define timeoutSTART       65000
