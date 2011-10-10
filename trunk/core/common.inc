@@ -16,3 +16,4 @@
    out   ADMUX, temp1
 .endmacro  
    
+#define RPM_TO_COMM_TIME(x) (1000000 * 10 / x)
