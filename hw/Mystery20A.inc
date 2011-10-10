@@ -135,7 +135,15 @@
 #define timeoutSTART       65000
 #define timeoutMIN         30000
 
-#define PWR_RANGE1         0x40 ; ( ~2400 RPM )
-#define PWR_RANGE2         0x20 ; ( ~4800 RPM )
+;#define PWR_RANGE1         0x40 ; ( ~2400 RPM )
+;#define PWR_RANGE2         0x20 ; ( ~4800 RPM )
 
 #define ENOUGH_GOODIES     60
+
+#define RPM_RUN_MIN_RPM         1000
+#define RPM_RUN_RANGE_01        2400
+#define RPM_RUN_RANGE_02        4800
+
+#define RPM_START_MIN_RPM       1500
+
+

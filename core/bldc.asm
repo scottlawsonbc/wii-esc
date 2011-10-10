@@ -88,7 +88,7 @@
         .equ    RPM_RANGE2      = 1     ; if set RPM is between 1831 RPM and 3662 RPM
         .equ    SCAN_TIMEOUT    = 2     ; if set a startup timeout occurred
         .equ    POFF_CYCLE      = 3     ; if set one commutation cycle is performed without power
-;       .equ    ...             = 4     ; 
+        .equ    RUN_MIN_RPM     = 4     ; 
         .equ    STARTUP         = 5     ; if set startup-phase is active
         .equ    RC_INTERVAL_OK  = 6     ; 
         .equ    NO_SYNC         = 7     ; 
@@ -556,60 +556,105 @@ eval_power_state_exit:
 ;* DECRIPTION
 ;*     1) Evaluates duty cycle
 ;*     2) Limits power to sys_control
-;*     3) Limits starup power
-;*     4) Limits RPM ranges power
-;*     5) Increments sys_control up to POWER_RANGE
+;*     3) Limits RPM ranges power
 ;* USAGE
 ;*      ZH (0-POWER_RANGE)
 ;* STATISTICS
 ;*      Register usage: temp1, temp2, temp3 
 ;******************************************************************************
+.macro CheckRPMi
+                cpi     temp3, LOW(RPM_TO_COMM_TIME(@0)*4*CLK_SCALE)             
+                ldi     temp1, HIGH(RPM_TO_COMM_TIME(@0)*4*CLK_SCALE)
+                cpc     temp4, temp1
+                ldi     temp1, BYTE3(RPM_TO_COMM_TIME(@0)*4*CLK_SCALE)
+                cpc     temp5, temp1
+.endmacro
+
 set_new_duty:   
-                mov     temp1, ZH
-                mov     temp2, sys_control      ; Limit PWM to sys_control
-                cp      temp1, temp2
-                brcs    set_new_duty10
-                mov     temp1, temp2
-set_new_duty10: lds     temp2, timing_x
-                tst     temp2
-                brne    set_new_duty12
-                lds     temp2, timing_h         ; get actual RPM reference high
-                cpi     temp2, PWR_RANGE1*CLK_SCALE ; lower range1 ?
-                brcs    set_new_duty20          ; on carry - test next range ; lower as range1
-set_new_duty12: sbr     flags2, (1<<RPM_RANGE1)
-                sbr     flags2, (1<<RPM_RANGE2)
-                ldi     temp2, PWR_MAX_RPM1     ; higher than range1 power max ?
-                cp      temp1, temp2
-                brcs    set_new_duty40          ; on carry - not higher, no restriction
-                mov     temp1, temp2            ; low (range1) RPM - set PWR_MAX_RPM1
-                rjmp    set_new_duty40          ; higher as range1
-set_new_duty20: cpi     temp2, PWR_RANGE2*CLK_SCALE; lower range2 ?
-                brcs    set_new_duty30          ; on carry - not lower, no restriction
-set_new_duty22: cbr     flags2, (1<<RPM_RANGE1)
-                sbr     flags2, (1<<RPM_RANGE2)
-                ldi     temp2, PWR_MAX_RPM2     ; higher than range2 power max ?
-                cp      temp1, temp2
-                brcs    set_new_duty40          ; on carry - not higher, no restriction
-                mov     temp1, temp2            ; low (range2) RPM - set PWR_MAX_RPM2
-                rjmp    set_new_duty40          ; higher as range2
-set_new_duty30: cbr     flags2, (1<<RPM_RANGE1)+(1<<RPM_RANGE2)  ; range limits are evaluated - look for STARTUP conditions
-set_new_duty40: sbrs    flags2, STARTUP
-                rjmp    set_new_duty50
-                ldi     temp3, PWR_STARTUP      ; at least PWR_STARTUP ?
-                cp      temp1, temp3
-                brcc    set_new_duty42          ; on no carry - higher than PWR_STARTUP, test PWR_MAX_STARTUP
-                ldi     temp1, PWR_STARTUP      ; lower - set to PWR_STARTUP
-                rjmp    set_new_duty50
-set_new_duty42: ldi     temp3, PWR_MAX_STARTUP  ; limit power in startup phase
-                cp      temp1, temp3
-                brcs    set_new_duty50          ; on carry - not higher, test range 2
-                mov     temp1, temp3            ; set PWR_MAX_STARTUP limit
-set_new_duty50: com     temp1                   ; down-count to up-count (T0)
+                mov     temp6, ZH
+                cp      temp6, sys_control      ; Limit PWM to sys_control
+                brcs    set_new_duty_no_limit
+                mov     temp6, sys_control
+set_new_duty_no_limit:
+                sbr     flags2, (1<<RPM_RANGE1) + (1<<RPM_RANGE2) + (1<<RUN_MIN_RPM)
+                lds     temp4, timing_h
+                lds     temp5, timing_x
+                cpi     temp4, 0x0e*CLK_SCALE   ; 0x000eff ~ 10.000 RPM
+                ldi     temp1, 0x0
+                cpc     temp5, temp1
+                brcc    set_new_duty_low_ranges
+                ; High RPM finish ASAP
+set_new_duty_set_pwm:                
+                mov     temp1, temp6
+                com     temp1
                 cli 
                 rcall   eval_power_state        ; evaluate power state
                 rcall   set_pwm                 ; set new PWM
                 sei
-                ret
+                ret                
+set_new_duty_low_ranges:
+                ; With low RPM we have more time for calculations. 
+                ; We assume that  RUN_MIN_RPM < RPM_RUN_RANGE_02 < RPM_RUN_RANGE_02
+                lds     temp3, timing_l
+                ;  Check for range 02
+                CheckRPMi(RPM_RUN_RANGE_02)
+                brcs    set_new_duty_set_pwm
+                cbr     flags2, (1<<RPM_RANGE2)
+                ldi     temp2, PWR_MAX_RPM2
+                cp      temp2, temp6
+                brcc    set_new_duty_range_01
+                mov     temp6, temp2   
+set_new_duty_range_01:
+                ;  Check for range 01               
+                CheckRPMi(RPM_RUN_RANGE_01)
+                brcs    set_new_duty_set_pwm
+                cbr     flags2, (1<<RPM_RANGE2)
+                ldi     temp2, PWR_MAX_RPM1
+                cp      temp2, temp6
+                brcc    set_new_duty_min_rpm
+                mov     temp6, temp2   
+set_new_duty_min_rpm:                
+                ;  Check for minimum RPM
+                CheckRPMi(RPM_RUN_MIN_RPM)
+                brcs    set_new_duty_set_pwm
+                cbr     flags2, (1<<RUN_MIN_RPM)
+                rjmp    set_new_duty_set_pwm
+                
+;******************************************************************************
+;* FUNCTION
+;*      set_new_duty_strt
+;* DECRIPTION
+;*     1) Evaluates duty cycle
+;*     2) Limits power to sys_control
+;*     3) Constraints power in range: PWR_STARTUP..PWR_MAX_STARTUP
+;* USAGE
+;*      ZH (0-POWER_RANGE)
+;* STATISTICS
+;*      Register usage: temp1, temp2, temp3 
+;******************************************************************************
+set_new_duty_strt:   
+                mov     temp6, ZH
+                cp      temp6, sys_control      ; Limit PWM to sys_control
+                brcs    set_new_duty_strt_01
+                mov     temp6, sys_control
+set_new_duty_strt_01:
+                ldi     temp2, PWR_MAX_STARTUP
+                cp      temp2, temp6
+                brcc    set_new_duty_strt_02
+                mov     temp6, temp2   
+set_new_duty_strt_02:
+                ldi     temp2, PWR_STARTUP
+                cp      temp6, temp2
+                brcc    set_new_duty_strt_03
+                mov     temp6, temp2
+set_new_duty_strt_03:                
+                mov     temp1, temp6
+                com     temp1
+                cli 
+                rcall   eval_power_state        ; evaluate power state
+                rcall   set_pwm                 ; set new PWM
+                sei
+                ret                
 ;-----bko-----------------------------------------------------------------
 set_all_timings:
                 ldi     YL, low  (timeoutSTART)
@@ -971,7 +1016,7 @@ start1:
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
                 rcall   com3com4
-                rcall   set_new_duty
+                rcall   set_new_duty_strt
                 rcall   start_timeout
 
 ; state 4 = C(p-on) + B(n-choppered) - comparator A evaluated
@@ -1019,14 +1064,14 @@ start1:
                 cpi     temp1, ENOUGH_GOODIES
                 brcs    s6_start1
                 ; We need some rotations without lost sync, to be able to trust timing..
-                clr     temp2
-                lds     temp1, timing_h             ; get actual RPM reference high
-                cpi     temp1, PWR_RANGE2*CLK_SCALE
+                lds     temp1, timing_h 
+                cpi     temp1, HIGH(RPM_TO_COMM_TIME(RPM_START_MIN_RPM)*4*CLK_SCALE) 
                 lds     temp1, timing_x
+                ldi     temp2, BYTE3(RPM_TO_COMM_TIME(RPM_START_MIN_RPM)*4*CLK_SCALE) 
                 cpc     temp1, temp2
                 brcs    start_to_run
 s6_start1:      
-                rcall   start_timeout           ; need to be here for a correct temp1=comp_state
+                rcall   start_timeout            
                 rjmp    start1                  ; go back to state 1
 
 start_to_run:
