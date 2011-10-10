@@ -18,3 +18,7 @@
    
 #define RPM_TO_COMM_TIME(x) (1000000 * 10 / x)
 #define PWR_PCT_TO_VAL(x)   (x*POWER_RANGE/100)
+
+#define PWR_CURVE_POINT(pt, rpm, pwr) \
+.equ    RPM_RUN_RANGE_ ## pt  = rpm\
+.equ    PCT_PWR_MAX_RPM_ ## pt = pwr
