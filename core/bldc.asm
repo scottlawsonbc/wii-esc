@@ -23,10 +23,10 @@
 #endif 
 
 
-.equ    NO_POWER         = 256 - MIN_DUTY       ; (POWER_OFF)
-.equ    MAX_POWER        = 256 - POWER_RANGE    ; (FULL_POWER)
-.equ    CONTROL_TOT      = 50                   ; time = NUMBER x 64ms
-.equ    CURRENT_ERR_MAX  = 3                    ; performs a reset after MAX errors
+.equ    NO_POWER         = 256 - PWR_PCT_TO_VAL(PCT_PWR_MIN)    ; (POWER_OFF)
+.equ    MAX_POWER        = 256 - POWER_RANGE                    ; (FULL_POWER)
+.equ    CONTROL_TOT      = 50                                   ; time = NUMBER x 64ms
+.equ    CURRENT_ERR_MAX  = 3                                    ; performs a reset after MAX errors
 
 .equ    T1STOP           = 0x00
 .equ    T1CK8            = 0x02
@@ -301,7 +301,7 @@ clear_ram:      st      X+, temp1
                 rcall   wait30ms
 
 control_start:  ; init variables
-                SetPWMi(MIN_DUTY-1)
+                SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_MIN)-1)
                 ldi     temp1, 0                ; reset error counters
                 mov     current_err,temp1
                 mov     sys_control, temp1
@@ -600,7 +600,7 @@ set_new_duty_low_ranges:
                 CheckRPMi(RPM_RUN_RANGE_02)
                 brcs    set_new_duty_set_pwm
                 cbr     flags2, (1<<RPM_RANGE2)
-                ldi     temp2, PWR_MAX_RPM2
+                ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_MAX_RPM2)
                 cp      temp2, temp6
                 brcc    set_new_duty_range_01
                 mov     temp6, temp2   
@@ -608,8 +608,8 @@ set_new_duty_range_01:
                 ;  Check for range 01               
                 CheckRPMi(RPM_RUN_RANGE_01)
                 brcs    set_new_duty_set_pwm
-                cbr     flags2, (1<<RPM_RANGE2)
-                ldi     temp2, PWR_MAX_RPM1
+                cbr     flags2, (1<<RPM_RANGE1)
+                ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_MAX_RPM1)
                 cp      temp2, temp6
                 brcc    set_new_duty_min_rpm
                 mov     temp6, temp2   
@@ -626,7 +626,7 @@ set_new_duty_min_rpm:
 ;* DECRIPTION
 ;*     1) Evaluates duty cycle
 ;*     2) Limits power to sys_control
-;*     3) Constraints power in range: PWR_STARTUP..PWR_MAX_STARTUP
+;*     3) Constraints power in range: PWR_PCT_TO_VAL(PCT_PWR_STARTUP)..PWR_PCT_TO_VAL(PCT_PWR_MAX_STARTUP)
 ;* USAGE
 ;*      ZH (0-POWER_RANGE)
 ;* STATISTICS
@@ -638,12 +638,12 @@ set_new_duty_strt:
                 brcs    set_new_duty_strt_01
                 mov     temp6, sys_control
 set_new_duty_strt_01:
-                ldi     temp2, PWR_MAX_STARTUP
+                ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_MAX_STARTUP)
                 cp      temp2, temp6
                 brcc    set_new_duty_strt_02
                 mov     temp6, temp2   
 set_new_duty_strt_02:
-                ldi     temp2, PWR_STARTUP
+                ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_STARTUP)
                 cp      temp6, temp2
                 brcc    set_new_duty_strt_03
                 mov     temp6, temp2
@@ -862,8 +862,8 @@ set_tot2:
                 ret
 ;-----bko-----------------------------------------------------------------
 switch_power_off:
-                ldi     ZH, MIN_DUTY-1          ; ZH is new_duty
-                SetPWMi(MIN_DUTY-1)
+                ldi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN)-1          ; ZH is new_duty
+                SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_MIN)-1)
 
                 ldi     temp1, 0                ; reset limiter
                 mov     sys_control, temp1
@@ -903,7 +903,7 @@ mot_brk10:      sbrs    flags0, T1OVFL_FLAG
                 push    temp2
                 rcall   evaluate_rc_puls
                 pop     temp2
-                cpi     ZH, MIN_DUTY+3          ; avoid jitter detect
+                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN)+3          ; avoid jitter detect
                 brcs    mot_brk20
                 rjmp    mot_brk90
 mot_brk20:
@@ -949,18 +949,18 @@ pre_align:      ldi     temp1, INIT_PB  ; all off
 pp_FETs_off_wt: dec     temp1
                 brne    pp_FETs_off_wt
                 cbr     flags1, (1<<POWER_OFF)  ; enable power
-                ldi     temp1, PWR_STARTUP      ; set limiter
+                ldi     temp1, PWR_PCT_TO_VAL(PCT_PWR_STARTUP)      ; set limiter
                 mov     sys_control, temp1
-                SetPWMi(PWR_STARTUP*1/4);
+                SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP)*1/4);
                 rcall   com5com6
                 rcall   com6com1
                 rcall   wait64ms
                 rcall   wait64ms
-                SetPWMi(PWR_STARTUP*2/4);
+                SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP)*2/4);
                 rcall   wait64ms
-                SetPWMi(PWR_STARTUP*3/4);
+                SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP)*3/4);
                 rcall   wait64ms
-                SetPWMi(PWR_STARTUP);               
+                SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP));               
                 ret                
 ;-----bko-----------------------------------------------------------------
 ; **** startup loop ****
@@ -970,7 +970,7 @@ wait_for_power_on:
                 DbgLEDOn
 
                 rcall   evaluate_rc_puls
-                cpi     ZH, MIN_DUTY + 1
+                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) + 1
                 brcs    wait_for_power_on
                 AcInit
                 rcall   pre_align
@@ -1049,7 +1049,7 @@ start1:
                 sbr     flags2, (1<<SCAN_TIMEOUT)
                 rcall   com6com1
                 ; no throttle 
-                cpi     ZH, MIN_DUTY + 1
+                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) + 1
                 brcs    init_startup
                 ; timeout 
                 tst     t1_timeout
@@ -1077,7 +1077,7 @@ s6_start1:
 start_to_run:
                 ldi     temp1, 0xff
                 mov     run_control, temp1
-                ldi     temp1, PWR_MAX_STARTUP
+                ldi     temp1, PWR_PCT_TO_VAL(PCT_PWR_MAX_STARTUP)
                 mov     sys_control, temp1
 
                 rcall   calc_next_timing
@@ -1252,7 +1252,7 @@ run6_1_1:
                 breq    run6_2                  ; higher than 610 RPM if zero
 run_to_start:   sbr     flags2, (1<<STARTUP)
                 cbr     flags2, (1<<POFF_CYCLE)
-                cpi     ZH, MIN_DUTY + 1
+                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) + 1
                 brcs    run_to_start_2
                 rjmp    restart_control
 run_to_start_2:                

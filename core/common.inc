@@ -17,3 +17,4 @@
 .endmacro  
    
 #define RPM_TO_COMM_TIME(x) (1000000 * 10 / x)
+#define PWR_PCT_TO_VAL(x)   (x*POWER_RANGE/100)
