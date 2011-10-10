@@ -600,7 +600,7 @@ set_new_duty_low_ranges:
                 CheckRPMi(RPM_RUN_RANGE_02)
                 brcs    set_new_duty_set_pwm
                 cbr     flags2, (1<<RPM_RANGE2)
-                ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_MAX_RPM2)
+                ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_MAX_RPM_02)
                 cp      temp2, temp6
                 brcc    set_new_duty_range_01
                 mov     temp6, temp2   
@@ -609,7 +609,7 @@ set_new_duty_range_01:
                 CheckRPMi(RPM_RUN_RANGE_01)
                 brcs    set_new_duty_set_pwm
                 cbr     flags2, (1<<RPM_RANGE1)
-                ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_MAX_RPM1)
+                ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_MAX_RPM_01)
                 cp      temp2, temp6
                 brcc    set_new_duty_min_rpm
                 mov     temp6, temp2   
