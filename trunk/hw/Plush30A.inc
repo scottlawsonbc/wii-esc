@@ -108,24 +108,33 @@
 ;*************************
 #undef     MOT_BRAKE      
 #define    READ_CALIBRATION
-#define    F_CPU           8000000               ; 8Mhz internal RC oscilator 
-#define    ZCF_CONST       3
+#define    F_CPU               8000000           ; 8Mhz internal RC oscilator 
+#define    ZCF_CONST           3
            
 ;*************************
-; Timings                *
+; Power settings         *
 ;*************************
-#define    MIN_DUTY        3*POWER_RANGE/100     ; Min power 3%
-           
-#define    PWR_MAX_RPM1    POWER_RANGE/4
-#define    PWR_MAX_RPM2    POWER_RANGE/2
+#define    PCT_PWR_MIN         3                 ; Min power 3%
 
-#define    PWR_STARTUP     12*POWER_RANGE/100    ;  5%
-#define    PWR_MAX_STARTUP 15*POWER_RANGE/100    ; 15%
+;*************************
+; Power curve            *
+;*************************
+PWR_CURVE_POINT(01, 3500, 25)
+PWR_CURVE_POINT(02, 7000, 50)
 
-#define    timeoutSTART    48000
-#define    timeoutMIN      36000
+;*************************
+; Startup settings       *
+;*************************
+#define    timeoutSTART        48000
+#define    timeoutMIN          36000
+#define    PCT_PWR_STARTUP     12
+#define    PCT_PWR_MAX_STARTUP 15
+#define    RPM_START_MIN_RPM   4000
+#define    ENOUGH_GOODIES      20
 
-#define    PWR_RANGE1      0x40      ; ( ~2400 RPM )
-#define    PWR_RANGE2      0x20
+;*************************
+; Run settings           *
+;*************************
+#define    RPM_RUN_MIN_RPM     3000
 
-#define    ENOUGH_GOODIES  60
+
