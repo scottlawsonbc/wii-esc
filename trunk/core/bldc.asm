@@ -84,8 +84,8 @@
         .equ    EVAL_PWM        = 7     ; if set, PWM should be updated
 
 .def    flags2  = r25
-        .equ    RPM_RANGE1      = 0     ; if set RPM is lower than 1831 RPM
-        .equ    RPM_RANGE2      = 1     ; if set RPM is between 1831 RPM and 3662 RPM
+        .equ    RPM_RANGE1      = 0     ; 
+        .equ    RPM_RANGE2      = 1     ; 
         .equ    SCAN_TIMEOUT    = 2     ; if set a startup timeout occurred
         .equ    POFF_CYCLE      = 3     ; if set one commutation cycle is performed without power
         .equ    RUN_MIN_RPM     = 4     ; 
@@ -579,7 +579,7 @@ set_new_duty_no_limit:
                 sbr     flags2, (1<<RPM_RANGE1) + (1<<RPM_RANGE2) + (1<<RUN_MIN_RPM)
                 lds     temp4, timing_h
                 lds     temp5, timing_x
-                cpi     temp4, 0x0e*CLK_SCALE   ; 0x000eff ~ 10.000 RPM
+                cpi     temp4, 0x0d*CLK_SCALE/2 ;  ~ 20.000 RPM
                 ldi     temp1, 0x0
                 cpc     temp5, temp1
                 brcc    set_new_duty_low_ranges
@@ -853,7 +853,7 @@ wait_for_zc_blank_loop:
 start_timeout:  lds     YL, wt_OCT1_tot_l
                 lds     YH, wt_OCT1_tot_h
                 rcall   update_timing
-                subi    YH, 4
+                subi    YH, 4/CLK_SCALE
                 cpi     YH, high (timeoutMIN)
                 brcc    set_tot2
                 ldi     YH, high (timeoutSTART)         
@@ -927,7 +927,7 @@ no_sync_poff:
                 out     PORTC, temp1
                 ldi     temp1, INIT_PD          ; all off
                 out     PORTD, temp1
-                DbgLEDOn
+                ;DbgLEDOn
                 ret
 
 
@@ -974,6 +974,7 @@ wait_for_power_on:
                 brcs    wait_for_power_on
                 AcInit
                 rcall   pre_align
+                DbgLEDOn
 
                 cbr     flags2, (1<<NO_SYNC) 
                 cbr     flags2, (1<<SCAN_TIMEOUT)
@@ -1049,7 +1050,7 @@ start1:
                 sbr     flags2, (1<<SCAN_TIMEOUT)
                 rcall   com6com1
                 ; no throttle 
-                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) + 1
+                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN)
                 brcs    init_startup
                 ; timeout 
                 tst     t1_timeout
@@ -1247,12 +1248,12 @@ run6_1:
                 cbr     flags2, (1<<NO_SYNC) 
 ;               rjmp    run6_2
 run6_1_1:                
-                lds     temp1, timing_x
-                tst     temp1
-                breq    run6_2                  ; higher than 610 RPM if zero
+                sbrc    flags2, RUN_MIN_RPM
+                rjmp    run6_2
+
 run_to_start:   sbr     flags2, (1<<STARTUP)
                 cbr     flags2, (1<<POFF_CYCLE)
-                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) + 1
+                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) 
                 brcs    run_to_start_2
                 rjmp    restart_control
 run_to_start_2:                
