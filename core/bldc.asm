@@ -35,22 +35,21 @@
 ;**** **** **** **** ****
 ; Register Definitions
 .def    i_sreg           = r1   ; status register save in interrupts
-.def    tcnt0_power_on   = r2   ; timer0 counts nFETs are switched on
-;.def   ...              = r3   ; 
-.def    temp5            = r4   ; 
-.def    temp6            = r5   ;
-.def    tcnt0_pwroff     = r6   ; timer0 counts nFETs are switched off
-
-.def    start_rcpuls_l   = r7
-.def    start_rcpuls_h   = r8
-.def    motor_count      = r9
+;.def   ...              = r2   ; 
+.def    temp5            = r3   ; 
+.def    temp6            = r4   ; 
+;.def   ...              = r5   
+.def    tcnt0_power_on   = r6   ; timer0 counts nFETs are switched on  
+.def    tcnt0_pwroff     = r7   ; timer0 counts nFETs are switched off
+.def    start_rcpuls_l   = r8
+.def    start_rcpuls_h   = r9
 ;.def    ...             = r10
 .def    control_timeout  = r11
 .def    current_err      = r12  ; counts consecutive current errors
 
 .def    sys_control      = r13
 .def    t1_timeout       = r14
-.def    run_control      = r15
+;.def   ...              = r15
 
 
 .def    temp1            = r16  ; main temporary
@@ -87,7 +86,7 @@
         .equ    RPM_RANGE1      = 0     ; 
         .equ    RPM_RANGE2      = 1     ; 
         .equ    SCAN_TIMEOUT    = 2     ; if set a startup timeout occurred
-        .equ    POFF_CYCLE      = 3     ; if set one commutation cycle is performed without power
+;       .equ    ...             = 3     ; 
         .equ    RUN_MIN_RPM     = 4     ; 
         .equ    STARTUP         = 5     ; if set startup-phase is active
         .equ    RC_INTERVAL_OK  = 6     ; 
@@ -206,10 +205,11 @@ version:        .db     0x0d, 0x0a
 ;******************************************************************************
 .macro SetPWMi
                 push    temp1
+                push    temp2
                 ldi     temp1, @0
                 com     temp1
                 rcall   set_pwm
-;                rcall   eval_power_state
+                pop     temp2
                 pop     temp1
 .endmacro
 
@@ -516,14 +516,14 @@ evaluate_sys_state_exit:
 ;* USAGE
 ;*      temp1
 ;* STATISTICS
-;*      Register usage: temp1
+;*      Register usage: temp1, temp2
 ;******************************************************************************
 set_pwm:
-                mov     tcnt0_power_on, temp1
-                subi    temp1, -POWER_RANGE     
-                com     temp1  
-                subi    temp1, -2               ; Make it shorter by 2 cycles
-                mov     tcnt0_pwroff, temp1
+                mov     temp2, temp1
+                subi    temp2, -POWER_RANGE     
+                com     temp2  
+                subi    temp2, -2               ; Make it shorter by 2 cycles
+                movw    tcnt0_power_on:tcnt0_pwroff, temp1:temp2
                 ret
 ;******************************************************************************
 ;* FUNCTION
@@ -547,8 +547,6 @@ not_full_power: cpi     temp1, NO_POWER
 neither_full_nor_off:
                 cbr     flags1, (1<<POWER_OFF)
 eval_power_state_exit:    
-                sbrc    flags2, POFF_CYCLE
-                sbr     flags1, (1<<POWER_OFF)
                 ret
 ;******************************************************************************
 ;* FUNCTION
@@ -587,10 +585,8 @@ set_new_duty_no_limit:
 set_new_duty_set_pwm:                
                 mov     temp1, temp6
                 com     temp1
-                cli 
                 rcall   eval_power_state        ; evaluate power state
                 rcall   set_pwm                 ; set new PWM
-                sei
                 ret                
 set_new_duty_low_ranges:
                 ; With low RPM we have more time for calculations. 
@@ -650,10 +646,8 @@ set_new_duty_strt_02:
 set_new_duty_strt_03:                
                 mov     temp1, temp6
                 com     temp1
-                cli 
                 rcall   eval_power_state        ; evaluate power state
                 rcall   set_pwm                 ; set new PWM
-                sei
                 ret                
 ;-----bko-----------------------------------------------------------------
 set_all_timings:
@@ -876,7 +870,6 @@ switch_power_off:
                 out     PORTD, temp1
 
                 sbr     flags1, (1<<POWER_OFF)  ; disable power on
-                cbr     flags2, (1<<POFF_CYCLE)
                 sbr     flags2, (1<<STARTUP)
                 ret                             ; motor is off
 ;-----bko-----------------------------------------------------------------
@@ -1076,8 +1069,6 @@ s6_start1:
                 rjmp    start1                  ; go back to state 1
 
 start_to_run:
-                ldi     temp1, 0xff
-                mov     run_control, temp1
                 ldi     temp1, PWR_PCT_TO_VAL(PCT_PWR_MAX_STARTUP)
                 mov     sys_control, temp1
 
@@ -1246,40 +1237,21 @@ run6_1:
                 rcall   evaluate_sys_state 
                 rcall   wait_for_zc_blank
                 cbr     flags2, (1<<NO_SYNC) 
-;               rjmp    run6_2
 run6_1_1:                
                 sbrc    flags2, RUN_MIN_RPM
-                rjmp    run6_2
+                rjmp    run1
 
 run_to_start:   sbr     flags2, (1<<STARTUP)
-                cbr     flags2, (1<<POFF_CYCLE)
                 cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) 
                 brcs    run_to_start_2
                 rjmp    restart_control
 run_to_start_2:                
                 rjmp    wait_for_power_on
 
-run6_2:         cbr     flags2, (1<<POFF_CYCLE)
-                tst     run_control             ; only once !
-                breq    run6_9
-                dec     run_control
-                breq    run6_3                  ; poweroff if 0
-                mov     temp1, run_control
-                cpi     temp1, 1                ; poweroff if 1
-                breq    run6_3
-                cpi     temp1, 2                ; poweroff if 2
-                brne    run6_9
-run6_3:         sbr     flags2, (1<<POFF_CYCLE)
-
-run6_9:
-                rjmp    run1                    ; go back to run 1
-
 restart_control:
                 cli                             ; disable all interrupts
                 rcall   switch_power_off
                 rjmp    reset
-
-
 ;-----bko-----------------------------------------------------------------
 ; *** scan comparator utilities ***
 filter_delay:  
@@ -1368,9 +1340,8 @@ com1com2:       BpFET_off                             ; Bp off
                 AcPhaseB
                 ret
 
-com2com3:       ldi     temp1, (1<<OCIE1A)+(1<<TOIE1) ; stop timer0 interrupt
-                out     TIMSK, temp1                  ;  .. only ONE should change these values at the time
-                nop
+com2com3:       
+                PwmCSEnter
                 cbr     flags0, (1<<A_FET)            ; next nFET = BnFET
                 cbr     flags0, (1<<C_FET)
                 sbrc    flags1, FULL_POWER
@@ -1380,8 +1351,8 @@ com2com3:       ldi     temp1, (1<<OCIE1A)+(1<<TOIE1) ; stop timer0 interrupt
 c2_switch:      CnFET_off                             ; Cn off
                 sbrs    flags1, POWER_OFF
                 BnFET_on                              ; Bn on
-c2_done:        ldi     temp1, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0) ; let timer0 do his work again
-                out     TIMSK, temp1
+c2_done:        
+                PwmCSLeave
                 AcPhaseC
                 ret
 
@@ -1391,9 +1362,8 @@ com3com4:       ApFET_off                             ; Ap off
                 AcPhaseA
                 ret
 
-com4com5:       ldi     temp1, (1<<OCIE1A)+(1<<TOIE1) ; stop timer0 interrupt
-                out     TIMSK, temp1                  ;  .. only ONE should change these values at the time
-                nop
+com4com5:       
+                PwmCSEnter 
                 sbr     flags0, (1<<A_FET)            ; next nFET = AnFET
                 cbr     flags0, (1<<C_FET)
                 sbrc    flags1, FULL_POWER
@@ -1403,8 +1373,8 @@ com4com5:       ldi     temp1, (1<<OCIE1A)+(1<<TOIE1) ; stop timer0 interrupt
 c4_switch:      BnFET_off                             ; Bn off
                 sbrs    flags1, POWER_OFF
                 AnFET_on                              ; An on
-c4_done:        ldi     temp1, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0) ; let timer0 do his work again
-                out     TIMSK, temp1
+c4_done:        
+                PwmCSLeave
                 AcPhaseB
                 ret
 
@@ -1414,9 +1384,8 @@ com5com6:       CpFET_off                             ; Cp off
                 AcPhaseC
                 ret
 
-com6com1:       ldi     temp1, (1<<OCIE1A)+(1<<TOIE1) ; stop timer0 interrupt
-                out     TIMSK, temp1                  ;  .. only ONE should change these values at the time
-                nop
+com6com1:       
+                PwmCSEnter
                 cbr     flags0, (1<<A_FET)            ; next nFET = CnFET
                 sbr     flags0, (1<<C_FET)
                 sbrc    flags1, FULL_POWER
@@ -1426,8 +1395,8 @@ com6com1:       ldi     temp1, (1<<OCIE1A)+(1<<TOIE1) ; stop timer0 interrupt
 c6_switch:      AnFET_off                             ; An off
                 sbrs    flags1, POWER_OFF
                 CnFET_on                              ; Cn on
-c6_done:        ldi     temp1, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0) ; let timer0 do his work again
-                out     TIMSK, temp1
+c6_done:        
+                PwmCSLeave
                 AcPhaseA
                 ret
 
