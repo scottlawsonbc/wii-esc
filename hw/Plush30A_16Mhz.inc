@@ -109,24 +109,34 @@
 #undef     MOT_BRAKE      
 #undef     READ_CALIBRATION
 #define    OVERCLOCK
-#define    F_CPU           16000000              ; 16Mhz internal RC oscilator (overclocked)
-#define    ZCF_CONST       6
+#define    F_CPU               16000000          ; 16Mhz internal RC oscilator (overclocked)
+#define    ZCF_CONST           6
            
 ;*************************
-; Timings                *
+; Power settings         *
 ;*************************
-#define    MIN_DUTY        3*POWER_RANGE/100     ; Min power 3%
-           
-#define    PWR_MAX_RPM1    POWER_RANGE/4
-#define    PWR_MAX_RPM2    POWER_RANGE/2
+#define    PCT_PWR_MIN         3                 ; Min power 3%
 
-#define    PWR_STARTUP     12*POWER_RANGE/100    ; 12%
-#define    PWR_MAX_STARTUP 15*POWER_RANGE/100    ; 15%
+;*************************
+; Power curve            *
+;*************************
+PWR_CURVE_POINT(01, 3500, 25)
+PWR_CURVE_POINT(02, 7000, 50)
 
-#define    timeoutSTART    65000
-#define    timeoutMIN      30000
+;*************************
+; Startup settings       *
+;*************************
+#define    timeoutSTART        65000
+#define    timeoutMIN          32000
+#define    PCT_PWR_STARTUP     12
+#define    PCT_PWR_MAX_STARTUP 15
+#define    RPM_START_MIN_RPM   4200
+#define    ENOUGH_GOODIES      20
 
-#define    PWR_RANGE1      0x40      ; ( ~2400 RPM )
-#define    PWR_RANGE2      0x20
+;*************************
+; Run settings           *
+;*************************
+#define    RPM_RUN_MIN_RPM     3200
 
-#define    ENOUGH_GOODIES  60
+
+
