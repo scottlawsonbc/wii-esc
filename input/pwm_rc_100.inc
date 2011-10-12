@@ -12,7 +12,6 @@
 #define    MIN_INT_RF    800
 
 .macro EvaluatePWC
-                cbr     flags1, (1<<EVAL_RC_PULS)
                 sbrs    flags1, RC_PULS_UPDATED
                 rjmp    eval_rc_p90
                 lds     temp1, new_rcpuls_l

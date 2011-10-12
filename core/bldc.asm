@@ -43,9 +43,9 @@
 .def    tcnt0_pwroff     = r7   ; timer0 counts nFETs are switched off
 .def    start_rcpuls_l   = r8
 .def    start_rcpuls_h   = r9
-;.def    ...             = r10
-.def    control_timeout  = r11
-.def    current_err      = r12  ; counts consecutive current errors
+.def    TCNT1L_shadow    = r10
+.def    TCNT1H_shadow    = r11
+.def    control_timeout  = r12  ; 
 
 .def    sys_control      = r13
 .def    t1_timeout       = r14
@@ -75,12 +75,12 @@
 .def    flags1  = r24   ; state flags
         .equ    POWER_OFF       = 0     ; switch fets on disabled
         .equ    FULL_POWER      = 1     ; 100% on - don't switch off, but do OFF_CYCLE working
-        .equ    CALC_NEXT_OCT1  = 2     ; calculate OCT1 offset, when wait_for_commutation is called
+;       .equ                    = 2     ; 
         .equ    RC_PULS_UPDATED = 3     ; new rc-puls value available
-        .equ    EVAL_RC_PULS    = 4     ; if set, new rc puls is evaluated, while waiting for OCT1
+;        .equ                   = 4     ; 
 ;        .equ                   = 5     ; 
 ;        .equ                   = 6     ; 
-        .equ    EVAL_PWM        = 7     ; if set, PWM should be updated
+;        .equ                   = 7     ; 
 
 .def    flags2  = r25
         .equ    RPM_RANGE1      = 0     ; 
@@ -302,9 +302,7 @@ clear_ram:      st      X+, temp1
 
 control_start:  ; init variables
                 SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_MIN)-1)
-                ldi     temp1, 0                ; reset error counters
-                mov     current_err,temp1
-                mov     sys_control, temp1
+                clr     sys_control
 
         ; init registers and interrupts
                 ldi     temp1, (1<<TOIE1)+(1<<OCIE1A)+(1<<TOIE0)
@@ -341,6 +339,8 @@ ext_int1_isr:   __ext_int1_isr
 ; output compare timer1 interrupt
 t1oca_int:      in      i_sreg, SREG
                 cbr     flags0, (1<<OCT1_PENDING) ; signal OCT1 passed
+                in      TCNT1L_shadow, TCNT1L
+                in      TCNT1H_shadow, TCNT1H
                 out     SREG, i_sreg
                 reti
 ;-----bko-----------------------------------------------------------------
@@ -771,10 +771,8 @@ correct_next_timing:
                 lds     YL, zc_wait_time_l
                 lds     YH, zc_wait_time_h
                 cli
-                in      temp1, TCNT1L
-                in      temp2, TCNT1H
-                add     YL, temp1
-                adc     YH, temp2
+                add     YL, TCNT1L_shadow
+                adc     YH, TCNT1H_shadow
                 out     OCR1AH, YH
                 out     OCR1AL, YL
                 sei
@@ -787,10 +785,8 @@ correct_timing_loop:
                 lsl     YL
                 rol     YH
                 cli
-                in      temp1, TCNT1L
-                in      temp2, TCNT1H
-                add     YL, temp1
-                adc     YH, temp2
+                add     YL, TCNT1L_shadow
+                adc     YH, TCNT1H_shadow
                 out     OCR1AH, YH
                 out     OCR1AL, YL
                 sei
@@ -800,8 +796,7 @@ correct_timing_loop:
 calc_next_timing:
                 lds     YL, com_timing_l
                 lds     YH, com_timing_h
-                rcall   update_timing
-                ret
+                rjmp    update_timing
                 
 wait_for_commutation:
                 sbrc    flags0, OCT1_PENDING
@@ -811,10 +806,8 @@ set_zc_blanking_time:
                 lds     YH, zc_blanking_time_h
                 lds     YL, zc_blanking_time_l
                 cli
-                in      temp1, TCNT1L
-                in      temp2, TCNT1H
-                add     YL, temp1
-                adc     YH, temp2
+                add     YL, TCNT1L_shadow
+                adc     YH, TCNT1H_shadow
                 out     OCR1AH, YH
                 out     OCR1AL, YL
                 sei
@@ -822,22 +815,24 @@ set_zc_blanking_time:
                 ret
 ;-----bko-----------------------------------------------------------------
 wait_for_zc_blank:
-        ; don't waste time while waiting - do some controls, if indicated
-                sbrc    flags1, EVAL_RC_PULS
+        ; don't waste time while waiting - do some controls
+                sbrc    flags1, RC_PULS_UPDATED
                 rcall   evaluate_rc_puls
-                sbrc    flags1, EVAL_PWM
                 rcall   set_new_duty
 wait_for_zc_blank_loop:      
+                sbrs    flags1, RC_PULS_UPDATED
+                rjmp    wait_for_zc_blank_loop2
+                rcall   evaluate_rc_puls
+                rcall   set_new_duty
+wait_for_zc_blank_loop2:                
                 sbrc    flags0, OCT1_PENDING
                 rjmp    wait_for_zc_blank_loop
         ; set ZC timeout
                 lds     YH, zc_wait_time_h
                 lds     YL, zc_wait_time_l
                 cli
-                in      temp1, TCNT1L
-                in      temp2, TCNT1H
-                add     YL, temp1
-                adc     YH, temp2
+                add     YL, TCNT1L_shadow
+                adc     YH, TCNT1H_shadow
                 out     OCR1AH, YH
                 out     OCR1AL, YL
                 sei
@@ -1101,10 +1096,8 @@ run1_fail:
                 rcall   no_sync_poff
                 rcall   com3com4
                 rcall   correct_next_timing
-                sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run4
 run1_1:                
-                sbr     flags1, (1<<EVAL_PWM)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com1com2
@@ -1126,10 +1119,8 @@ run2_fail:
                 rcall   no_sync_poff
                 rcall   com4com5
                 rcall   correct_next_timing
-                sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run5
 run2_1:                
-                sbr     flags1, (1<<EVAL_RC_PULS)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com2com3
@@ -1152,10 +1143,8 @@ run3_fail:
                 rcall   no_sync_poff
                 rcall   com5com6
                 rcall   correct_next_timing
-                sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run6
 run3_1:                
-                sbr     flags1, (1<<EVAL_PWM)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com3com4
@@ -1176,10 +1165,8 @@ run4_fail:
                 rcall   no_sync_poff
                 rcall   com6com1
                 rcall   correct_next_timing
-                sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run1
 run4_1:        
-                sbr     flags1, (1<<EVAL_RC_PULS)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com4com5
@@ -1201,10 +1188,8 @@ run5_fail:
                 rcall   no_sync_poff
                 rcall   com1com2
                 rcall   correct_next_timing
-                sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run2
 run5_1:                
-                sbr     flags1, (1<<EVAL_PWM)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com5com6
@@ -1227,10 +1212,8 @@ run6_fail:
                 rcall   no_sync_poff
                 rcall   com2com3
                 rcall   correct_next_timing
-                sbr     flags1, (1<<EVAL_PWM)
                 rjmp    run3
 run6_1:                
-                sbr     flags1, (1<<EVAL_RC_PULS)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
                 rcall   com6com1
