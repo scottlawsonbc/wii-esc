@@ -363,6 +363,7 @@ t1ovfl_99:      out     SREG, i_sreg
 ;-----bko-----------------------------------------------------------------
 ; timer0 overflow interrupt
 t0ovfl_int:     in      i_sreg, SREG
+                DbgLEDOff
                 sbrc    flags0, I_OFF_CYCLE
                 rjmp    t0_on_cycle
 
@@ -386,6 +387,7 @@ t0_off_cycle:
                 reti
 
 t0_on_cycle_t1:
+                DbgLEDOn
                 nop
                 nop                
                 nop
@@ -915,7 +917,7 @@ no_sync_poff:
                 out     PORTC, temp1
                 ldi     temp1, INIT_PD          ; all off
                 out     PORTD, temp1
-                ;DbgLEDOn
+                DbgLEDOn
                 ret
 
 
@@ -940,15 +942,18 @@ pp_FETs_off_wt: dec     temp1
                 ldi     temp1, PWR_PCT_TO_VAL(PCT_PWR_STARTUP)      ; set limiter
                 mov     sys_control, temp1
                 SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP)*1/4);
-                rcall   com5com6
                 rcall   com6com1
+                rcall   com1com2
+                BpFET_on
                 rcall   wait64ms
                 rcall   wait64ms
                 SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP)*2/4);
                 rcall   wait64ms
                 SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP)*3/4);
                 rcall   wait64ms
-                SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP));               
+                SetPWMi(PWR_PCT_TO_VAL(PCT_PWR_STARTUP));
+                BpFET_off               
+                rcall   com2com3
                 ret                
 ;-----bko-----------------------------------------------------------------
 ; **** startup loop ****
@@ -972,6 +977,7 @@ wait_for_power_on:
                 mov     t1_timeout, temp1
                 rcall   set_all_timings
                 rcall   start_timeout
+                rjmp    start3
 ;-----bko-----------------------------------------------------------------
 ; **** start control loop ****
 
@@ -999,6 +1005,7 @@ start1:
 
 ; state 3 = A(p-on) + B(n-choppered) - comparator C evaluated
 ; out_cC changes from low to high
+start3:
                 rcall   wait_for_low_strt
                 rcall   wait_for_high_strt
 ;                rcall   wait_for_test
