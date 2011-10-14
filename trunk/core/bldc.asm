@@ -363,50 +363,31 @@ t1ovfl_99:      out     SREG, i_sreg
 ;-----bko-----------------------------------------------------------------
 ; timer0 overflow interrupt
 t0ovfl_int:     in      i_sreg, SREG
-                DbgLEDOff
                 sbrc    flags0, I_OFF_CYCLE
                 rjmp    t0_on_cycle
-
 t0_off_cycle:   
+                mov     i_temp1, tcnt0_pwroff
+                cpi     i_temp1, 0xFF
+                breq    t0_on_cycle_t1
+                ;
                 out     TCNT0, tcnt0_pwroff     ; reload t0
-                ; PWM state = off cycle
-                sbr     flags0, (1<<I_OFF_CYCLE)
                 ; We can just turn them all off as we only have one nFET on at a
                 ; time, and interrupts are disabled during beeps.
                 CnFET_off
                 AnFET_off
                 BnFET_off
-
-                mov     i_temp1, tcnt0_pwroff
-                cpi     i_temp1, 0
-                breq    t0_on_cycle_t1
-                cpi     i_temp1, 1
-                breq    t0_on_cycle_t0
-
+                ; PWM state = off cycle
+                sbr     flags0, (1<<I_OFF_CYCLE)
                 out     SREG, i_sreg
                 reti
-
 t0_on_cycle_t1:
-                DbgLEDOn
-                nop
-                nop                
-                nop
-                nop                
-                nop
-;                nop                
-;                nop
-;                nop                
-                
-                
-t0_on_cycle_t0:
-;                nop
-;                nop      
-;                nop
-;                nop      
-;                DbgLEDOn          
-
-
+                ; Off-load last cycle 
+                CnFET_off
+                AnFET_off
+                BnFET_off
+                nop             
 t0_on_cycle:
+                out     TCNT0, tcnt0_power_on   ; reload t0
                 sbrc    flags1, POWER_OFF
                 rjmp    t0_on_cycle_tcnt
                 ; switch appropriate nFET on as soon as possible
@@ -422,14 +403,12 @@ sw_BnFET_on:
                 BnFET_on                        ; Bn on
 t0_on_cycle_tcnt:
                 cbr     flags0, (1<<I_OFF_CYCLE); PWM state = on cycle
-                mov     i_temp1, tcnt0_power_on
                 cbr     flags1, (1<<FULL_POWER)
-                cpi     i_temp1, MAX_POWER
-                brsh    t0_on_cycle_not_full_power
+                tst     tcnt0_pwroff
+                brne    t0_on_cycle_not_full_power
                 sbr     flags1, (1<<FULL_POWER)
                 sbr     flags0, (1<<I_OFF_CYCLE)
 t0_on_cycle_not_full_power:
-                out     TCNT0, tcnt0_power_on   ; reload t0
                 out     SREG, i_sreg
                 reti                   
 ;-----bko-----------------------------------------------------------------
@@ -503,7 +482,7 @@ evaluate_rc_puls:
 ;-----bko-----------------------------------------------------------------
 evaluate_sys_state:
                 mov     temp1, sys_control      ; Build up sys_control to POWER_RANGE
-                cpi     temp1, POWER_RANGE
+                cpi     temp1, POWER_RANGE - 1
                 breq    evaluate_sys_state_exit
                 inc     sys_control             ; 
 evaluate_sys_state_exit:                
@@ -522,9 +501,14 @@ evaluate_sys_state_exit:
 ;******************************************************************************
 set_pwm:
                 mov     temp2, temp1
-                subi    temp2, -POWER_RANGE     
+                subi    temp2, -(POWER_RANGE + 1)
                 com     temp2  
                 subi    temp2, -2               ; Make it shorter by 2 cycles
+                cpi     temp1, 0xFE
+                brcs    set_pwm_01
+                ldi     temp1, 0xFF - 2         ; Limit to 0xFF
+set_pwm_01:
+                subi    temp1, -2               ; Make it shorter by 2 cycles 
                 movw    tcnt0_power_on:tcnt0_pwroff, temp1:temp2
                 ret
 ;******************************************************************************
@@ -558,7 +542,7 @@ eval_power_state_exit:
 ;*     2) Limits power to sys_control
 ;*     3) Limits RPM ranges power
 ;* USAGE
-;*      ZH (0-POWER_RANGE)
+;*      ZH (0 - POWER_RANGE - 1)
 ;* STATISTICS
 ;*      Register usage: temp1, temp2, temp3 
 ;******************************************************************************
@@ -626,7 +610,7 @@ set_new_duty_min_rpm:
 ;*     2) Limits power to sys_control
 ;*     3) Constraints power in range: PWR_PCT_TO_VAL(PCT_PWR_STARTUP)..PWR_PCT_TO_VAL(PCT_PWR_MAX_STARTUP)
 ;* USAGE
-;*      ZH (0-POWER_RANGE)
+;*      ZH (0 - POWER_RANGE-1)
 ;* STATISTICS
 ;*      Register usage: temp1, temp2, temp3 
 ;******************************************************************************
