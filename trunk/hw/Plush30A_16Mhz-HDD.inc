@@ -115,7 +115,7 @@
 ;*************************
 ; Power settings         *
 ;*************************
-#define    PCT_PWR_MIN         3                 ; Min power 3%
+#define    PCT_PWR_MIN         25                 ; Min power 25%
 
 ;*************************
 ; Power curve            *
@@ -126,9 +126,9 @@ PWR_CURVE_POINT(02, 12000, 50)
 ;*************************
 ; Startup settings       *
 ;*************************
-#define    timeoutSTART        65000
-#define    timeoutMIN          32000
-#define    PCT_PWR_STARTUP     25
+#define    timeoutSTART        8192*4*2-1
+#define    timeoutMIN          4096*4*2
+#define    PCT_PWR_STARTUP     35
 #define    PCT_PWR_MAX_STARTUP 40
 #define    RPM_START_MIN_RPM   8000
 #define    ENOUGH_GOODIES      20
