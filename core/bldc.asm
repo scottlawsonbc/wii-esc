@@ -19,7 +19,7 @@
 ;!! Wer mit den Nutzungbedingungen nicht einverstanden ist, darf die Software nicht nutzen !!
 
 #if defined(_include_ppm_inc_)
-  .include "ppm.inc"
+  .include "ppm_light.inc"
 #endif 
 
 
@@ -362,7 +362,8 @@ t1ovfl_99:      out     SREG, i_sreg
                 reti
 ;-----bko-----------------------------------------------------------------
 ; timer0 overflow interrupt
-t0ovfl_int:     in      i_sreg, SREG
+t0ovfl_int:     
+                in      i_sreg, SREG
                 sbrc    flags0, I_OFF_CYCLE
                 rjmp    t0_on_cycle
 t0_off_cycle:   
@@ -385,7 +386,14 @@ t0_on_cycle_t1:
                 CnFET_off
                 AnFET_off
                 BnFET_off
-                nop             
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
+                nop
 t0_on_cycle:
                 out     TCNT0, tcnt0_power_on   ; reload t0
                 sbrc    flags1, POWER_OFF
@@ -434,11 +442,11 @@ beep:           clr     temp1
                 BpFET_on                ; BpFET on
                 AnFET_on                ; CnFET on
 beep_BpCn10:    in      temp1, TCNT0
-                cpi     temp1, 32*CLK_SCALE             ; 32³s on
+                cpi     temp1, 16*CLK_SCALE             ; 16us on
                 brne    beep_BpCn10
                 BpFET_off               ; BpFET off
                 AnFET_off               ; CnFET off
-                ldi     temp3, 8*CLK_SCALE              ; 2040³s off
+                ldi     temp3, 8*CLK_SCALE              ; 2040us off
 beep_BpCn12:    clr     temp1
                 out     TCNT0, temp1
 beep_BpCn13:    in      temp1, TCNT0
@@ -506,7 +514,7 @@ set_pwm:
                 subi    temp2, -2               ; Make it shorter by 2 cycles
                 cpi     temp1, 0xFE
                 brcs    set_pwm_01
-                ldi     temp1, 0xFF - 2         ; Limit to 0xFF
+                ldi     temp1, 0xFF  - 2        ; Limit to 0xFF
 set_pwm_01:
                 subi    temp1, -2               ; Make it shorter by 2 cycles 
                 movw    tcnt0_power_on:tcnt0_pwroff, temp1:temp2
@@ -944,14 +952,14 @@ pp_FETs_off_wt: dec     temp1
 init_startup:   rcall   switch_power_off
                 rcall   motor_brake
 wait_for_power_on:
-                DbgLEDOn
+                ;DbgLEDOn
 
                 rcall   evaluate_rc_puls
                 cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) + 1
                 brcs    wait_for_power_on
                 AcInit
                 rcall   pre_align
-                DbgLEDOn
+                ;DbgLEDOn
 
                 cbr     flags2, (1<<NO_SYNC) 
                 cbr     flags2, (1<<SCAN_TIMEOUT)
@@ -1062,7 +1070,7 @@ start_to_run:
                 rcall   wait_for_commutation    ; needed to align phases 
                 rcall   wait_for_zc_blank       ; the ZC timeout should start at: ZC + comm_time + zc_blank_time
 
-                DbgLEDOff
+                ;DbgLEDOff
 
                 cbr     flags2, (1<<NO_SYNC) 
                 cbr     flags2, (1<<STARTUP)
@@ -1216,7 +1224,7 @@ run6_1_1:
                 rjmp    run1
 
 run_to_start:   sbr     flags2, (1<<STARTUP)
-                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MIN) 
+                cpi     ZH, PWR_PCT_TO_VAL(PCT_PWR_MAX_STARTUP) 
                 brcs    run_to_start_2
                 rjmp    restart_control
 run_to_start_2:                
