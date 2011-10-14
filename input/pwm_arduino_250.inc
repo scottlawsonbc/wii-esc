@@ -28,9 +28,9 @@ eval_rc_p00:    lsr     temp2
                 ror     temp1
 .endif
                 mov     temp3, temp1
-                cpi     temp3, POWER_RANGE
+                cpi     temp3, POWER_RANGE - 1
                 brcs    eval_rc_p10
-                ldi     temp3, POWER_RANGE
+                ldi     temp3, POWER_RANGE - 1
 eval_rc_p10:    
 ;                cpi     temp3, MIN_DUTY 
 ;                brcc    eval_rc_p20

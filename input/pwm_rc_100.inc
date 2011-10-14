@@ -33,9 +33,9 @@ eval_rc_p00:    lsr     temp2
                 ror     temp1
 .endif
                 mov     temp3, temp1            
-                subi    temp1, POWER_RANGE - 0
+                subi    temp1, POWER_RANGE - 1
                 brcs    eval_rc_p10
-                ldi     temp3, POWER_RANGE - 0
+                ldi     temp3, POWER_RANGE - 1
 eval_rc_p10:    mov     ZH, temp3
 eval_rc_p90:    ret
 
