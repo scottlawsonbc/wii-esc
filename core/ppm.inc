@@ -67,7 +67,8 @@ micp_fail:      tst     control_timeout
                 dec     control_timeout
                 rjmp    micp_exit
                 ; rc impuls is at low state
-falling_edge:   sbic    PIND, rcp_in                              ; test level of rc impuls
+falling_edge:   
+                sbic    PIND, rcp_in                              ; test level of rc impuls
                 rjmp    micp_exit                                 ; seems to be a spike
                 ldi     i_temp1, micp_r_edge
                 out     MCUCR, i_temp1                            ; set next int to rising edge
