@@ -992,7 +992,6 @@ start1:
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
                 rcall   com2com3
-                rcall   evaluate_rc_puls
                 rcall   start_timeout
 
 ; state 3 = A(p-on) + B(n-choppered) - comparator C evaluated
@@ -1004,7 +1003,6 @@ start3:
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
                 rcall   com3com4
-                rcall   set_new_duty_strt
                 rcall   start_timeout
 
 ; state 4 = C(p-on) + B(n-choppered) - comparator A evaluated
@@ -1026,6 +1024,8 @@ start3:
                 sbr     flags2, (1<<SCAN_TIMEOUT)
                 rcall   com5com6
                 rcall   evaluate_sys_state
+                rcall   evaluate_rc_puls
+                rcall   set_new_duty_strt
                 rcall   start_timeout
 
 ; state 6 = B(p-on) + A(n-choppered) - comparator C evaluated
