@@ -743,22 +743,28 @@ update_t99:
                 ror     temp3
                 mov     temp1, temp3
                 mov     temp2, temp4
-                lsr     temp5
-                ror     temp4
+                lsr     temp4                    ; x always 0 at this stage (0x2ffff / 4 = 0xBFFF)
                 ror     temp3
-                lsr     temp5
-                ror     temp4
+                lsr     temp4
                 ror     temp3
-        ; use the same value for commutation timing and zc_blanking (15ø)
-                sts     zc_blanking_time_l, temp3
-                sts     zc_blanking_time_h, temp4
-                sts     com_timing_l, temp3
+                ;
+                sts     com_timing_l, temp3      ; save for timing advance delay (15 deg)
                 sts     com_timing_h, temp4
-        ; timer correction in case of lost ZC: +15 deg        
-                add     temp1, temp3
-                adc     temp2, temp4
-                sts     zc_wait_time_l, temp1   ; save for zero crossing timeout (Expected time +45 deg)
-                sts     zc_wait_time_h, temp2    
+                mov     temp5, temp3
+                mov     temp6, temp4
+                lsr     temp5
+                ror     temp6
+                ; 3,4 -  15 deg
+                ; 5,6 - 7.5 deg 
+                ; 1,2 -  60 deg
+                add     temp1, temp5
+                adc     temp2, temp6
+                sts     zc_wait_time_l, temp1     ; save for zero crossing timeout (60 + 7.5 = 67.5)
+                sts     zc_wait_time_h, temp2
+                add     temp3, temp5
+                adc     temp4, temp6
+                sts     zc_blanking_time_l, temp3 ; save for zero crossing blanking time (15 + 7.5 = 22.5)
+                sts     zc_blanking_time_h, temp4
                 ret
                 
 correct_next_timing:          
