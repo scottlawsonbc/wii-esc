@@ -1097,6 +1097,8 @@ run1_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com1com2
+                rcall   com2com3
                 rcall   com3com4
                 rcall   correct_next_timing
                 rjmp    run4
@@ -1120,6 +1122,8 @@ run2_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com2com3
+                rcall   com3com4
                 rcall   com4com5
                 rcall   correct_next_timing
                 rjmp    run5
@@ -1144,6 +1148,8 @@ run3_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com3com4
+                rcall   com4com5
                 rcall   com5com6
                 rcall   correct_next_timing
                 rjmp    run6
@@ -1166,6 +1172,8 @@ run4_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com4com5
+                rcall   com5com6
                 rcall   com6com1
                 rcall   correct_next_timing
                 rjmp    run1
@@ -1189,6 +1197,8 @@ run5_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com5com6
+                rcall   com6com1
                 rcall   com1com2
                 rcall   correct_next_timing
                 rjmp    run2
@@ -1213,6 +1223,8 @@ run6_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com6com1
+                rcall   com1com2
                 rcall   com2com3
                 rcall   correct_next_timing
                 rjmp    run3
