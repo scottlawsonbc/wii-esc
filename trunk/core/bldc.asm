@@ -65,19 +65,18 @@
         .equ    OCT1_PENDING    = 0     ; if set, output compare interrunpt is pending
         .equ    UB_LOW          = 1     ; set if accu voltage low
         .equ    I_pFET_HIGH     = 2     ; set if over-current detect
-        .equ    GET_STATE       = 3     ; set if state is to be send
+        .equ    B_FET           = 3     ; if set, A-FET state is to be changed
         .equ    C_FET           = 4     ; if set, C-FET state is to be changed
         .equ    A_FET           = 5     ; if set, A-FET state is to be changed
-             ; if neither 1 nor 2 is set, B-FET state is to be changed
-        .equ    I_OFF_CYCLE     = 6     ; if set, current off cycle is active
+;        .equ    ...            = 6     ; 
         .equ    T1OVFL_FLAG     = 7     ; each timer1 overflow sets this flag - used for voltage + current watch
 
 .def    flags1  = r24   ; state flags
         .equ    POWER_OFF       = 0     ; switch fets on disabled
         .equ    FULL_POWER      = 1     ; 100% on - don't switch off, but do OFF_CYCLE working
-;       .equ                    = 2     ; 
+        .equ    NO_COMM         = 2     ; !(FULL_POWER or !PWM_OFF_CYCLE)
         .equ    RC_PULS_UPDATED = 3     ; new rc-puls value available
-;        .equ                   = 4     ; 
+        .equ    PWM_OFF_CYCLE   = 4     ; if set, current off cycle is active
 ;        .equ                   = 5     ; 
 ;        .equ                   = 6     ; 
 ;        .equ                   = 7     ; 
@@ -364,7 +363,7 @@ t1ovfl_99:      out     SREG, i_sreg
 ; timer0 overflow interrupt
 t0ovfl_int:     
                 in      i_sreg, SREG
-                sbrc    flags0, I_OFF_CYCLE
+                sbrc    flags1, PWM_OFF_CYCLE
                 rjmp    t0_on_cycle
 t0_off_cycle:   
                 mov     i_temp1, tcnt0_pwroff
@@ -378,7 +377,7 @@ t0_off_cycle:
                 AnFET_off
                 BnFET_off
                 ; PWM state = off cycle
-                sbr     flags0, (1<<I_OFF_CYCLE)
+                sbr     flags1, (1<<PWM_OFF_CYCLE) + (1<<NO_COMM)
                 out     SREG, i_sreg
                 reti
 t0_on_cycle_t1:
@@ -399,23 +398,17 @@ t0_on_cycle:
                 sbrc    flags1, POWER_OFF
                 rjmp    t0_on_cycle_tcnt
                 ; switch appropriate nFET on as soon as possible
-                sbrs    flags0, C_FET           ; is Cn choppered ?
-                rjmp    test_AnFET_on                   ; .. no - test An
+                sbrc    flags0, C_FET           ; is Cn choppered ?
                 CnFET_on                        ; Cn on
-                rjmp    t0_on_cycle_tcnt
-test_AnFET_on:  sbrs    flags0, A_FET           ; is An choppered ?
-                rjmp    sw_BnFET_on                     ; .. no - Bn has to be choppered
+                sbrc    flags0, A_FET           ; is An choppered ?
                 AnFET_on                        ; An on
-                rjmp    t0_on_cycle_tcnt
-sw_BnFET_on:    
+                sbrc    flags0, B_FET           ; is Bn choppered ?
                 BnFET_on                        ; Bn on
 t0_on_cycle_tcnt:
-                cbr     flags0, (1<<I_OFF_CYCLE); PWM state = on cycle
-                cbr     flags1, (1<<FULL_POWER)
+                cbr     flags1, (1<<FULL_POWER) + (1<<NO_COMM) + (1<<PWM_OFF_CYCLE); PWM state = on cycle
                 tst     tcnt0_pwroff
                 brne    t0_on_cycle_not_full_power
-                sbr     flags1, (1<<FULL_POWER)
-                sbr     flags0, (1<<I_OFF_CYCLE)
+                sbr     flags1, (1<<FULL_POWER) + (1<<PWM_OFF_CYCLE)
 t0_on_cycle_not_full_power:
                 out     SREG, i_sreg
                 reti                   
@@ -1328,20 +1321,20 @@ wait_for_test:
 ;-----bko-----------------------------------------------------------------
 ; *** commutation utilities ***
 com1com2:       BpFET_off                             ; Bp off
-                sbrs    flags1, POWER_OFF
+                CpFET_off                             ; Cp off
+                ;sbrs    flags1, POWER_OFF
                 ApFET_on                              ; Ap on
                 AcPhaseB
                 ret
 
 com2com3:       
                 PwmCSEnter
-                cbr     flags0, (1<<A_FET)            ; next nFET = BnFET
-                cbr     flags0, (1<<C_FET)
-                sbrc    flags1, FULL_POWER
-                rjmp    c2_switch
-                sbrc    flags0, I_OFF_CYCLE           ; was power off ?
+                cbr     flags0, (1<<A_FET) + (1<<B_FET) + (1<<C_FET)   
+                sbr     flags0, (1<<B_FET)            ; next nFET = BnFET
+                sbrc    flags1, NO_COMM               ; 
                 rjmp    c2_done                       ; .. yes - futhermore work is done in timer0 interrupt
-c2_switch:      CnFET_off                             ; Cn off
+                CnFET_off                             ; Cn off
+                AnFET_off                             ; An off
                 sbrs    flags1, POWER_OFF
                 BnFET_on                              ; Bn on
 c2_done:        
@@ -1350,20 +1343,20 @@ c2_done:
                 ret
 
 com3com4:       ApFET_off                             ; Ap off
-                sbrs    flags1, POWER_OFF
+                BpFET_off                             ; Bp off
+                ;sbrs    flags1, POWER_OFF
                 CpFET_on                              ; Cp on
                 AcPhaseA
                 ret
 
 com4com5:       
                 PwmCSEnter 
+                cbr     flags0, (1<<A_FET) + (1<<B_FET) + (1<<C_FET)   
                 sbr     flags0, (1<<A_FET)            ; next nFET = AnFET
-                cbr     flags0, (1<<C_FET)
-                sbrc    flags1, FULL_POWER
-                rjmp    c4_switch
-                sbrc    flags0, I_OFF_CYCLE           ; was power off ?
+                sbrc    flags1, NO_COMM               ; 
                 rjmp    c4_done                       ; .. yes - futhermore work is done in timer0 interrupt
-c4_switch:      BnFET_off                             ; Bn off
+                BnFET_off                             ; Bn off
+                CnFET_off                             ; Cn off
                 sbrs    flags1, POWER_OFF
                 AnFET_on                              ; An on
 c4_done:        
@@ -1372,20 +1365,20 @@ c4_done:
                 ret
 
 com5com6:       CpFET_off                             ; Cp off
-                sbrs    flags1, POWER_OFF
+                ApFET_off                             ; Ap off
+                ;sbrs    flags1, POWER_OFF
                 BpFET_on                              ; Bp on
                 AcPhaseC
                 ret
 
 com6com1:       
                 PwmCSEnter
-                cbr     flags0, (1<<A_FET)            ; next nFET = CnFET
-                sbr     flags0, (1<<C_FET)
-                sbrc    flags1, FULL_POWER
-                rjmp    c6_switch
-                sbrc    flags0, I_OFF_CYCLE           ; was power off ?
+                cbr     flags0, (1<<A_FET) + (1<<B_FET) + (1<<C_FET)   
+                sbr     flags0, (1<<C_FET)            ; next nFET = CnFET
+                sbrc    flags1, NO_COMM               ; 
                 rjmp    c6_done                       ; .. yes - futhermore work is done in timer0 interrupt
-c6_switch:      AnFET_off                             ; An off
+                AnFET_off                             ; An off
+                BnFET_off                             ; Bn off
                 sbrs    flags1, POWER_OFF
                 CnFET_on                              ; Cn on
 c6_done:        
