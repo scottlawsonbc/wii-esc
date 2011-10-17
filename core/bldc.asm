@@ -65,18 +65,19 @@
         .equ    OCT1_PENDING    = 0     ; if set, output compare interrunpt is pending
         .equ    UB_LOW          = 1     ; set if accu voltage low
         .equ    I_pFET_HIGH     = 2     ; set if over-current detect
-        .equ    B_FET           = 3     ; if set, A-FET state is to be changed
+        .equ    GET_STATE       = 3     ; set if state is to be send
         .equ    C_FET           = 4     ; if set, C-FET state is to be changed
         .equ    A_FET           = 5     ; if set, A-FET state is to be changed
-;        .equ    ...            = 6     ; 
+             ; if neither 1 nor 2 is set, B-FET state is to be changed
+        .equ    I_OFF_CYCLE     = 6     ; if set, current off cycle is active
         .equ    T1OVFL_FLAG     = 7     ; each timer1 overflow sets this flag - used for voltage + current watch
 
 .def    flags1  = r24   ; state flags
         .equ    POWER_OFF       = 0     ; switch fets on disabled
         .equ    FULL_POWER      = 1     ; 100% on - don't switch off, but do OFF_CYCLE working
-        .equ    NO_COMM         = 2     ; !(FULL_POWER or !PWM_OFF_CYCLE)
+;       .equ                    = 2     ; 
         .equ    RC_PULS_UPDATED = 3     ; new rc-puls value available
-        .equ    PWM_OFF_CYCLE   = 4     ; if set, current off cycle is active
+;        .equ                   = 4     ; 
 ;        .equ                   = 5     ; 
 ;        .equ                   = 6     ; 
 ;        .equ                   = 7     ; 
@@ -363,7 +364,7 @@ t1ovfl_99:      out     SREG, i_sreg
 ; timer0 overflow interrupt
 t0ovfl_int:     
                 in      i_sreg, SREG
-                sbrc    flags1, PWM_OFF_CYCLE
+                sbrc    flags0, I_OFF_CYCLE
                 rjmp    t0_on_cycle
 t0_off_cycle:   
                 mov     i_temp1, tcnt0_pwroff
@@ -377,7 +378,7 @@ t0_off_cycle:
                 AnFET_off
                 BnFET_off
                 ; PWM state = off cycle
-                sbr     flags1, (1<<PWM_OFF_CYCLE) + (1<<NO_COMM)
+                sbr     flags0, (1<<I_OFF_CYCLE)
                 out     SREG, i_sreg
                 reti
 t0_on_cycle_t1:
@@ -398,17 +399,23 @@ t0_on_cycle:
                 sbrc    flags1, POWER_OFF
                 rjmp    t0_on_cycle_tcnt
                 ; switch appropriate nFET on as soon as possible
-                sbrc    flags0, C_FET           ; is Cn choppered ?
+                sbrs    flags0, C_FET           ; is Cn choppered ?
+                rjmp    test_AnFET_on                   ; .. no - test An
                 CnFET_on                        ; Cn on
-                sbrc    flags0, A_FET           ; is An choppered ?
+                rjmp    t0_on_cycle_tcnt
+test_AnFET_on:  sbrs    flags0, A_FET           ; is An choppered ?
+                rjmp    sw_BnFET_on                     ; .. no - Bn has to be choppered
                 AnFET_on                        ; An on
-                sbrc    flags0, B_FET           ; is Bn choppered ?
+                rjmp    t0_on_cycle_tcnt
+sw_BnFET_on:    
                 BnFET_on                        ; Bn on
 t0_on_cycle_tcnt:
-                cbr     flags1, (1<<FULL_POWER) + (1<<NO_COMM) + (1<<PWM_OFF_CYCLE); PWM state = on cycle
+                cbr     flags0, (1<<I_OFF_CYCLE); PWM state = on cycle
+                cbr     flags1, (1<<FULL_POWER)
                 tst     tcnt0_pwroff
                 brne    t0_on_cycle_not_full_power
-                sbr     flags1, (1<<FULL_POWER) + (1<<PWM_OFF_CYCLE)
+                sbr     flags1, (1<<FULL_POWER)
+                sbr     flags0, (1<<I_OFF_CYCLE)
 t0_on_cycle_not_full_power:
                 out     SREG, i_sreg
                 reti                   
@@ -736,28 +743,22 @@ update_t99:
                 ror     temp3
                 mov     temp1, temp3
                 mov     temp2, temp4
-                lsr     temp4                    ; x always 0 at this stage (0x2ffff / 4 = 0xBFFF)
-                ror     temp3
-                lsr     temp4
-                ror     temp3
-                ;
-                sts     com_timing_l, temp3      ; save for timing advance delay (15 deg)
-                sts     com_timing_h, temp4
-                mov     temp5, temp3
-                mov     temp6, temp4
                 lsr     temp5
-                ror     temp6
-                ; 3,4 -  15 deg
-                ; 5,6 - 7.5 deg 
-                ; 1,2 -  60 deg
-                add     temp1, temp5
-                adc     temp2, temp6
-                sts     zc_wait_time_l, temp1     ; save for zero crossing timeout (60 + 7.5 = 67.5)
-                sts     zc_wait_time_h, temp2
-                add     temp3, temp5
-                adc     temp4, temp6
-                sts     zc_blanking_time_l, temp3 ; save for zero crossing blanking time (15 + 7.5 = 22.5)
+                ror     temp4
+                ror     temp3
+                lsr     temp5
+                ror     temp4
+                ror     temp3
+        ; use the same value for commutation timing and zc_blanking (15ø)
+                sts     zc_blanking_time_l, temp3
                 sts     zc_blanking_time_h, temp4
+                sts     com_timing_l, temp3
+                sts     com_timing_h, temp4
+        ; timer correction in case of lost ZC: +15 deg        
+                add     temp1, temp3
+                adc     temp2, temp4
+                sts     zc_wait_time_l, temp1   ; save for zero crossing timeout (Expected time +45 deg)
+                sts     zc_wait_time_h, temp2    
                 ret
                 
 correct_next_timing:          
@@ -1097,8 +1098,6 @@ run1_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com1com2
-                rcall   com2com3
                 rcall   com3com4
                 rcall   correct_next_timing
                 rjmp    run4
@@ -1122,8 +1121,6 @@ run2_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com2com3
-                rcall   com3com4
                 rcall   com4com5
                 rcall   correct_next_timing
                 rjmp    run5
@@ -1148,8 +1145,6 @@ run3_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com3com4
-                rcall   com4com5
                 rcall   com5com6
                 rcall   correct_next_timing
                 rjmp    run6
@@ -1172,8 +1167,6 @@ run4_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com4com5
-                rcall   com5com6
                 rcall   com6com1
                 rcall   correct_next_timing
                 rjmp    run1
@@ -1197,8 +1190,6 @@ run5_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com5com6
-                rcall   com6com1
                 rcall   com1com2
                 rcall   correct_next_timing
                 rjmp    run2
@@ -1223,8 +1214,6 @@ run6_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com6com1
-                rcall   com1com2
                 rcall   com2com3
                 rcall   correct_next_timing
                 rjmp    run3
@@ -1333,20 +1322,20 @@ wait_for_test:
 ;-----bko-----------------------------------------------------------------
 ; *** commutation utilities ***
 com1com2:       BpFET_off                             ; Bp off
-                CpFET_off                             ; Cp off
-                ;sbrs    flags1, POWER_OFF
+                sbrs    flags1, POWER_OFF
                 ApFET_on                              ; Ap on
                 AcPhaseB
                 ret
 
 com2com3:       
                 PwmCSEnter
-                cbr     flags0, (1<<A_FET) + (1<<B_FET) + (1<<C_FET)   
-                sbr     flags0, (1<<B_FET)            ; next nFET = BnFET
-                sbrc    flags1, NO_COMM               ; 
+                cbr     flags0, (1<<A_FET)            ; next nFET = BnFET
+                cbr     flags0, (1<<C_FET)
+                sbrc    flags1, FULL_POWER
+                rjmp    c2_switch
+                sbrc    flags0, I_OFF_CYCLE           ; was power off ?
                 rjmp    c2_done                       ; .. yes - futhermore work is done in timer0 interrupt
-                CnFET_off                             ; Cn off
-                AnFET_off                             ; An off
+c2_switch:      CnFET_off                             ; Cn off
                 sbrs    flags1, POWER_OFF
                 BnFET_on                              ; Bn on
 c2_done:        
@@ -1355,20 +1344,20 @@ c2_done:
                 ret
 
 com3com4:       ApFET_off                             ; Ap off
-                BpFET_off                             ; Bp off
-                ;sbrs    flags1, POWER_OFF
+                sbrs    flags1, POWER_OFF
                 CpFET_on                              ; Cp on
                 AcPhaseA
                 ret
 
 com4com5:       
                 PwmCSEnter 
-                cbr     flags0, (1<<A_FET) + (1<<B_FET) + (1<<C_FET)   
                 sbr     flags0, (1<<A_FET)            ; next nFET = AnFET
-                sbrc    flags1, NO_COMM               ; 
+                cbr     flags0, (1<<C_FET)
+                sbrc    flags1, FULL_POWER
+                rjmp    c4_switch
+                sbrc    flags0, I_OFF_CYCLE           ; was power off ?
                 rjmp    c4_done                       ; .. yes - futhermore work is done in timer0 interrupt
-                BnFET_off                             ; Bn off
-                CnFET_off                             ; Cn off
+c4_switch:      BnFET_off                             ; Bn off
                 sbrs    flags1, POWER_OFF
                 AnFET_on                              ; An on
 c4_done:        
@@ -1377,20 +1366,20 @@ c4_done:
                 ret
 
 com5com6:       CpFET_off                             ; Cp off
-                ApFET_off                             ; Ap off
-                ;sbrs    flags1, POWER_OFF
+                sbrs    flags1, POWER_OFF
                 BpFET_on                              ; Bp on
                 AcPhaseC
                 ret
 
 com6com1:       
                 PwmCSEnter
-                cbr     flags0, (1<<A_FET) + (1<<B_FET) + (1<<C_FET)   
-                sbr     flags0, (1<<C_FET)            ; next nFET = CnFET
-                sbrc    flags1, NO_COMM               ; 
+                cbr     flags0, (1<<A_FET)            ; next nFET = CnFET
+                sbr     flags0, (1<<C_FET)
+                sbrc    flags1, FULL_POWER
+                rjmp    c6_switch
+                sbrc    flags0, I_OFF_CYCLE           ; was power off ?
                 rjmp    c6_done                       ; .. yes - futhermore work is done in timer0 interrupt
-                AnFET_off                             ; An off
-                BnFET_off                             ; Bn off
+c6_switch:      AnFET_off                             ; An off
                 sbrs    flags1, POWER_OFF
                 CnFET_on                              ; Cn on
 c6_done:        
