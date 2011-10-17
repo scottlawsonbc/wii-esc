@@ -723,12 +723,11 @@ update_t90:     sts     timing_l, temp3
                 sts     timing_h, temp4
                 sts     timing_x, temp5
                 ldi     temp2, 3
-                cp      temp5, temp2            ; limit range to 0x2ffff
+                cp      temp5, temp2              ; limit range to 0x2ffff
                 brcs    update_t99
                 rcall   set_timing_v
-
 update_t99:
-                lsr     temp5                   ; a 16th is the next wait before scan
+                lsr     temp5                   
                 ror     temp4
                 ror     temp3
                 lsr     temp5
@@ -736,30 +735,20 @@ update_t99:
                 ror     temp3
                 mov     temp1, temp3
                 mov     temp2, temp4
-                lsr     temp4                    ; x always 0 at this stage (0x2ffff / 4 = 0xBFFF)
+                lsr     temp4                     ; x always 0 at this stage (0x2ffff / 4 = 0xBFFF)
                 ror     temp3
                 lsr     temp4
                 ror     temp3
-                ;
-                sts     com_timing_l, temp3      ; save for timing advance delay (15 deg)
-                sts     com_timing_h, temp4
-                mov     temp5, temp3
-                mov     temp6, temp4
-                lsr     temp5
-                ror     temp6
-                ; 3,4 -  15 deg
-                ; 5,6 - 7.5 deg 
-                ; 1,2 -  60 deg
-                add     temp1, temp5
-                adc     temp2, temp6
-                sts     zc_wait_time_l, temp1     ; save for zero crossing timeout (60 + 7.5 = 67.5)
-                sts     zc_wait_time_h, temp2
-                add     temp3, temp5
-                adc     temp4, temp6
-                sts     zc_blanking_time_l, temp3 ; save for zero crossing blanking time (15 + 7.5 = 22.5)
+                sts     zc_blanking_time_l, temp3 ; save for zero crossing blanking time (15 deg) 
                 sts     zc_blanking_time_h, temp4
-                ret
-                
+                sts     com_timing_l, temp3       ; save for timing advance delay (15 deg)
+                sts     com_timing_h, temp4
+                add     temp1, temp3
+                adc     temp2, temp4
+                sts     zc_wait_time_l, temp1     ; save for zero crossing timeout (60 + 15 = 75 deg)
+                sts     zc_wait_time_h, temp2    
+                ret               
+;-----bko-----------------------------------------------------------------
 correct_next_timing:          
                 lds     YL, zc_wait_time_l
                 lds     YH, zc_wait_time_h
@@ -1097,8 +1086,6 @@ run1_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com1com2
-                rcall   com2com3
                 rcall   com3com4
                 rcall   correct_next_timing
                 rjmp    run4
@@ -1122,8 +1109,6 @@ run2_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com2com3
-                rcall   com3com4
                 rcall   com4com5
                 rcall   correct_next_timing
                 rjmp    run5
@@ -1148,8 +1133,6 @@ run3_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com3com4
-                rcall   com4com5
                 rcall   com5com6
                 rcall   correct_next_timing
                 rjmp    run6
@@ -1172,8 +1155,6 @@ run4_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com4com5
-                rcall   com5com6
                 rcall   com6com1
                 rcall   correct_next_timing
                 rjmp    run1
@@ -1197,8 +1178,6 @@ run5_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com5com6
-                rcall   com6com1
                 rcall   com1com2
                 rcall   correct_next_timing
                 rjmp    run2
@@ -1223,8 +1202,6 @@ run6_fail:
                 rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
-                rcall   com6com1
-                rcall   com1com2
                 rcall   com2com3
                 rcall   correct_next_timing
                 rjmp    run3
@@ -1334,7 +1311,7 @@ wait_for_test:
 ; *** commutation utilities ***
 com1com2:       BpFET_off                             ; Bp off
                 CpFET_off                             ; Cp off
-                ;sbrs    flags1, POWER_OFF
+                sbrs    flags1, POWER_OFF
                 ApFET_on                              ; Ap on
                 AcPhaseB
                 ret
@@ -1356,7 +1333,7 @@ c2_done:
 
 com3com4:       ApFET_off                             ; Ap off
                 BpFET_off                             ; Bp off
-                ;sbrs    flags1, POWER_OFF
+                sbrs    flags1, POWER_OFF
                 CpFET_on                              ; Cp on
                 AcPhaseA
                 ret
@@ -1378,7 +1355,7 @@ c4_done:
 
 com5com6:       CpFET_off                             ; Cp off
                 ApFET_off                             ; Ap off
-                ;sbrs    flags1, POWER_OFF
+                sbrs    flags1, POWER_OFF
                 BpFET_on                              ; Bp on
                 AcPhaseC
                 ret
