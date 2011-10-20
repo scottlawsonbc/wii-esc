@@ -111,8 +111,8 @@ zc_blanking_time_l: .byte   1   ; time from switch to comparator scan
 zc_blanking_time_h: .byte   1       
 com_timing_l:   .byte   1       ; time from zero-crossing to switch of the appropriate FET
 com_timing_h:   .byte   1
-wt_OCT1_tot_l:  .byte   1       ; OCT1 waiting time
-wt_OCT1_tot_h:  .byte   1
+strt_zc_wait_time_x:  .byte   1 
+strt_zc_wait_time_h:  .byte   1
 zc_wait_time_l: .byte   1
 zc_wait_time_h: .byte   1
 
@@ -346,14 +346,6 @@ t1oca_int:      in      i_sreg, SREG
                 reti
 t1oca_intmsb:                
                 cbr     flags0, (1<<OCT1_MSB) 
-                lds     i_temp1, wt_OCT1_tot_l
-                lds     i_temp2, wt_OCT1_tot_h
-                in      i_temp3, TCNT1L
-                add     i_temp1, i_temp3
-                in      i_temp3, TCNT1H
-                adc     i_temp2, i_temp3
-                out     OCR1AH, i_temp2
-                out     OCR1AL, i_temp1
                 out     SREG, i_sreg
                 reti                
 ;-----bko-----------------------------------------------------------------
@@ -652,10 +644,10 @@ set_new_duty_strt_03:
                 ret                
 ;-----bko-----------------------------------------------------------------
 set_all_timings:
-                ldi     YL, low  (timeoutSTART)
-                ldi     YH, high (timeoutSTART)
-                sts     wt_OCT1_tot_l, YL
-                sts     wt_OCT1_tot_h, YH
+                ldi     YL, high(timeoutSTART)
+                ldi     YH, byte3(timeoutSTART)
+                sts     strt_zc_wait_time_h, YL
+                sts     strt_zc_wait_time_x, YH
                 ldi     temp3, 0xff
                 ldi     temp4, 0x1f
                 sts     zc_blanking_time_l, temp3
@@ -691,14 +683,6 @@ update_timing:
                 sts     last_tcnt1_h, temp2
                 sub     temp1, temp3
                 sbc     temp2, temp4
-                
-                sbrs     flags2, NO_SYNC
-                rjmp     update_t_normal
-                clr      temp5
-                mov      temp3, temp1
-                mov      temp4, temp2
-                rjmp     update_t90
-update_t_normal:                
         ; calculate next waiting times - timing(-l-h-x) holds the time of 4 commutations
                 lds     temp3, timing_l
                 lds     temp4, timing_h
@@ -824,24 +808,33 @@ start_timeout:
 start_timeout_loop:                
                 sbrc    flags0, OCT1_PENDING
                 rjmp    start_timeout_loop      ; ZC blanking interval
-                lds     YL, wt_OCT1_tot_l
-                lds     YH, wt_OCT1_tot_h
+                lds     YL, strt_zc_wait_time_h
+                lds     YH, strt_zc_wait_time_x
+                clr     temp6
                 cli
-                add     YL, TCNT1L_shadow
-                adc     YH, TCNT1H_shadow
-                out     OCR1AH, YH
-                out     OCR1AL, YL
-.if CLK_SCALE==2
-                sbr     flags0, (1<<OCT1_MSB)
-.endif
-                sei
+                mov     temp1, TCNT1L_shadow
+                mov     temp2, TCNT1H_shadow
+                add     temp1, temp6
+                adc     temp2, YL
+                out     OCR1AH, temp2
+                out     OCR1AL, temp1
                 sbr     flags0, (1<<OCT1_PENDING)
-                subi    YH, 4
-                cpi     YH, high (timeoutMIN)
-                brcc    set_tot2
-                ldi     YH, high (timeoutSTART)         
-set_tot2:
-                sts     wt_OCT1_tot_h, YH
+                tst     YH
+                breq    start_timeout_no_msb
+                sbr     flags0, (1<<OCT1_MSB)                
+start_timeout_no_msb:                
+                sei
+                subi    YL, 4
+                sbci    YH, 0
+                cpi     YL, high(timeoutMIN)
+                ldi     temp1, byte3(timeoutMIN)
+                cpc     YH, temp1
+                brcc    start_timeout_no_lim
+                ldi     YL, high(timeoutSTART)         
+                ldi     YH, byte3(timeoutSTART)         
+start_timeout_no_lim:
+                sts     strt_zc_wait_time_h, YL
+                sts     strt_zc_wait_time_x, YH
                 ret
 ;-----bko-----------------------------------------------------------------
 switch_power_off:
