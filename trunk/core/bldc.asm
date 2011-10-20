@@ -63,7 +63,7 @@
 
 .def    flags0  = r23   ; state flags
         .equ    OCT1_PENDING    = 0     ; if set, output compare interrunpt is pending
-        .equ    UB_LOW          = 1     ; set if accu voltage low
+        .equ    OCT1_MSB        = 1     ; 
         .equ    I_pFET_HIGH     = 2     ; set if over-current detect
         .equ    B_FET           = 3     ; if set, A-FET state is to be changed
         .equ    C_FET           = 4     ; if set, C-FET state is to be changed
@@ -337,11 +337,25 @@ ext_int1_isr:   __ext_int1_isr
 ;-----bko-----------------------------------------------------------------
 ; output compare timer1 interrupt
 t1oca_int:      in      i_sreg, SREG
+                sbrc    flags0, OCT1_MSB 
+                rjmp    t1oca_intmsb
                 cbr     flags0, (1<<OCT1_PENDING) ; signal OCT1 passed
                 in      TCNT1L_shadow, TCNT1L
                 in      TCNT1H_shadow, TCNT1H
                 out     SREG, i_sreg
                 reti
+t1oca_intmsb:                
+                cbr     flags0, (1<<OCT1_MSB) 
+                lds     i_temp1, wt_OCT1_tot_l
+                lds     i_temp2, wt_OCT1_tot_h
+                in      i_temp3, TCNT1L
+                add     i_temp1, i_temp3
+                in      i_temp3, TCNT1H
+                adc     i_temp2, i_temp3
+                out     OCR1AH, i_temp1
+                out     OCR1AL, i_temp2
+                out     SREG, i_sreg
+                reti                
 ;-----bko-----------------------------------------------------------------
 ; overflow timer1 / happens all 32768³s / 65536³s
 t1ovfl_int:     in      i_sreg, SREG
@@ -835,9 +849,12 @@ start_timeout_loop:
                 adc     YH, TCNT1H_shadow
                 out     OCR1AH, YH
                 out     OCR1AL, YL
+.if CLK_SCALE==2
+                sbr     flags0, (1<<OCT1_MSB)
+.endif
                 sei
                 sbr     flags0, (1<<OCT1_PENDING)
-                subi    YH, 4/CLK_SCALE
+                subi    YH, 4
                 cpi     YH, high (timeoutMIN)
                 brcc    set_tot2
                 ldi     YH, high (timeoutSTART)         
