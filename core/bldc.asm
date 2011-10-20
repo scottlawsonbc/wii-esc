@@ -352,8 +352,8 @@ t1oca_intmsb:
                 add     i_temp1, i_temp3
                 in      i_temp3, TCNT1H
                 adc     i_temp2, i_temp3
-                out     OCR1AH, i_temp1
-                out     OCR1AL, i_temp2
+                out     OCR1AH, i_temp2
+                out     OCR1AL, i_temp1
                 out     SREG, i_sreg
                 reti                
 ;-----bko-----------------------------------------------------------------
