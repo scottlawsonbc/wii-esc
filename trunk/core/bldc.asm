@@ -761,9 +761,11 @@ calc_next_timing:
                 rjmp    update_timing
                 
 wait_for_commutation:
+                sbrc    flags2, NO_SYNC
+                rjmp    wait_for_commutation_no_sync
+wait_for_commutation_loop:
                 sbrc    flags0, OCT1_PENDING
-                rjmp    wait_for_commutation
-
+                rjmp    wait_for_commutation_loop
 set_zc_blanking_time:
                 lds     YH, zc_blanking_time_h
                 lds     YL, zc_blanking_time_l
@@ -775,8 +777,16 @@ set_zc_blanking_time:
                 sei
                 sbr     flags0, (1<<OCT1_PENDING)
                 ret
+wait_for_commutation_no_sync:
+                cli
+                in      TCNT1L_shadow, TCNT1L
+                in      TCNT1H_shadow, TCNT1H
+                sei
+                rjmp    set_zc_blanking_time
 ;-----bko-----------------------------------------------------------------
 wait_for_zc_blank:
+                sbrc    flags2, NO_SYNC
+                rjmp    wait_for_zc_blank_no_sync
         ; don't waste time while waiting - do some controls
                 sbrc    flags1, RC_PULS_UPDATED
                 rcall   evaluate_rc_puls
@@ -789,6 +799,7 @@ wait_for_zc_blank_loop:
 wait_for_zc_blank_loop2:                
                 sbrc    flags0, OCT1_PENDING
                 rjmp    wait_for_zc_blank_loop
+set_zc_wait_time:
         ; set ZC timeout
                 lds     YH, zc_wait_time_h
                 lds     YL, zc_wait_time_l
@@ -800,6 +811,10 @@ wait_for_zc_blank_loop2:
                 sei
                 sbr     flags0, (1<<OCT1_PENDING)
                 ret
+wait_for_zc_blank_no_sync:                
+                sbrc    flags0, OCT1_PENDING
+                rjmp    wait_for_zc_blank_no_sync
+                rjmp    set_zc_wait_time                
 ;-----bko-----------------------------------------------------------------
 start_timeout:  
                 ldi     YL, 50*CLK_SCALE
