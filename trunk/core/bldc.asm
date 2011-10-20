@@ -644,8 +644,8 @@ set_new_duty_strt_03:
                 ret                
 ;-----bko-----------------------------------------------------------------
 set_all_timings:
-                ldi     YL, high(timeoutSTART)
-                ldi     YH, byte3(timeoutSTART)
+                ldi     YL, high(RPM_TO_COMM_TIME(RPM_STEP_INITIAL)*CLK_SCALE)
+                ldi     YH, byte3(RPM_TO_COMM_TIME(RPM_STEP_INITIAL)*CLK_SCALE)
                 sts     strt_zc_wait_time_h, YL
                 sts     strt_zc_wait_time_x, YH
                 ldi     temp3, 0xff
@@ -826,12 +826,12 @@ start_timeout_no_msb:
                 sei
                 subi    YL, 4
                 sbci    YH, 0
-                cpi     YL, high(timeoutMIN)
-                ldi     temp1, byte3(timeoutMIN)
+                cpi     YL, high(RPM_TO_COMM_TIME(RPM_STEP_MAX)*CLK_SCALE)
+                ldi     temp1, byte3(RPM_TO_COMM_TIME(RPM_STEP_MAX)*CLK_SCALE)
                 cpc     YH, temp1
                 brcc    start_timeout_no_lim
-                ldi     YL, high(timeoutSTART)         
-                ldi     YH, byte3(timeoutSTART)         
+                ldi     YL, high(RPM_TO_COMM_TIME(RPM_STEP_INITIAL)*CLK_SCALE)         
+                ldi     YH, byte3(RPM_TO_COMM_TIME(RPM_STEP_INITIAL)*CLK_SCALE)         
 start_timeout_no_lim:
                 sts     strt_zc_wait_time_h, YL
                 sts     strt_zc_wait_time_x, YH
