@@ -817,6 +817,7 @@ wait_for_zc_blank_no_sync:
                 rjmp    set_zc_wait_time                
 ;-----bko-----------------------------------------------------------------
 start_timeout:  
+                cbr     flags0, (1<<OCT1_MSB)
                 ldi     YL, 50*CLK_SCALE
                 ldi     YH, 0
                 rcall   update_timing
@@ -1065,15 +1066,14 @@ s6_start1:
 start_to_run:
                 ldi     temp1, PWR_PCT_TO_VAL(PCT_PWR_MAX_STARTUP)
                 mov     sys_control, temp1
-
+                cbr     flags0, (1<<OCT1_MSB)
                 rcall   calc_next_timing
                 rcall   wait_for_commutation    ; needed to align phases 
                 rcall   wait_for_zc_blank       ; the ZC timeout should start at: ZC + comm_time + zc_blank_time
 
                 ;DbgLEDOff
 
-                cbr     flags2, (1<<NO_SYNC) 
-                cbr     flags2, (1<<STARTUP)
+                cbr     flags2, (1<<NO_SYNC) + (1<<STARTUP) 
                 rjmp    run1                    ; running state begins
                 
 ;-----bko-----------------------------------------------------------------
