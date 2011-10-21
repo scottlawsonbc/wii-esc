@@ -729,7 +729,7 @@ update_t90:     sts     timing_l, temp3
                 sts     timing_h, temp4
                 sts     timing_x, temp5
                 ldi     temp2, 3
-                cp      temp5, temp2              ; limit range to 0x2ffff
+                cp      temp5, temp2            ; limit range to 0x2ffff
                 brcs    update_t99
                 rcall   set_timing_v
 update_t99:
@@ -1078,7 +1078,6 @@ start_to_run:
                 
 ;-----bko-----------------------------------------------------------------
 ; **** running control loop ****
-
 ; run 1 = B(p-on) + C(n-choppered) - comparator A evaluated
 ; out_cA changes from low to high
 run1:           
@@ -1117,14 +1116,12 @@ run2_1:
                 cbr     flags2, (1<<NO_SYNC) 
 ; run 3 = A(p-on) + B(n-choppered) - comparator C evaluated
 ; out_cC changes from low to high
-
 run3:           rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run3_fail
                 rcall   wait_for_high
                 sbrc    flags0, OCT1_PENDING
-                rjmp    run3_1
-                
+                rjmp    run3_1                
 run3_fail:                
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
@@ -1158,8 +1155,7 @@ run5:           rcall   wait_for_low
                 rjmp    run5_fail
                 rcall   wait_for_high
                 sbrc    flags0, OCT1_PENDING
-                rjmp    run5_1
-                
+                rjmp    run5_1                
 run5_fail:                
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
@@ -1171,14 +1167,12 @@ run5_1:
                 cbr     flags2, (1<<NO_SYNC) 
 ; run 6 = B(p-on) + A(n-choppered) - comparator C evaluated
 ; out_cC changes from high to low
-
 run6:           rcall   wait_for_high
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run6_fail
                 rcall   wait_for_low
                 sbrc    flags0, OCT1_PENDING
-                rjmp    run6_1
-                
+                rjmp    run6_1                
 run6_fail:                
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
