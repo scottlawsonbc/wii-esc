@@ -126,12 +126,10 @@ PWR_CURVE_POINT(02, 7000, 50)
 ;*************************
 ; Startup settings       *
 ;*************************
-;#define    timeoutSTART        65000
-;#define    timeoutMIN          32000
-#define    RPM_STEP_INITIAL 200
-#define    RPM_STEP_MAX     250
-#define    PCT_PWR_STARTUP     12
-#define    PCT_PWR_MAX_STARTUP 15
+#define    RPM_STEP_INITIAL    90
+#define    RPM_STEP_MAX        250
+#define    PCT_PWR_STARTUP     10
+#define    PCT_PWR_MAX_STARTUP 20
 #define    RPM_START_MIN_RPM   4200
 #define    ENOUGH_GOODIES      20
 
