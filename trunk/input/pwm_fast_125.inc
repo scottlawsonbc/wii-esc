@@ -1,15 +1,15 @@
 #define _include_ppm_inc_
 
-#define    POWER_RANGE    125
-#define    MIN_RC_PULS    1000
+#define    POWER_RANGE   125
+#define    MIN_RC_PULS   1000
 
 ; falling->rising intervals
-#define    MAX_INT_FR     25000
-#define    MIN_INT_FR     16
+#define    MAX_INT_FR    25000
+#define    MIN_INT_FR    100
 
 ; rising->falling intervals
-#define    MAX_INT_RF     2200
-#define    MIN_INT_RF     (MIN_RC_PULS-8)
+#define    MAX_INT_RF    2200
+#define    MIN_INT_RF    800
 
 .macro EvaluatePWC
                 sbrs    flags1, RC_PULS_UPDATED
@@ -22,26 +22,21 @@
                 brcc    eval_rc_p00
                 clr     temp1
                 clr     temp2
-eval_rc_p00:    lsr     temp2   ; actual 0->1000
+eval_rc_p00:    lsr     temp2
                 ror     temp1
-                lsr     temp2   ; actual 0->500
+                lsr     temp2
                 ror     temp1
-                lsr     temp2   ; actual 0->250
+                lsr     temp2           
                 ror     temp1
 .if CLK_SCALE==2
                 lsr     temp2   ; actual 0->400
                 ror     temp1
 .endif
-                ; now 0->125
                 mov     temp3, temp1            
-                cpi     temp3, POWER_RANGE - 1
+                subi    temp1, POWER_RANGE - 1
                 brcs    eval_rc_p10
                 ldi     temp3, POWER_RANGE - 1
-eval_rc_p10:    tst     temp3
-                breq    eval_rc_p20
-                cpi     temp3, MIN_DUTY ; +20
-                brcc    eval_rc_p20
-                ldi     temp3, MIN_DUTY ; +20
-eval_rc_p20:    mov     ZH, temp3
+eval_rc_p10:    mov     ZH, temp3
 eval_rc_p90:    ret
+
 .endmacro
