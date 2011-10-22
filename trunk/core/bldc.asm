@@ -683,6 +683,14 @@ update_timing:
                 sts     last_tcnt1_h, temp2
                 sub     temp1, temp3
                 sbc     temp2, temp4
+                
+                sbrs     flags2, NO_SYNC
+                rjmp     update_t_normal
+                clr      temp5
+                mov      temp3, temp1
+                mov      temp4, temp2
+                rjmp     update_t90
+update_t_normal:                
         ; calculate next waiting times - timing(-l-h-x) holds the time of 4 commutations
                 lds     temp3, timing_l
                 lds     temp4, timing_h
@@ -706,14 +714,6 @@ update_timing:
                 adc     temp4, temp2
                 adc     temp5, temp6
 
-                sbrs    flags2, NO_SYNC
-                rjmp    update_t_insync
-
-                add     temp3, temp1            ; .. and add the new time again
-                adc     temp4, temp2
-                adc     temp5, temp6
-                
-update_t_insync:
         ; limit RPM to 120.000
                 cpi     temp3, 0x4c             ; 0x14c = 120.000 RPM
                 ldi     temp1, 0x1
@@ -729,7 +729,7 @@ update_t90:     sts     timing_l, temp3
                 sts     timing_h, temp4
                 sts     timing_x, temp5
                 ldi     temp2, 3
-                cp      temp5, temp2            ; limit range to 0x2ffff
+                cp      temp5, temp2              ; limit range to 0x2ffff
                 brcs    update_t99
                 rcall   set_timing_v
 update_t99:
@@ -739,10 +739,10 @@ update_t99:
                 lsr     temp5
                 ror     temp4
                 ror     temp3
-                lsr     temp4                     ; x always 0 at this stage (0x2ffff / 4 = 0xBFFF)
-                ror     temp3
                 mov     temp1, temp3
                 mov     temp2, temp4
+                lsr     temp4                     ; x always 0 at this stage (0x2ffff / 4 = 0xBFFF)
+                ror     temp3
                 lsr     temp4
                 ror     temp3
                 sts     zc_blanking_time_l, temp3 ; save for zero crossing blanking time (15 deg) 
@@ -751,9 +751,35 @@ update_t99:
                 sts     com_timing_h, temp4
                 add     temp1, temp3
                 adc     temp2, temp4
-                sts     zc_wait_time_l, temp1     ; save for zero crossing timeout (30 + 15 = 45 deg)
+                sts     zc_wait_time_l, temp1     ; save for zero crossing timeout (60 + 15 = 75 deg)
                 sts     zc_wait_time_h, temp2    
                 ret               
+;-----bko-----------------------------------------------------------------
+correct_next_timing:          
+                lds     YL, zc_wait_time_l
+                lds     YH, zc_wait_time_h
+                cli
+                add     YL, TCNT1L_shadow
+                adc     YH, TCNT1H_shadow
+                out     OCR1AH, YH
+                out     OCR1AL, YL
+                sei
+                sbr     flags0, (1<<OCT1_PENDING)
+correct_timing_loop:      
+                sbrc    flags0, OCT1_PENDING
+                rjmp    correct_timing_loop
+                lds     YL, zc_wait_time_l
+                lds     YH, zc_wait_time_h
+                lsl     YL
+                rol     YH
+                cli
+                add     YL, TCNT1L_shadow
+                adc     YH, TCNT1H_shadow
+                out     OCR1AH, YH
+                out     OCR1AL, YL
+                sei
+                sbr     flags0, (1<<OCT1_PENDING)
+                ret
 ;-----bko-----------------------------------------------------------------
 calc_next_timing:
                 lds     YL, com_timing_l
@@ -761,11 +787,9 @@ calc_next_timing:
                 rjmp    update_timing
                 
 wait_for_commutation:
-                sbrc    flags2, NO_SYNC
-                rjmp    wait_for_commutation_no_sync
-wait_for_commutation_loop:
                 sbrc    flags0, OCT1_PENDING
-                rjmp    wait_for_commutation_loop
+                rjmp    wait_for_commutation
+
 set_zc_blanking_time:
                 lds     YH, zc_blanking_time_h
                 lds     YL, zc_blanking_time_l
@@ -777,16 +801,8 @@ set_zc_blanking_time:
                 sei
                 sbr     flags0, (1<<OCT1_PENDING)
                 ret
-wait_for_commutation_no_sync:
-                cli
-                in      TCNT1L_shadow, TCNT1L
-                in      TCNT1H_shadow, TCNT1H
-                sei
-                rjmp    set_zc_blanking_time
 ;-----bko-----------------------------------------------------------------
 wait_for_zc_blank:
-                sbrc    flags2, NO_SYNC
-                rjmp    wait_for_zc_blank_no_sync
         ; don't waste time while waiting - do some controls
                 sbrc    flags1, RC_PULS_UPDATED
                 rcall   evaluate_rc_puls
@@ -799,7 +815,6 @@ wait_for_zc_blank_loop:
 wait_for_zc_blank_loop2:                
                 sbrc    flags0, OCT1_PENDING
                 rjmp    wait_for_zc_blank_loop
-set_zc_wait_time:
         ; set ZC timeout
                 lds     YH, zc_wait_time_h
                 lds     YL, zc_wait_time_l
@@ -811,10 +826,6 @@ set_zc_wait_time:
                 sei
                 sbr     flags0, (1<<OCT1_PENDING)
                 ret
-wait_for_zc_blank_no_sync:                
-                sbrc    flags0, OCT1_PENDING
-                rjmp    wait_for_zc_blank_no_sync
-                rjmp    set_zc_wait_time                
 ;-----bko-----------------------------------------------------------------
 start_timeout:  
                 cbr     flags0, (1<<OCT1_MSB)
@@ -1078,6 +1089,7 @@ start_to_run:
                 
 ;-----bko-----------------------------------------------------------------
 ; **** running control loop ****
+
 ; run 1 = B(p-on) + C(n-choppered) - comparator A evaluated
 ; out_cA changes from low to high
 run1:           
@@ -1088,8 +1100,13 @@ run1:
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run1_1
 run1_fail:             
+                sbrc    flags2, NO_SYNC
+                rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com3com4
+                rcall   correct_next_timing
+                rjmp    run4
 run1_1:                
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
@@ -1106,8 +1123,13 @@ run2:
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run2_1
 run2_fail:
+                sbrc    flags2, NO_SYNC
+                rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com4com5
+                rcall   correct_next_timing
+                rjmp    run5
 run2_1:                
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
@@ -1116,15 +1138,22 @@ run2_1:
                 cbr     flags2, (1<<NO_SYNC) 
 ; run 3 = A(p-on) + B(n-choppered) - comparator C evaluated
 ; out_cC changes from low to high
+
 run3:           rcall   wait_for_low
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run3_fail
                 rcall   wait_for_high
                 sbrc    flags0, OCT1_PENDING
-                rjmp    run3_1                
+                rjmp    run3_1
+                
 run3_fail:                
+                sbrc    flags2, NO_SYNC
+                rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com5com6
+                rcall   correct_next_timing
+                rjmp    run6
 run3_1:                
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
@@ -1140,8 +1169,13 @@ run4:           rcall   wait_for_high
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run4_1
 run4_fail:                
+                sbrc    flags2, NO_SYNC
+                rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com6com1
+                rcall   correct_next_timing
+                rjmp    run1
 run4_1:        
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
@@ -1155,10 +1189,16 @@ run5:           rcall   wait_for_low
                 rjmp    run5_fail
                 rcall   wait_for_high
                 sbrc    flags0, OCT1_PENDING
-                rjmp    run5_1                
+                rjmp    run5_1
+                
 run5_fail:                
+                sbrc    flags2, NO_SYNC
+                rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com1com2
+                rcall   correct_next_timing
+                rjmp    run2
 run5_1:                
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
@@ -1167,15 +1207,22 @@ run5_1:
                 cbr     flags2, (1<<NO_SYNC) 
 ; run 6 = B(p-on) + A(n-choppered) - comparator C evaluated
 ; out_cC changes from high to low
+
 run6:           rcall   wait_for_high
                 sbrs    flags0, OCT1_PENDING
                 rjmp    run6_fail
                 rcall   wait_for_low
                 sbrc    flags0, OCT1_PENDING
-                rjmp    run6_1                
+                rjmp    run6_1
+                
 run6_fail:                
+                sbrc    flags2, NO_SYNC
+                rjmp    run_to_start
                 sbr     flags2, (1<<NO_SYNC) 
                 rcall   no_sync_poff
+                rcall   com2com3
+                rcall   correct_next_timing
+                rjmp    run3
 run6_1:                
                 rcall   calc_next_timing
                 rcall   wait_for_commutation
