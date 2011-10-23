@@ -674,7 +674,6 @@ update_timing:
                 out     OCR1AL, YL
                 sei
                 sbr     flags0, (1<<OCT1_PENDING)
-                sei  
                 clr     temp6
         ; calculate this commutation time
                 lds     temp3, last_tcnt1_l
