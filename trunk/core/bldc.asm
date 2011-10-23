@@ -689,13 +689,14 @@ update_timing:
                 mov      temp3, temp1
                 mov      temp4, temp2
                 rjmp     update_t90
+
 update_t_normal:                
         ; calculate next waiting times - timing(-l-h-x) holds the time of 4 commutations
                 lds     temp3, timing_l
                 lds     temp4, timing_h
                 lds     temp5, timing_x
 
-                movw    YL, temp3               ; copy timing to Y
+                movw    YL:YH, temp3:temp4      ; copy timing to Y
                 lsr     temp5                   ; build a quarter
                 ror     YH
                 ror     YL
@@ -738,8 +739,7 @@ update_t99:
                 lsr     temp5
                 ror     temp4
                 ror     temp3
-                mov     temp1, temp3
-                mov     temp2, temp4
+                movw    temp1:temp2, temp3:temp4
                 lsr     temp4                     ; x always 0 at this stage (0x2ffff / 4 = 0xBFFF)
                 ror     temp3
                 lsr     temp4
