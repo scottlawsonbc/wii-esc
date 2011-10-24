@@ -577,7 +577,7 @@ set_new_duty_no_limit:
                 brcc    set_new_duty_low_ranges
                 ; High RPM finish ASAP
 set_new_duty_set_pwm:                
-                clr     temp3                   ;  pwr_lpf = (3*pwr_lpf +  temp6) / 4
+                clr     temp3                   ;  pwr_lpf = (3*pwr_lpf + temp6 + 3) / 4
                 mov     temp1, pwr_lpf
                 clr     temp2 
                 lsl     temp1                   
@@ -585,6 +585,9 @@ set_new_duty_set_pwm:
                 add     temp1, pwr_lpf
                 adc     temp2, temp3
                 add     temp1, temp6
+                adc     temp2, temp3
+                ldi     temp4, 3
+                add     temp1, temp4
                 adc     temp2, temp3
                 lsr     temp2
                 ror     temp1
