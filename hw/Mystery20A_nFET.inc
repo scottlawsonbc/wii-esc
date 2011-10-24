@@ -122,7 +122,7 @@
 ;*************************
 ; Power settings         *
 ;*************************
-#define    PCT_PWR_MIN         3                 ; Min power 3%
+#define    PCT_PWR_MIN         5                 ; Min power 5%
 
 ;*************************
 ; Power curve            *
