@@ -38,7 +38,7 @@
 ;.def   ...              = r2   ; 
 .def    temp5            = r3   ; 
 .def    temp6            = r4   ; 
-;.def   ...              = r5   
+.def    pwr_lpf          = r5   
 .def    tcnt0_power_on   = r6   ; timer0 counts nFETs are switched on  
 .def    tcnt0_pwroff     = r7   ; timer0 counts nFETs are switched off
 .def    start_rcpuls_l   = r8
@@ -566,6 +566,7 @@ set_new_duty:
                 cp      temp6, sys_control      ; Limit PWM to sys_control
                 brcs    set_new_duty_no_limit
                 mov     temp6, sys_control
+                mov     pwr_lpf, sys_control
 set_new_duty_no_limit:
                 sbr     flags2, (1<<RPM_RANGE1) + (1<<RPM_RANGE2) + (1<<RUN_MIN_RPM)
                 lds     temp4, timing_h
@@ -576,7 +577,21 @@ set_new_duty_no_limit:
                 brcc    set_new_duty_low_ranges
                 ; High RPM finish ASAP
 set_new_duty_set_pwm:                
-                mov     temp1, temp6
+                clr     temp3                   ;  pwr_lpf = (3*pwr_lpf +  temp6) / 4
+                mov     temp1, pwr_lpf
+                clr     temp2 
+                lsl     temp1                   
+                rol     temp2
+                add     temp1, pwr_lpf
+                adc     temp2, temp3
+                add     temp1, temp6
+                adc     temp2, temp3
+                lsr     temp2
+                ror     temp1
+                lsr     temp2
+                ror     temp1
+                mov     pwr_lpf, temp1
+                ;mov     temp1, temp6
                 com     temp1
                 rcall   eval_power_state        ; evaluate power state
                 rcall   set_pwm                 ; set new PWM
@@ -592,7 +607,8 @@ set_new_duty_low_ranges:
                 ldi     temp2, PWR_PCT_TO_VAL(PCT_PWR_MAX_RPM_02)
                 cp      temp2, temp6
                 brcc    set_new_duty_range_01
-                mov     temp6, temp2   
+                mov     temp6, temp2  
+                mov     pwr_lpf, temp2 
 set_new_duty_range_01:
                 ;  Check for range 01               
                 CheckRPMi(RPM_RUN_RANGE_01)
@@ -602,6 +618,7 @@ set_new_duty_range_01:
                 cp      temp2, temp6
                 brcc    set_new_duty_min_rpm
                 mov     temp6, temp2   
+                mov     pwr_lpf, temp2 
 set_new_duty_min_rpm:                
                 ;  Check for minimum RPM
                 CheckRPMi(RPM_RUN_MIN_RPM)
