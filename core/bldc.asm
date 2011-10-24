@@ -658,6 +658,7 @@ set_new_duty_strt_02:
                 mov     temp6, temp2
 set_new_duty_strt_03:                
                 mov     temp1, temp6
+                mov     pwr_lpf, temp6
                 com     temp1
                 rcall   eval_power_state        ; evaluate power state
                 rcall   set_pwm                 ; set new PWM
@@ -827,11 +828,11 @@ wait_for_zc_blank:
                 rcall   evaluate_rc_puls
                 rcall   set_new_duty
 wait_for_zc_blank_loop:      
-                sbrs    flags1, RC_PULS_UPDATED
-                rjmp    wait_for_zc_blank_loop2
-                rcall   evaluate_rc_puls
-                rcall   set_new_duty
-wait_for_zc_blank_loop2:                
+;                sbrs    flags1, RC_PULS_UPDATED
+;                rjmp    wait_for_zc_blank_loop2
+;                rcall   evaluate_rc_puls
+;                rcall   set_new_duty
+;wait_for_zc_blank_loop2:                
                 sbrc    flags0, OCT1_PENDING
                 rjmp    wait_for_zc_blank_loop
         ; set ZC timeout
