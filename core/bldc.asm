@@ -25,7 +25,7 @@
 
 .equ    NO_POWER         = 256 - PWR_PCT_TO_VAL(PCT_PWR_MIN)    ; (POWER_OFF)
 .equ    MAX_POWER        = 256 - POWER_RANGE                    ; (FULL_POWER)
-.equ    CONTROL_TOT      = 50                                   ; time = NUMBER x 64ms
+.equ    CONTROL_TOT      = 31                                   ; time = NUMBER x 64ms
 .equ    CURRENT_ERR_MAX  = 3                                    ; performs a reset after MAX errors
 
 .equ    T1STOP           = 0x00
@@ -38,7 +38,7 @@
 ;.def   ...              = r2   ; 
 .def    temp5            = r3   ; 
 .def    temp6            = r4   ; 
-.def    pwr_lpf          = r5   
+;.def   ..               = r5   ;
 .def    tcnt0_power_on   = r6   ; timer0 counts nFETs are switched on  
 .def    tcnt0_pwroff     = r7   ; timer0 counts nFETs are switched off
 .def    start_rcpuls_l   = r8
@@ -566,7 +566,6 @@ set_new_duty:
                 cp      temp6, sys_control      ; Limit PWM to sys_control
                 brcs    set_new_duty_no_limit
                 mov     temp6, sys_control
-                mov     pwr_lpf, sys_control
 set_new_duty_no_limit:
                 sbr     flags2, (1<<RPM_RANGE1) + (1<<RPM_RANGE2) + (1<<RUN_MIN_RPM)
                 lds     temp4, timing_h
@@ -577,24 +576,7 @@ set_new_duty_no_limit:
                 brcc    set_new_duty_low_ranges
                 ; High RPM finish ASAP
 set_new_duty_set_pwm:                
-                clr     temp3                   ;  pwr_lpf = (3*pwr_lpf + temp6 + 3) / 4
-                mov     temp1, pwr_lpf
-                clr     temp2 
-                lsl     temp1                   
-                rol     temp2
-                add     temp1, pwr_lpf
-                adc     temp2, temp3
-                add     temp1, temp6
-                adc     temp2, temp3
-                ldi     temp4, 3
-                add     temp1, temp4
-                adc     temp2, temp3
-                lsr     temp2
-                ror     temp1
-                lsr     temp2
-                ror     temp1
-                mov     pwr_lpf, temp1
-                ;mov     temp1, temp6
+                mov     temp1, temp6
                 com     temp1
                 rcall   eval_power_state        ; evaluate power state
                 rcall   set_pwm                 ; set new PWM
@@ -611,7 +593,6 @@ set_new_duty_low_ranges:
                 cp      temp2, temp6
                 brcc    set_new_duty_range_01
                 mov     temp6, temp2  
-                mov     pwr_lpf, temp2 
 set_new_duty_range_01:
                 ;  Check for range 01               
                 CheckRPMi(RPM_RUN_RANGE_01)
@@ -621,7 +602,6 @@ set_new_duty_range_01:
                 cp      temp2, temp6
                 brcc    set_new_duty_min_rpm
                 mov     temp6, temp2   
-                mov     pwr_lpf, temp2 
 set_new_duty_min_rpm:                
                 ;  Check for minimum RPM
                 CheckRPMi(RPM_RUN_MIN_RPM)
@@ -658,7 +638,6 @@ set_new_duty_strt_02:
                 mov     temp6, temp2
 set_new_duty_strt_03:                
                 mov     temp1, temp6
-                mov     pwr_lpf, temp6
                 com     temp1
                 rcall   eval_power_state        ; evaluate power state
                 rcall   set_pwm                 ; set new PWM
@@ -709,31 +688,27 @@ update_timing:
                 mov      temp3, temp1
                 mov      temp4, temp2
                 rjmp     update_t90
-update_t_normal:                
+update_t_normal:           
+                clr     temp6     
                 ; calculate next waiting times - timing(-l-h-x) holds the time of 4 commutations
                 lds     temp3, timing_l
                 lds     temp4, timing_h
                 lds     temp5, timing_x
-                ; t*3/4 = (2*t + t)/4  
+                ; t*3/4 = t - t/4
                 movw    YL:YH, temp3:temp4      ; copy timing to Y:temp6
-                mov     temp6, temp5            ; 2*t
-                lsl     temp3
-                rol     temp4
-                rol     temp5
-                add     temp3, YL               ; + t
-                adc     temp4, YH
-                adc     temp5, temp6
-                lsr     temp5                   ; /4
-                ror     temp4
-                ror     temp3
-                lsr     temp5                   
-                ror     temp4
-                ror     temp3
-                ; t = t*3/4 + tn 
-                clr     temp6
+                lsr     temp5                   ; build a quarter
+                ror     YH
+                ror     YL
+                lsr     temp5
+                ror     YH                      ; temp5 no longer needed (should be 0)
+                ror     YL
+                lds     temp5, timing_x         ; reload original timing_x
+                sub     temp3, YL               ; subtract quarter from timing
+                sbc     temp4, YH
+                sbc     temp5, temp6
                 add     temp3, temp1            ; .. and add the new time
                 adc     temp4, temp2
-                adc     temp5, temp6
+                adc     temp5, temp6                
                 ; limit RPM to 120.000
                 cpi     temp3, 0x4c             ; 0x14c = 120.000 RPM
                 ldi     temp1, 0x1
@@ -827,11 +802,11 @@ wait_for_zc_blank:
                 rcall   evaluate_rc_puls
                 rcall   set_new_duty
 wait_for_zc_blank_loop:      
-;                sbrs    flags1, RC_PULS_UPDATED
-;                rjmp    wait_for_zc_blank_loop2
-;                rcall   evaluate_rc_puls
-;                rcall   set_new_duty
-;wait_for_zc_blank_loop2:                
+                sbrs    flags1, RC_PULS_UPDATED
+                rjmp    wait_for_zc_blank_loop2
+                rcall   evaluate_rc_puls
+                rcall   set_new_duty
+wait_for_zc_blank_loop2:                
                 sbrc    flags0, OCT1_PENDING
                 rjmp    wait_for_zc_blank_loop
         ; set ZC timeout
@@ -1279,19 +1254,18 @@ filter_delay_loop:
                 clc
                 sbis    ACSR, ACO
                 sec
-                brcc    wait_for_filter_1
-                inc     temp2
-wait_for_filter_1:
+                in      temp5, SREG
+                adc     temp2, temp6 
+                out     SREG, temp5
                 rol     temp1
-                brcc    wait_for_filter_2
-                dec     temp2
-wait_for_filter_2:
+                sbc     temp2, temp6
 .endmacro
                                 
 wait_for_low:   
                 ldi     temp1, 0xFF
                 ldi     temp2, 8
                 ldi     temp3, (8-ZCF_CONST) + 1
+                clr     temp6 
 wait_for_low_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
@@ -1304,6 +1278,7 @@ wait_for_high:
                 ldi     temp1, 0x0
                 ldi     temp2, 0
                 ldi     temp3, ZCF_CONST
+                clr     temp6 
 wait_for_high_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
@@ -1316,6 +1291,7 @@ wait_for_high_strt:
                 ldi     temp1, 0x0
                 ldi     temp2, 0
                 ldi     temp3, 5
+                clr     temp6 
 wait_for_high_strt_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
@@ -1329,6 +1305,7 @@ wait_for_low_strt:
                 ldi     temp1, 0xFF
                 ldi     temp2, 8
                 ldi     temp3, (8-5) + 1
+                clr     temp6 
 wait_for_low_strt_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
