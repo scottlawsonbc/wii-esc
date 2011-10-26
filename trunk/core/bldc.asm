@@ -716,21 +716,22 @@ update_t_normal:
                 lds     temp3, timing_l
                 lds     temp4, timing_h
                 lds     temp5, timing_x
-
+                
                 movw    YL:YH, temp3:temp4      ; copy timing to Y
+                lsl     temp3
+                rol     temp4
+                rol     temp5
+                add     temp3, YL
+                adc     temp4, YH
+                lds     YH, timing_x
+                adc     temp5, YH
                 lsr     temp5                   ; build a quarter
-                ror     YH
-                ror     YL
-                lsr     temp5
-                ror     YH                      ; temp5 no longer needed (should be 0)
-                ror     YL
-
-                lds     temp5, timing_x         ; reload original timing_x
-
-                sub     temp3, YL               ; subtract quarter from timing
-                sbc     temp4, YH
-                sbc     temp5, temp6
-
+                ror     temp4
+                ror     temp3
+                lsr     temp5                   
+                ror     temp4
+                ror     temp3
+                 
                 add     temp3, temp1            ; .. and add the new time
                 adc     temp4, temp2
                 adc     temp5, temp6
