@@ -695,59 +695,57 @@ update_timing:
                 out     OCR1AL, YL
                 sei
                 sbr     flags0, (1<<OCT1_PENDING)
-                clr     temp6
-        ; calculate this commutation time
+                ; calculate this commutation time
                 lds     temp3, last_tcnt1_l
                 lds     temp4, last_tcnt1_h
                 sts     last_tcnt1_l, temp1
                 sts     last_tcnt1_h, temp2
                 sub     temp1, temp3
                 sbc     temp2, temp4
-                
+                ; No sync correction
                 sbrs     flags2, NO_SYNC
                 rjmp     update_t_normal
                 clr      temp5
                 mov      temp3, temp1
                 mov      temp4, temp2
                 rjmp     update_t90
-
 update_t_normal:                
-        ; calculate next waiting times - timing(-l-h-x) holds the time of 4 commutations
+                ; calculate next waiting times - timing(-l-h-x) holds the time of 4 commutations
                 lds     temp3, timing_l
                 lds     temp4, timing_h
                 lds     temp5, timing_x
-                
-                movw    YL:YH, temp3:temp4      ; copy timing to Y
+                ; t*3/4 = (2*t + t)/4  
+                movw    YL:YH, temp3:temp4      ; copy timing to Y:temp6
+                mov     temp6, temp5            ; 2*t
                 lsl     temp3
                 rol     temp4
                 rol     temp5
-                add     temp3, YL
+                add     temp3, YL               ; + t
                 adc     temp4, YH
-                lds     YH, timing_x
-                adc     temp5, YH
-                lsr     temp5                   ; build a quarter
+                adc     temp5, temp6
+                lsr     temp5                   ; /4
                 ror     temp4
                 ror     temp3
                 lsr     temp5                   
                 ror     temp4
                 ror     temp3
-                 
+                ; t = t*3/4 + tn 
+                clr     temp6
                 add     temp3, temp1            ; .. and add the new time
                 adc     temp4, temp2
                 adc     temp5, temp6
-
-        ; limit RPM to 120.000
+                ; limit RPM to 120.000
                 cpi     temp3, 0x4c             ; 0x14c = 120.000 RPM
                 ldi     temp1, 0x1
                 cpc     temp4, temp1
                 cpc     temp5, temp6
                 brcc    update_t90
-
+                ; limit by reducing power
                 tst     sys_control
                 breq    update_t90
-                dec     sys_control             ; limit by reducing power
-
-update_t90:     sts     timing_l, temp3
+                dec     sys_control             
+update_t90:     
+                sts     timing_l, temp3
                 sts     timing_h, temp4
                 sts     timing_x, temp5
                 ldi     temp2, 3
