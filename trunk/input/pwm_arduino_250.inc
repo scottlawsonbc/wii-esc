@@ -13,7 +13,7 @@
 
 .macro EvaluatePWC
                 sbrs    flags1, RC_PULS_UPDATED
-                rjmp    eval_rc_exit
+                ret
                 lds     temp1, new_rcpuls_l
                 lds     temp2, new_rcpuls_h
                 cbr     flags1, (1<<RC_PULS_UPDATED) ; rc impuls value is read out
@@ -27,12 +27,10 @@ eval_rc_p00:    lsr     temp2
                 lsr     temp2   
                 ror     temp1
 .endif
-                mov     temp3, temp1
-                cpi     temp3, POWER_RANGE - 1
+                cpi     temp1, POWER_RANGE - 1
                 brcs    eval_rc_p10
-                ldi     temp3, POWER_RANGE - 1
+                ldi     temp1, POWER_RANGE - 1
 eval_rc_p10:    
-                mov     ZH, temp3
-eval_rc_exit:                
+                mov     ZH, temp1
                 ret
 .endmacro
