@@ -35,7 +35,7 @@ eval_rc_p00:    lsr     temp2
                 brcs    eval_rc_p10
                 ldi     temp1, POWER_RANGE - 1
 eval_rc_p10:    
-		        mov     ZH, temp1
-		        ret
+                mov     ZH, temp1
+                ret
 
 .endmacro
