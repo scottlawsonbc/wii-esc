@@ -34,26 +34,21 @@
                 
                 ldi     i_temp3, micp_f_edge
                 out     MCUCR, i_temp3                            ; set next int to falling edge
-                mov     start_rcpuls_l, i_temp1
-                mov     start_rcpuls_h, i_temp2
-                rjmp    micp_exit
-
-micp_fail:      tst     control_timeout
-                breq    micp_exit
-                dec     control_timeout
-                rjmp    micp_exit
-                
+                sts     start_rcpuls_l, i_temp1
+                sts     start_rcpuls_h, i_temp2
+                out     SREG, i_sreg
+                reti
+micp_fail:      
+                out     SREG, i_sreg
+                reti
 falling_edge:
                 ldi     i_temp3, micp_r_edge
                 out     MCUCR, i_temp3                            ; set next int to rising edge
-                
-                sts     stop_rcpuls_l, i_temp1                    ; prepare next interval evaluation
-                sts     stop_rcpuls_h, i_temp2
-                sub     i_temp1, start_rcpuls_l
-                sbc     i_temp2, start_rcpuls_h
-                ; save impuls length
-                sts     new_rcpuls_l, i_temp1
-                sts     new_rcpuls_h, i_temp2
+                lds     i_temp3, start_rcpuls_l  
+                sub     i_temp1, i_temp3
+                lds     i_temp3, start_rcpuls_h
+                sbc     i_temp2, i_temp3
+
                 cpi     i_temp1, low (MAX_INT_RF*CLK_SCALE)
                 ldi     i_temp3, high(MAX_INT_RF*CLK_SCALE)       ; test range high
                 cpc     i_temp2, i_temp3
@@ -63,9 +58,9 @@ falling_edge:
                 cpc     i_temp2, i_temp3
                 brlo    micp_fail                                 ; through away
                 sbr     flags1, (1<<RC_PULS_UPDATED)              ; set to rc impuls value is ok !
+                movw    new_rcpuls_l:new_rcpuls_h, i_temp1:i_temp2; save impuls length
                 ldi     i_temp1, CONTROL_TOT*CLK_SCALE
                 mov     control_timeout, i_temp1
-micp_exit:   
                 out     SREG, i_sreg
                 reti
 .endm
