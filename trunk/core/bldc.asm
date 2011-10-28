@@ -1258,9 +1258,12 @@ restart_control:
                 rjmp    reset
 ;-----bko-----------------------------------------------------------------
 ; *** scan comparator utilities ***
+
+#include "str_zc_filter.inc"
+
 filter_delay:  
                 push    temp1
-                ldi     temp1, 16*CLK_SCALE
+                ldi     temp1, STRT_ZC_FILTER_DELAY
 filter_delay_loop: 
                 dec     temp1
                 brne    filter_delay_loop
@@ -1307,7 +1310,7 @@ wait_for_high_loop:
 wait_for_high_strt:
                 ldi     temp1, 0x0
                 ldi     temp2, 0
-                ldi     temp3, 5
+                ldi     temp3, STRT_ZC_FILTER_FACTOR
                 clr     temp6 
 wait_for_high_strt_loop:
                 sbrs    flags0, OCT1_PENDING
@@ -1321,7 +1324,7 @@ wait_for_high_strt_loop:
 wait_for_low_strt:
                 ldi     temp1, 0xFF
                 ldi     temp2, 8
-                ldi     temp3, (8-5) + 1
+                ldi     temp3, (8-STRT_ZC_FILTER_FACTOR) + 1
                 clr     temp6 
 wait_for_low_strt_loop:
                 sbrs    flags0, OCT1_PENDING
