@@ -26,10 +26,6 @@
 .equ    NO_POWER         = 256 - PWR_PCT_TO_VAL(PCT_PWR_MIN)    ; (POWER_OFF)
 .equ    MAX_POWER        = 256 - POWER_RANGE                    ; (FULL_POWER)
 .equ    CONTROL_TOT      = 31                                   ; time = NUMBER x 64ms
-.equ    CURRENT_ERR_MAX  = 3                                    ; performs a reset after MAX errors
-
-.equ    T1STOP           = 0x00
-.equ    T1CK8            = 0x02
 .equ    CLK_SCALE        = F_CPU / 8000000
 
 ;**** **** **** **** ****
@@ -41,8 +37,9 @@
 ;.def   ..               = r5   ;
 .def    tcnt0_power_on   = r6   ; timer0 counts nFETs are switched on  
 .def    tcnt0_pwroff     = r7   ; timer0 counts nFETs are switched off
-.def    start_rcpuls_l   = r8
-.def    start_rcpuls_h   = r9
+.def    new_rcpuls_l     = r8
+.def    new_rcpuls_h     = r9
+
 .def    TCNT1L_shadow    = r10
 .def    TCNT1H_shadow    = r11
 .def    control_timeout  = r12  ; 
@@ -63,7 +60,7 @@
 
 .def    flags0  = r23   ; state flags
         .equ    OCT1_PENDING    = 0     ; if set, output compare interrunpt is pending
-        .equ    OCT1_MSB        = 1     ; 
+        .equ    OCT1_MSB        = 1     ; MSB of 17 bit timer
         .equ    I_pFET_HIGH     = 2     ; set if over-current detect
         .equ    B_FET           = 3     ; if set, A-FET state is to be changed
         .equ    C_FET           = 4     ; if set, C-FET state is to be changed
@@ -98,32 +95,32 @@
 
 ;**** **** **** **** ****
 ; RAM Definitions
-.dseg                                   ;EEPROM segment
+.dseg                                   
 .org SRAM_START
 
-last_tcnt1_l:   .byte   1       ; last timer1 value
-last_tcnt1_h:   .byte   1
-timing_l:       .byte   1       ; holds time of 4 commutations 
-timing_h:       .byte   1
-timing_x:       .byte   1
+last_tcnt1_l:         .byte   1         ; last timer1 value
+last_tcnt1_h:         .byte   1
+timing_l:             .byte   1         ; holds time of 4 commutations 
+timing_h:             .byte   1
+timing_x:             .byte   1
 
-zc_blanking_time_l: .byte   1   ; time from switch to comparator scan
-zc_blanking_time_h: .byte   1       
-com_timing_l:   .byte   1       ; time from zero-crossing to switch of the appropriate FET
-com_timing_h:   .byte   1
+zc_blanking_time_l:   .byte   1         ; time from switch to comparator scan
+zc_blanking_time_h:   .byte   1       
+com_timing_l:         .byte   1         ; time from zero-crossing to switch of the appropriate FET
+com_timing_h:         .byte   1
+zc_wait_time_l:       .byte   1
+zc_wait_time_h:       .byte   1
+
 strt_zc_wait_time_x:  .byte   1 
 strt_zc_wait_time_h:  .byte   1
-zc_wait_time_l: .byte   1
-zc_wait_time_h: .byte   1
+goodies:              .byte   1
 
-stop_rcpuls_l:  .byte   1
-stop_rcpuls_h:  .byte   1
-new_rcpuls_l:   .byte   1
-new_rcpuls_h:   .byte   1
+start_rcpuls_l:       .byte   1
+start_rcpuls_h:       .byte   1
+stop_rcpuls_l:        .byte   1
+stop_rcpuls_h:        .byte   1
 
-goodies:        .byte   1
-
-uart_data:      .byte   100             ; only for debug requirements
+uart_data:            .byte   100       ; only for debug requirements
 
 
 ;**** **** **** **** ****
@@ -314,8 +311,7 @@ control_start:  ; init variables
 i_rc_puls1:     ldi     temp3, 10               ; wait for this count of receiving power off
 i_rc_puls2:     sbrs    flags1, RC_PULS_UPDATED
                 rjmp    i_rc_puls2
-                lds     temp1, new_rcpuls_l
-                lds     temp2, new_rcpuls_h
+                movw    temp1:temp2, new_rcpuls_l:new_rcpuls_h
                 cbr     flags1, (1<<RC_PULS_UPDATED) ; rc impuls value is read out
                 subi    temp1, low  (MIN_RC_PULS*CLK_SCALE)     ; power off received ?
                 sbci    temp2, high (MIN_RC_PULS*CLK_SCALE)

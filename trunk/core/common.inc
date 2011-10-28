@@ -44,3 +44,6 @@
 .macro PwmCSLeave
                 sei
 .endm
+
+.equ    T1STOP           = 0x00
+.equ    T1CK8            = 0x02

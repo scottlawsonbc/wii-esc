@@ -14,8 +14,7 @@
 .macro EvaluatePWC
                 sbrs    flags1, RC_PULS_UPDATED
                 ret
-                lds     temp1, new_rcpuls_l
-                lds     temp2, new_rcpuls_h
+                movw    temp1:temp2, new_rcpuls_l:new_rcpuls_h  
                 cbr     flags1, (1<<RC_PULS_UPDATED) ; rc impuls value is read out
                 subi    temp1, low  (MIN_RC_PULS*CLK_SCALE)
                 sbci    temp2, high (MIN_RC_PULS*CLK_SCALE)
