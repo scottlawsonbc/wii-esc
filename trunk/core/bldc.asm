@@ -1312,6 +1312,11 @@ wait_for_high_strt:
                 ldi     temp2, 0
                 ldi     temp3, STRT_ZC_FILTER_FACTOR
                 clr     temp6 
+                
+wait_for_high_strt_loop2:                
+                sbrs    flags1, PWM_OFF_CYCLE
+                rjmp    wait_for_high_strt_loop2
+                
 wait_for_high_strt_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
@@ -1326,6 +1331,11 @@ wait_for_low_strt:
                 ldi     temp2, 8
                 ldi     temp3, (8-STRT_ZC_FILTER_FACTOR) + 1
                 clr     temp6 
+                
+wait_for_low_strt_loop2:
+                sbrs    flags1, PWM_OFF_CYCLE
+                rjmp    wait_for_low_strt_loop2
+                
 wait_for_low_strt_loop:
                 sbrs    flags0, OCT1_PENDING
                 ret
