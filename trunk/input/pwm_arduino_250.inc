@@ -4,7 +4,7 @@
 #define    MIN_RC_PULS   18
 
 ; falling->rising intervals
-#define    MAX_INT_FR    25000
+#define    MAX_INT_FR    2200
 #define    MIN_INT_FR    14
 
 ; rising->falling intervals
