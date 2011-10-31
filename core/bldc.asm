@@ -795,6 +795,10 @@ correct_timing_loop:
 calc_next_timing:
                 lds     YL, com_timing_l
                 lds     YH, com_timing_h
+                ; ZC filter phase correction
+                subi    YL, (ZCF_CONST * 13 + 4) / 8
+                sbci    YH, 0
+                ;
                 rjmp    update_timing
                 
 wait_for_commutation:
@@ -829,6 +833,12 @@ wait_for_zc_blank_loop2:
         ; set ZC timeout
                 lds     YH, zc_wait_time_h
                 lds     YL, zc_wait_time_l
+                ; ZC filter phase correction
+                ldi     temp1, (ZCF_CONST * 13 + 4) / 8
+                clr     temp6
+                add     YL, temp1
+                adc     YH, temp6
+                ;
                 cli
                 add     YL, TCNT1L_shadow
                 adc     YH, TCNT1H_shadow
