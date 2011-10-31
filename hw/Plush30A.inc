@@ -126,7 +126,7 @@ PWR_CURVE_POINT(02, 7000, 50)
 ; Startup settings       *
 ;*************************
 #define    RPM_STEP_INITIAL    90
-#define    RPM_STEP_MAX        250
+#define    RPM_STEP_MAX        180
 #define    PCT_PWR_STARTUP     14
 #define    PCT_PWR_MAX_STARTUP 20
 #define    RPM_START_MIN_RPM   4000
