@@ -68,8 +68,6 @@ falling_edge:
                 rjmp    micp_exit                                 ; seems to be a spike
                 ldi     i_temp1, micp_r_edge
                 out     MCUCR, i_temp1                            ; set next int to rising edge
-                sbrc    flags1, RC_PULS_UPDATED
-                rjmp    micp_exit
                 ; get timer1 values
                 in      i_temp1, TCNT1L
                 in      i_temp2, TCNT1H
