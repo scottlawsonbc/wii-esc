@@ -455,13 +455,13 @@ beep_f4:        ldi     temp4, 100
 
 beep:           clr     temp1
                 out     TCNT0, temp1
-                BpFET_on                ; BpFET on
-                AnFET_on                ; CnFET on
+                BpFET_on                                ; BpFET on
+                AnFET_on                                ; CnFET on
 beep_BpCn10:    in      temp1, TCNT0
                 cpi     temp1, 16*CLK_SCALE             ; 16us on
                 brne    beep_BpCn10
-                BpFET_off               ; BpFET off
-                AnFET_off               ; CnFET off
+                BpFET_off                               ; BpFET off
+                AnFET_off                               ; CnFET off
                 ldi     temp3, 8*CLK_SCALE              ; 2040us off
 beep_BpCn12:    clr     temp1
                 out     TCNT0, temp1
@@ -474,7 +474,7 @@ beep_BpCn13:    in      temp1, TCNT0
                 brne    beep
                 ret
 
-wait30ms:       ldi     temp2, 15*CLK_SCALE
+wait30ms:       ldi     temp2, 15
 beep_BpCn20:    ldi     temp3, 8*CLK_SCALE
 beep_BpCn21:    clr     temp1
                 out     TCNT0, temp1
@@ -488,7 +488,7 @@ beep_BpCn22:    in      temp1, TCNT0
                 ret
 
         ; 256 periods = 261ms silence
-wait260ms:      ldi     temp2, 127*CLK_SCALE    ; = 256
+wait260ms:      ldi     temp2, 128
 beep2_BpCn20:   ldi     temp3, 8*CLK_SCALE
 beep2_BpCn21:   clr     temp1
                 out     TCNT0, temp1
