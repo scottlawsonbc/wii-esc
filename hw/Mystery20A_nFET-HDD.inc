@@ -118,6 +118,9 @@
 #undef     READ_CALIBRATION
 #define    F_CPU               16000000          ; 16Mhz oscilator 
 #define    ZCF_CONST           7
+;#define    HIGH_SIDE_PWM
+;#define    COMP_PWM
+#define    CHARGE_BOOTSTRAP
 
 ;*************************
 ; Power settings         *
