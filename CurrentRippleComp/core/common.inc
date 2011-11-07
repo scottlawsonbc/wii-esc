@@ -47,3 +47,42 @@
 
 .equ    T1STOP           = 0x00
 .equ    T1CK8            = 0x02
+
+
+.macro WaitForEvent
+loop:
+                in      tifr_shadow, TIFR
+                sbrc    tifr_shadow, OCF1B
+                rjmp    loop
+                cli
+                in      TCNT1L_shadow, TCNT1L
+                in      TCNT1H_shadow, TCNT1H
+                sei
+.endm
+
+.macro SetEvent
+                add     @0, TCNT1L_shadow
+                adc     @1, TCNT1H_shadow
+                cli
+                out     OCR1BH, @0
+                out     OCR1BL, @1
+                sei
+                push    temp1
+                ldi     temp1, (1<<OCF1B)
+                out     TIFR, temp1
+                pop     temp1
+.endm
+
+.macro CheckEvent
+                clc
+                in      tifr_shadow, TIFR
+                sbrs    tifr_shadow, OCF1B
+                rjmp    exit
+                cli
+                in      TCNT1L_shadow, TCNT1L
+                in      TCNT1H_shadow, TCNT1H
+                sei
+                sec
+exit:                
+.endm
+
