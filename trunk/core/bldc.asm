@@ -110,6 +110,7 @@ com_timing_l:         .byte   1         ; time from zero-crossing to switch of t
 com_timing_h:         .byte   1
 zc_wait_time_l:       .byte   1
 zc_wait_time_h:       .byte   1
+zc_filter_time:       .byte   1
 
 strt_zc_wait_time_x:  .byte   1 
 strt_zc_wait_time_h:  .byte   1
@@ -660,7 +661,7 @@ set_new_duty_set_pwm:
                 ret                
 set_new_duty_low_ranges:
                 ; With low RPM we have more time for calculations. 
-                ; We assume that  RUN_MIN_RPM < RPM_RUN_RANGE_02 < RPM_RUN_RANGE_02
+                ; We assume that  RUN_MIN_RPM < RPM_RUN_RANGE_01 < RPM_RUN_RANGE_02
                 lds     temp3, timing_l
                 ;  Check for range 02
                 CheckRPMi(RPM_RUN_RANGE_02)
@@ -731,6 +732,7 @@ set_all_timings:
                 sts     zc_blanking_time_h, temp4
                 sts     com_timing_l, temp3
                 sts     com_timing_h, temp4
+                sts     zc_filter_time, temp3 
 set_timing_v:   
                 ldi     ZL, 0x02
                 mov     temp5, ZL
@@ -824,11 +826,31 @@ update_t99:
                 adc     temp2, temp4
                 sts     zc_wait_time_l, temp1     ; save for zero crossing timeout (60 + 15 = 75 deg)
                 sts     zc_wait_time_h, temp2    
+                ;
+                lsr     temp4                     
+                ror     temp3
+                lsr     temp4
+                ror     temp3
+                lsr     temp4
+                ror     temp3
+                ;lsr     temp4
+                ;ror     temp3
+                ;movw    temp1:temp2, temp3:temp4
+                ;lsr     temp4
+                ;ror     temp3
+                ;add     temp3, temp1
+                ;adc     temp4, temp2
+		        tst     temp4
+                breq    update_t100    
+                ldi     temp3, 0xFF   
+update_t100:
+;               inc     temp3
+                sts     zc_filter_time, temp3
                 ret               
 ;-----bko-----------------------------------------------------------------
 correct_next_timing:          
-                lds     YL, zc_wait_time_l
-                lds     YH, zc_wait_time_h
+                lds     YL, zc_blanking_time_l
+                lds     YH, zc_blanking_time_h
                 cli
                 add     YL, TCNT1L_shadow
                 adc     YH, TCNT1H_shadow
@@ -839,16 +861,6 @@ correct_next_timing:
 correct_timing_loop:      
                 sbrc    flags0, OCT1_PENDING
                 rjmp    correct_timing_loop
-                lds     YL, zc_wait_time_l
-                lds     YH, zc_wait_time_h
-                lsl     YL
-                rol     YH
-                cli
-                add     YL, TCNT1L_shadow
-                adc     YH, TCNT1H_shadow
-                out     OCR1AH, YH
-                out     OCR1AL, YL
-                sei
                 sbr     flags0, (1<<OCT1_PENDING)
                 ret
 ;-----bko-----------------------------------------------------------------
@@ -894,7 +906,7 @@ wait_for_zc_blank_loop2:
                 lds     YH, zc_wait_time_h
                 lds     YL, zc_wait_time_l
                 ; ZC filter phase correction
-                ldi     temp1, (ZCF_CONST * 13 + 4) / 8
+                lds     temp1, zc_filter_time      
                 clr     temp6
                 add     YL, temp1
                 adc     YH, temp6
@@ -1085,8 +1097,7 @@ wait_for_power_on:
 ; state 1 = B(p-on) + C(n-choppered) - comparator A evaluated
 ; out_cA changes from low to high
 start1:         
-                rcall   wait_for_low_strt
-                rcall   wait_for_high_strt
+                rcall   wait_for_transition_lh
 ;                rcall   wait_for_test
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
@@ -1095,8 +1106,7 @@ start1:
 
 ; state 2 = A(p-on) + C(n-choppered) - comparator B evaluated
 ; out_cB changes from high to low
-                rcall   wait_for_high_strt
-                rcall   wait_for_low_strt
+                rcall   wait_for_transition_hl
 ;                rcall   wait_for_test
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
@@ -1106,8 +1116,7 @@ start1:
 ; state 3 = A(p-on) + B(n-choppered) - comparator C evaluated
 ; out_cC changes from low to high
 start3:
-                rcall   wait_for_low_strt
-                rcall   wait_for_high_strt
+                rcall   wait_for_transition_lh
 ;                rcall   wait_for_test
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
@@ -1116,8 +1125,7 @@ start3:
 
 ; state 4 = C(p-on) + B(n-choppered) - comparator A evaluated
 ; out_cA changes from high to low
-                rcall   wait_for_high_strt
-                rcall   wait_for_low_strt
+                rcall   wait_for_transition_hl
 ;                rcall   wait_for_test
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
@@ -1126,8 +1134,7 @@ start3:
 
 ; state 5 = C(p-on) + A(n-choppered) - comparator B evaluated
 ; out_cB changes from low to high
-                rcall   wait_for_low_strt
-                rcall   wait_for_high_strt
+                rcall   wait_for_transition_lh
 ;                rcall   wait_for_test
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
@@ -1139,8 +1146,7 @@ start3:
 
 ; state 6 = B(p-on) + A(n-choppered) - comparator C evaluated
 ; out_cC changes from high to low
-                rcall   wait_for_high_strt
-                rcall   wait_for_low_strt
+                rcall   wait_for_transition_hl
 ;                rcall   wait_for_test
                 sbrs    flags0, OCT1_PENDING
                 sbr     flags2, (1<<SCAN_TIMEOUT)
@@ -1190,10 +1196,7 @@ start_to_run:
 ; run 1 = B(p-on) + C(n-choppered) - comparator A evaluated
 ; out_cA changes from low to high
 run1:           
-                rcall   wait_for_low
-                sbrs    flags0, OCT1_PENDING
-                rjmp    run1_fail
-                rcall   wait_for_high
+                rcall   wait_for_transition_lh
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run1_1
 run1_fail:             
@@ -1213,10 +1216,7 @@ run1_1:
 ; run 2 = A(p-on) + C(n-choppered) - comparator B evaluated
 ; out_cB changes from high to low
 run2:
-                rcall   wait_for_high
-                sbrs    flags0, OCT1_PENDING
-                rjmp    run2_fail
-                rcall   wait_for_low
+                rcall   wait_for_transition_hl
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run2_1
 run2_fail:
@@ -1236,10 +1236,8 @@ run2_1:
 ; run 3 = A(p-on) + B(n-choppered) - comparator C evaluated
 ; out_cC changes from low to high
 
-run3:           rcall   wait_for_low
-                sbrs    flags0, OCT1_PENDING
-                rjmp    run3_fail
-                rcall   wait_for_high
+run3: 
+                rcall   wait_for_transition_lh
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run3_1
                 
@@ -1259,10 +1257,8 @@ run3_1:
                 cbr     flags2, (1<<NO_SYNC) 
 ; run 4 = C(p-on) + B(n-choppered) - comparator A evaluated
 ; out_cA changes from high to low
-run4:           rcall   wait_for_high
-                sbrs    flags0, OCT1_PENDING
-                rjmp    run4_fail
-                rcall   wait_for_low
+run4:           
+                rcall   wait_for_transition_hl
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run4_1
 run4_fail:                
@@ -1281,10 +1277,8 @@ run4_1:
                 cbr     flags2, (1<<NO_SYNC) 
 ; run 5 = C(p-on) + A(n-choppered) - comparator B evaluated
 ; out_cB changes from low to high
-run5:           rcall   wait_for_low
-                sbrs    flags0, OCT1_PENDING
-                rjmp    run5_fail
-                rcall   wait_for_high
+run5:           
+                rcall   wait_for_transition_lh
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run5_1
                 
@@ -1305,10 +1299,8 @@ run5_1:
 ; run 6 = B(p-on) + A(n-choppered) - comparator C evaluated
 ; out_cC changes from high to low
 
-run6:           rcall   wait_for_high
-                sbrs    flags0, OCT1_PENDING
-                rjmp    run6_fail
-                rcall   wait_for_low
+run6:           
+                rcall   wait_for_transition_hl
                 sbrc    flags0, OCT1_PENDING
                 rjmp    run6_1
                 
@@ -1327,6 +1319,7 @@ run6_1:
                 rcall   evaluate_sys_state 
                 rcall   wait_for_zc_blank
                 cbr     flags2, (1<<NO_SYNC) 
+                DbgLEDOff
 run6_1_1:                
                 sbrc    flags2, RUN_MIN_RPM
                 rjmp    run1
@@ -1344,93 +1337,50 @@ restart_control:
                 rjmp    reset
 ;-----bko-----------------------------------------------------------------
 ; *** scan comparator utilities ***
+.equ            __low   = 0
+.equ            __high  = 1
 
-#include "str_zc_filter.inc"
-
-filter_delay:  
-                push    temp1
-                ldi     temp1, STRT_ZC_FILTER_DELAY
-filter_delay_loop: 
+.macro __wait_for
+                mov     temp2, temp1
+loop:
+                sbrs    flags0, OCT1_PENDING
+                ret
+  .if @0==__low
+                sbis    ACSR, ACO 
+  .else                
+                sbic    ACSR, ACO 
+  .endif                
+                rjmp    fail    
                 dec     temp1
-                brne    filter_delay_loop
-                pop     temp1
-                ret
+                brne    loop
+                rjmp    exit
+fail:
+                cp      temp1, temp2
+                brcc    loop
+                inc     temp1
+                rjmp    loop
+exit:
+.endm
 
-.macro __wait_for_filter
-                clc
-                sbis    ACSR, ACO
-                sec
-                in      temp5, SREG
-                adc     temp2, temp6 
-                out     SREG, temp5
-                rol     temp1
-                sbc     temp2, temp6
-.endmacro
-                                
-wait_for_low:   
-                ldi     temp1, 0xFF
-                ldi     temp2, 8
-                ldi     temp3, (8-ZCF_CONST) + 1
-                clr     temp6 
-wait_for_low_loop:
-                sbrs    flags0, OCT1_PENDING
-                ret
-                __wait_for_filter
-                cp      temp2, temp3
-                brcc    wait_for_low_loop
-                ret
-                               
-wait_for_high:   
-                ldi     temp1, 0x0
-                ldi     temp2, 0
-                ldi     temp3, ZCF_CONST
-                clr     temp6 
-wait_for_high_loop:
-                sbrs    flags0, OCT1_PENDING
-                ret
-                __wait_for_filter
-                cp      temp2, temp3
-                brcs    wait_for_high_loop
-                ret
 
-wait_for_high_strt:
-                ldi     temp1, 0x0
-                ldi     temp2, 0
-                ldi     temp3, STRT_ZC_FILTER_FACTOR
-                clr     temp6 
-                
-wait_for_high_strt_loop2:                
-                sbrs    flags1, PWM_OFF_CYCLE
-                rjmp    wait_for_high_strt_loop2
-                
-wait_for_high_strt_loop:
-                sbrs    flags0, OCT1_PENDING
-                ret
-                __wait_for_filter
-                rcall   filter_delay
-                cp      temp2, temp3
-                brcs    wait_for_high_strt_loop
-                ret
+wait_for_transition_lh:
+                ;DbgLEDOn 
+                lds	temp1, zc_filter_time
+                 __wait_for __low
+                lds	temp1, zc_filter_time
+                __wait_for __high
+                ;DbgLEDOff
+                ret  
 
-wait_for_low_strt:
-                ldi     temp1, 0xFF
-                ldi     temp2, 8
-                ldi     temp3, (8-STRT_ZC_FILTER_FACTOR) + 1
-                clr     temp6 
-                
-wait_for_low_strt_loop2:
-                sbrs    flags1, PWM_OFF_CYCLE
-                rjmp    wait_for_low_strt_loop2
-                
-wait_for_low_strt_loop:
-                sbrs    flags0, OCT1_PENDING
-                ret
-                __wait_for_filter
-                rcall   filter_delay
-                cp      temp2, temp3
-                brcc    wait_for_low_strt_loop
-                ret
-                
+wait_for_transition_hl:
+                ;DbgLEDOn 
+                lds	temp1, zc_filter_time
+                __wait_for __high
+                lds	temp1, zc_filter_time
+                __wait_for __low
+                ;DbgLEDOff
+                ret  
+
 wait_for_test:
                 sbrs    flags0, OCT1_PENDING
                 ret
