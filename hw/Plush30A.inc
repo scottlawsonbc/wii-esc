@@ -109,7 +109,6 @@
 #undef     MOT_BRAKE      
 #undef     READ_CALIBRATION
 #define    F_CPU               8000000           ; 8Mhz internal RC oscilator 
-#define    ZCF_CONST           6
            
 ;*************************
 ; Power settings         *

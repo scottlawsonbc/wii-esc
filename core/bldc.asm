@@ -868,8 +868,10 @@ calc_next_timing:
                 lds     YL, com_timing_l
                 lds     YH, com_timing_h
                 ; ZC filter phase correction
-                subi    YL, (ZCF_CONST * 13 + 4) / 8
-                sbci    YH, 0
+                lds     temp1, zc_filter_time      
+                clr     temp6
+                sub     YL, temp1
+                sbc     YH, temp6
                 ;
                 rjmp    update_timing
                 
