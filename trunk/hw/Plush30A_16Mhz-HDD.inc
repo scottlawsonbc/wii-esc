@@ -110,7 +110,6 @@
 #undef     READ_CALIBRATION
 #define    OVERCLOCK
 #define    F_CPU               16000000          ; 16Mhz internal RC oscilator (overclocked)
-#define    ZCF_CONST           7
            
 ;*************************
 ; Power settings         *
