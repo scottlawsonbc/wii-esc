@@ -8,7 +8,6 @@
 ...
 = Comparator configuration =
 ...
-
 = General Parameters =
 || *Name* || *Type* || *Description* ||
 || MOT_BRAKE || on/off || Turn on or off break ||
