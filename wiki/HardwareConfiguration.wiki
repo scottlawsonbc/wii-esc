@@ -1,0 +1,31 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+...
+= General conciderations =
+...
+= Port Mapping =
+...
+= Comparator configuration =
+...
+
+= General Parameters =
+|| *Name* || *Type* || *Description* ||
+|| MOT_BRAKE || on/off || Turn on or off break ||
+|| READ_CALIBRATION || on/off || Read calibration byte from EEPROM ||
+|| F_CPU || int || CPU frequency in Hz ||
+|| COMP_PWM || on/off || Turn on complimentary PWM for nFET boards ||
+
+= Power settings =
+|| *Name* || *Type* || *Description* ||
+|| PCT_PWR_MIN || Percent || Minimal power ||
+
+= Startup settings =
+|| *Name* || *Type* || *Description* ||
+|| ENOUGH_GOODIES || int || number of successful electrical rotations before checking RPM. ||
+|| RPM_START_MIN_RPM || int || minimal RPM for transition to run ||
+|| RPM_STEP_INITIAL, RPM_STEP_MAX || int || initially when there no back EMF, it starts commutation with RPM_STEP_INITIAL speed and accelerates up to RPM_STEP_MAX. For a good start you need to provide enough power to rotate motor (with load) at least at RPM_STEP_INITIAL and motor should be able to produce detectable back EMF somewhere inside this range. ||
+
+= Run settings =
+|| *Name* || *Type* || *Description* ||
+|| RPM_RUN_MIN_RPM || int || below this RPM BLDC exits from run mode. Currently 2 cases: 1) if current power is lower than PCT_PWR_MAX_STARTUP it goes to startup. 2) if higher - reset ||
