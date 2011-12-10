@@ -1,0 +1,27 @@
+== About ==
+
+The wii-esc firmware for brushless DC motor controllers written by D. Kayukov is a further development of the well known [http://home.versanet.de/~b-konze quax] firmware by B. Konze. It was started with the goal to increase the input resolution and optimize the response time for better flight stability of multi copters.
+
+During the development the two different quax versions (Type 17a / 18a) have been merged into one and a lot of additional changes (improved startup, zero crossing filer, complementary PWM...) were committed. Different hardware is now selected with hardware dependent configuration files.
+
+Although it's called wii-esc (MultiWii project), this firmware works with every PWM capable flight controller, e.g. OpenPilot CopterControl.
+
+
+== Getting Started ==
+
+These are the basic steps to update an ESC with the wii-esc firmware:
+
+ # Identify the ESC ([SupportedEscs Supported ESCs])
+ # Configure the hardware ([HardwareConfiguration Hardware Configuration])
+ # Choose the input method ([InputConfiguration Input Configuration])
+ # Assemble the firmware ([FirmwareAssembling Firmware Assembling])
+ # Flash the ESC ([FirmwareFlashing Firmware Flashing])
+
+
+== Source Tree ==
+
+ * *./:* batch files for assembly
+ * *./bin:* assembly output directory
+ * *./core:* main source files
+ * *./hw:* hardware configuration files
+ * *./input:* input configuration files
