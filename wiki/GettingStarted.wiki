@@ -4,7 +4,7 @@ The wii-esc firmware for brushless DC motor controllers written by D. Kayukov is
 
 During the development the two different quax versions (Type 17a / 18a) have been merged into one and a lot of additional changes (improved startup, zero crossing filer, complementary PWM...) were committed. Different hardware is now selected with hardware dependent configuration files.
 
-Although it's called wii-esc (MultiWii project), this firmware works with every PWM capable flight controller, e.g. OpenPilot CopterControl.
+Although it's called wii-esc ([http://www.multiwii.com/ MultiWii] project), this firmware works with every PWM capable flight controller, e.g. [http://www.openpilot.org OpenPilot] !CopterControl.
 
 
 == Getting Started ==
