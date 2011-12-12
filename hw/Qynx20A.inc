@@ -38,9 +38,6 @@
 #define    DIR_PD          (1<<DbgLED)
 #define    BRAKE_PD        0
 
-#define LED_UIT            sbi     PORTD,2 ; LED uit
-#define LED_AAN            cbi     PORTD,2 ; LED aan
-
 #define DbgLEDOn           sbi     PORTD,2
 #define DbgLEDOff          cbi     PORTD,2
 
