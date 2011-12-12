@@ -1331,7 +1331,7 @@ run_to_start:   sbr     flags2, (1<<STARTUP)
                 brcs    run_to_start_2
                 rjmp    restart_control
 run_to_start_2:                
-                rjmp    wait_for_power_on
+                rjmp    init_startup
 
 restart_control:
                 cli                             ; disable all interrupts
