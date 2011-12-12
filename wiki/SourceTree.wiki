@@ -1,0 +1,7 @@
+#summary Project Structure
+
+ * *./:* batch files for assembly
+ * *./bin:* assembly output directory
+ * *./core:* main source files
+ * *./hw:* hardware configuration files
+ * *./input:* input configuration files
