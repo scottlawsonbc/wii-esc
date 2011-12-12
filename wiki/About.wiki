@@ -1,5 +1,4 @@
 #summary Information about this project.
-#sidebar GlobalTOC
 
 The wii-esc firmware for brushless DC motor controllers written by D. Kayukov is a further development of the well known [http://home.versanet.de/~b-konze quax] firmware by B. Konze. It was started with the goal to increase the input resolution and optimize the response time for better flight stability of multi copters.
 
