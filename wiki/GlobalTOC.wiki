@@ -2,4 +2,4 @@
 
 * [About]
 * [GettingStarted Getting Started]
-** [SourceTree Project Structure] 
+  * [SourceTree Project Structure] 
