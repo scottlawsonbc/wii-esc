@@ -1,0 +1,29 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+In general, there are two different types of ESCs which can be easily identified (based on Atmega8 MCU):
+
+# Mystery BlueSeries – external 16 MHz crystal
+# HobbyWing Pentium – no external crystal
+
+Almost any other "China" ESC is based more or less on one of them. They are just rebranded / relabelled or use different parts, but the schematic is still the same.
+
+= The following ESCs are confirmed to work with the wii-esc firmware =
+
+Add your content here.  Format your content with:
+
+
+# Mystery20A.inc
+  # Mystery Blue Series 12A / 20A / 30A with p- and n-FETs
+  # HobbyKing Blue Series 12A / 20A / 30A with p- and n-FETs
+  # Turnigy TY-P1 25A with all n-FETs
+
+# Mystery20A_nFET.inc
+  # Mystery Blue Series 12A / 20A / 30A with all n-FETs
+  # HobbyKing Blue Series 12A / 20A / 30A with all n-FETs
+
+# Plush30A.inc
+  # All HobbyWing Pentium based ESCs with ATmega8 (like Turnigy Plush, RCTimer...)
+
+If you find an ESC which is not listed above but compatible, please let us know.
