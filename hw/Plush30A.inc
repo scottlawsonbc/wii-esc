@@ -24,7 +24,6 @@
 ;*********************
 ; PORT C definitions *
 ;*********************
-
 #define INIT_PC         0
 #define DIR_PC          0
 #define BRAKE_PC        0
