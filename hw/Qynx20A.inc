@@ -70,16 +70,13 @@
   ACMultiplexed
 .endmacro
 
-
 .macro AcPhaseA
   ACChannel mux_a
 .endmacro
 
-
 .macro AcPhaseB
   ACChannel mux_b
 .endmacro
-
 
 .macro AcPhaseC
   ACChannel mux_c
