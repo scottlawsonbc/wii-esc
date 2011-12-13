@@ -104,8 +104,7 @@
 #undef     MOT_BRAKE      
 #undef     READ_CALIBRATION
 #define    F_CPU               16000000          ; 16Mhz oscilator 
-;#define    HIGH_SIDE_PWM
-;#define    COMP_PWM
+#undef     COMP_PWM
 #define    CHARGE_BOOTSTRAP
 
 ;*************************
