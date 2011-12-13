@@ -26,13 +26,13 @@ Assembling is done with the batch files named after the hardware confguration fi
 call _make.cmd Plush30A pwm_rc_200
 }}}
 
-This assembles a firmware with the hardware configuration file Plush30A.inc and input configuration file pwm_rc_200.inc. To use the input configuration file pwm_fast_250.inc it must be changed to:
+It assembles a firmware with the hardware configuration file Plush30A.inc and input configuration file pwm_rc_200.inc. To use the input configuration file pwm_fast_250.inc it must be changed to:
 
 {{{
 call _make.cmd Plush30A  pwm_fast_250
 }}}
 
-Here is the output of a succesfull assembly:
+This is the output of a succesfull assembly:
 
 {{{
 AVRASM: AVR macro assembler 2.1.42 (build 1796 Sep 15 2009 10:48:36)
