@@ -8,4 +8,5 @@
     * [SourceTree Project Structure] 
     * [HardwareConfiguration Hardware Configuration]
     * [InputConfiguration Input Configuration]
-    * [FirmwareAssembling Firmware Assembling] 
+    * [FirmwareAssembling Firmware Assembling]
+    * [FirmwareFlashing  Firmware Flashing]
