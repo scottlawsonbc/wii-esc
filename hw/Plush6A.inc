@@ -29,7 +29,7 @@
 #define BRAKE_PC        0
 
 ;*********************
-; PORT D 
+; PORT D definitions *
 ;*********************  
 ;#define                7     ;i <plus> comparator input (AIN0)
 #define c_comp          6     ;i common comparator input (AIN0)
@@ -41,7 +41,6 @@
 #define INIT_PD         0
 #define DIR_PD          (1<<ApFET)+(1<<BpFET)+(1<<CpFET)
 #define BRAKE_PD        0
-
 
 ;*********************
 ; ADC definitions    *
