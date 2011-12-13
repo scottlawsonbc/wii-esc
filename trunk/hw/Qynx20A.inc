@@ -1,11 +1,10 @@
 .include "common.inc"
 
-#define Typ "Qynx  20"
+#define Typ "Qynx 20a"
 
-; PORT  definities *************************************************************
-
-;PORT B
-
+;*********************
+; PORT B definitions *
+;*********************
 #define    CpFET           1      ; Aansturing FET plus
 #define    BpFET           2      ; Aansturing FET plus
 #define    ApFET           3      ; Aansturing FET plus
@@ -14,55 +13,59 @@
 #define    DIR_PB          (1<<ApFET) + (1<<BpFET) + (1<< CpFET)
 #define    BRAKE_PB        0
 
-;PORT C
-
+;*********************
+; PORT C definitions *
+;*********************
 #define    AnFET           0      ; Aansturing FET massa
 #define    BnFET           1      ; Aansturing FET massa 
 #define    CnFET           2      ; Aansturing FET massa
-#define    mux_a           3      ;
-#define    mux_b           4      ;
-#define    mux_c           5      ;
 
 #define    INIT_PC         0
 #define    DIR_PC          (1<<AnFET) + (1<<BnFET) + (1<< CnFET)
 #define    BRAKE_PC        (1<<AnFET) + (1<<BnFET) + (1<< CnFET)
 
-;PORT D
-
+;*********************
+; PORT D definitions *
+;*********************  
 #define    DbgLED          2      ; LED
 #define    rcp_in          3      ; INT1 PPM input
 #define    c_comp          6
-
 
 #define    INIT_PD         (1<<DbgLED) ; Led staat uit
 #define    DIR_PD          (1<<DbgLED)
 #define    BRAKE_PD        0
 
-#define DbgLEDOn           sbi     PORTD,2
-#define DbgLEDOff          cbi     PORTD,2
+#define    DbgLEDOn        sbi     PORTD, DbgLED
+#define    DbgLEDOff       cbi     PORTD, DbgLED
 
-; FET Control *****************************************************************
+;*********************
+; ADC definitions    *
+;*********************
+#define    mux_a           3      ;
+#define    mux_b           4      ;
+#define    mux_c           5      ;
 
-#define ApFET_on           cbi     PORTB,3
-#define ApFET_off          sbi     PORTB,3
+;*********************
+; FET Control        *
+;*********************
+#define ApFET_on           cbi     PORTB, ApFET
+#define ApFET_off          sbi     PORTB, ApFET
+#define AnFET_on           sbi     PORTC, AnFET
+#define AnFET_off          cbi     PORTC, AnFET
 
-#define BpFET_on           cbi     PORTB,2
-#define BpFET_off          sbi     PORTB,2
+#define BpFET_on           cbi     PORTB, BpFET
+#define BpFET_off          sbi     PORTB, BpFET
+#define BnFET_on           sbi     PORTC, BnFET
+#define BnFET_off          cbi     PORTC, BnFET
 
-#define CpFET_on           cbi     PORTB,1
-#define CpFET_off          sbi     PORTB,1
+#define CpFET_on           cbi     PORTB, CpFET
+#define CpFET_off          sbi     PORTB, CpFET
+#define CnFET_on           sbi     PORTC, CnFET
+#define CnFET_off          cbi     PORTC, CnFET
 
-#define AnFET_on           sbi     PORTC,0
-#define AnFET_off          cbi     PORTC,0
-
-#define BnFET_on           sbi     PORTC,1
-#define BnFET_off          cbi     PORTC,1
-
-#define CnFET_on           sbi     PORTC,2
-#define CnFET_off          cbi     PORTC,2
-
-; Comparator definitions ******************************************************
-
+;*************************
+; Comparator definitions *
+;*************************
 .macro AcInit
   ACMultiplexed
 .endmacro
