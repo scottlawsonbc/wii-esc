@@ -15,13 +15,13 @@ Add your content here.  Format your content with:
 
 
   # Mystery20A.inc
-    # Mystery Blue Series 12A / 20A / 30A with p- and n-FETs
-    # HobbyKing Blue Series 12A / 20A / 30A with p- and n-FETs
-    # Turnigy TY-P1 25A with all n-FETs
+    * Mystery Blue Series 12A / 20A / 30A with p- and n-FETs
+    * HobbyKing Blue Series 12A / 20A / 30A with p- and n-FETs
+    * Turnigy TY-P1 25A with all n-FETs
   # Mystery20A_nFET.inc
-    # Mystery Blue Series 12A / 20A / 30A with all n-FETs
-    # HobbyKing Blue Series 12A / 20A / 30A with all n-FETs
+    * Mystery Blue Series 12A / 20A / 30A with all n-FETs
+    * HobbyKing Blue Series 12A / 20A / 30A with all n-FETs
   # Plush30A.inc
-    # All HobbyWing Pentium based ESCs with ATmega8 (like Turnigy Plush, RCTimer...)
+    * All HobbyWing Pentium based ESCs with ATmega8 (like Turnigy Plush, RCTimer...)
 
 If you find an ESC which is not listed above but compatible, please let us know.
