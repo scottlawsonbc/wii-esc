@@ -2,7 +2,7 @@
 
 The wii-esc firmware is flashed with an In-System Programming (ISP) adapter. The Atmel standard ISP connection is a six wire interface:
 
-_Atmel ISP headers (taken from [http://code.google.com/p/th9x th9x] project)_
+_Atmel ISP headers (image taken from [http://code.google.com/p/th9x/wiki/installation_de?wl=en-US#Connecting_the_Th9x_with_the_Programmer th9x] project)_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_atmel_6_10_pin.jpg
 
 
@@ -22,13 +22,13 @@ There are several ways in making an ISP connection. The following pictures are s
 _Soldered ISP connection_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_soldered_1.jpg
 
-_Soldered ISP connection (taken from [http://www.rcgroups.com/forums/showthread.php?t=1513678 rcgroups.com])_
+_Soldered ISP connection (image taken from [http://www.rcgroups.com/forums/showthread.php?t=1513678 rcgroups.com])_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_nek_soldered_2.jpg
 
 _Needle board_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_needle_board_1.jpg
 
-_Clothes pin (taken from [http://www.rcgroups.com/forums/showthread.php?t=1513678 rcgroups.com])_
+_Clothes pin (image taken from [http://www.rcgroups.com/forums/showthread.php?t=1513678 rcgroups.com])_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_jonnyc67_clothes_pin_1.jpg
 
 The way of makeing the connection mostly depends on the availability and arrangement of the ISP pads and if a boot loader can be used for updating. The pin assignment for the ISP connections of some ESCs can be found on the Supported ESCs page.
