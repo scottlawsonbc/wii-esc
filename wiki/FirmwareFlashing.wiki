@@ -2,12 +2,9 @@
 
 The wii-esc firmware is flashed with an In-System Programming (ISP) adapter. The Atmel standard ISP connection is a six wire interface:
 
- * MOSI
- * MISO
- * SCK
- * RESET
- * VCC
- * GND
+_Atmel ISP headers (taken from [http://code.google.com/p/th9x th9x] project)_
+http://wii-esc.googlecode.com/svn/wiki/hw/isp_atmel_6_10_pin.jpg
+
 
 There are a lot of different ISP programmers available for Atmel AVR devices. This howto is based on the Atmel AVR910 compatible programming adapter in combination with the software avrdude. 
 
@@ -22,18 +19,17 @@ With some ESCs (HK/Mystery Blue Series), it's possible to use a boot loader. Thi
 
 There are several ways in making an ISP connection. The following pictures are showing some examples:
 
+_Soldered ISP connection_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_soldered_1.jpg
-Soldered ISP connection
 
+_Soldered ISP connection (taken from [http://www.rcgroups.com/forums/showthread.php?t=1513678 rcgroups.com])_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_nek_soldered_2.jpg
-Soldered ISP connection (image taken from [http://www.rcgroups.com/forums/showthread.php?t=1513678 rcgroups.com])
 
+_Needle board_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_needle_board_1.jpg
-Needle board
 
+_Clothes pin (taken from [http://www.rcgroups.com/forums/showthread.php?t=1513678 rcgroups.com])_
 http://wii-esc.googlecode.com/svn/wiki/hw/isp_jonnyc67_clothes_pin_1.jpg
-Clothes pin (image taken from [http://www.rcgroups.com/forums/showthread.php?t=1513678 rcgroups.com])
-
 
 The way of makeing the connection mostly depends on the availability and arrangement of the ISP pads and if a boot loader can be used for updating. The pin assignment for the ISP connections of some ESCs can be found on the Supported ESCs page.
 
