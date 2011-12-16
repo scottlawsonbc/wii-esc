@@ -5,7 +5,7 @@ The wii-esc firmware is written in assembly language. Any change in hardware and
 
 = Required Software =
 
-On Windows !AvrAssembler2 is used for assembling. Officially it's not a standalone program and only available as a component of Atmel's [http://www.atmel.com/avrstudio/ AVR Studio]. Because AVR Studio is a very comprehensive software package, here is a non offical link for the [http://www.avrfreaks.net/index.php?module=Freaks%20Files&func=viewFile&id=874 AvrAssembler2] standalone version.
+On Windows !AvrAssembler2 is used for assembling. Officially it's not a standalone program and only available as a component of Atmel's [http://www.atmel.com/avrstudio/ AVR Studio]. Because AVR Studio is a very comprehensive software package, here is a non offical link for the [http://www.vfx.hu/avr/download/avrasm2.zip AvrAssembler2] standalone version.
 
 
 = Setting up !AvrAssembler2 =
