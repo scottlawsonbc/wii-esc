@@ -29,10 +29,14 @@ eval_rc_p00:    lsr     temp2
                 lsr     temp2   ; actual 0->400
                 ror     temp1
 .endif
-                cpi     temp1, POWER_RANGE - 1
-                brcs    eval_rc_p10
+                tst     temp2
+                breq    eval_rc_p10  
                 ldi     temp1, POWER_RANGE - 1
 eval_rc_p10:    
+                cpi     temp1, POWER_RANGE - 1
+                brcs    eval_rc_p11
+                ldi     temp1, POWER_RANGE - 1
+eval_rc_p11:    
                 mov     ZH, temp1
                 ret
 
