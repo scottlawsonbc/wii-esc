@@ -88,6 +88,7 @@
 #undef     MOT_BRAKE      
 #undef     READ_CALIBRATION
 #define    F_CPU               16000000          ; 16Mhz oscilator 
+#define    TIMING_ADV          0
 
 ;*************************
 ; Power settings         *

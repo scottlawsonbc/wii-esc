@@ -95,6 +95,7 @@
 #undef     MOT_BRAKE      
 #undef     READ_CALIBRATION
 #define    F_CPU               8000000           ; 8Mhz internal RC oscilator 
+#define    TIMING_ADV          0
            
 ;*************************
 ; Power settings         *
