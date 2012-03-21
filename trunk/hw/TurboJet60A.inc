@@ -97,6 +97,7 @@
 #define    F_CPU               16000000          ; 16Mhz oscilator 
 #undef     COMP_PWM
 #define    CHARGE_BOOTSTRAP
+#define    TIMING_ADV          0
 
 ;*************************
 ; Power settings         *

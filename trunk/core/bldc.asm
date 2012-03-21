@@ -872,6 +872,18 @@ calc_next_timing:
                 clr     temp6
                 sub     YL, temp1
                 sbc     YH, temp6
+#if TIMING_ADV > 0
+                sub     YL, temp1
+                sbc     YH, temp6
+#endif
+#if TIMING_ADV > 1
+                sub     YL, temp1
+                sbc     YH, temp6
+#endif
+#if TIMING_ADV > 2
+                sub     YL, temp1
+                sbc     YH, temp6
+#endif
                 ;
                 rjmp    update_timing
                 
@@ -912,7 +924,18 @@ wait_for_zc_blank_loop2:
                 clr     temp6
                 add     YL, temp1
                 adc     YH, temp6
-                ;
+#if TIMING_ADV > 0
+                add     YL, temp1
+                adc     YH, temp6
+#endif                ;
+#if TIMING_ADV > 1
+                add     YL, temp1
+                adc     YH, temp6
+#endif                ;
+#if TIMING_ADV > 2
+                add     YL, temp1
+                adc     YH, temp6
+#endif                
                 cli
                 add     YL, TCNT1L_shadow
                 adc     YH, TCNT1H_shadow
@@ -1321,7 +1344,7 @@ run6_1:
                 rcall   evaluate_sys_state 
                 rcall   wait_for_zc_blank
                 cbr     flags2, (1<<NO_SYNC) 
-                DbgLEDOff
+                ;DbgLEDOff
 run6_1_1:                
                 sbrc    flags2, RUN_MIN_RPM
                 rjmp    run1

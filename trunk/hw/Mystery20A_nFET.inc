@@ -105,6 +105,7 @@
 #undef     READ_CALIBRATION
 #define    F_CPU               16000000          ; 16Mhz oscilator 
 #undef     COMP_PWM
+#define    TIMING_ADV          0
 #define    CHARGE_BOOTSTRAP
 
 ;*************************
