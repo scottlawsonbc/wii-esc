@@ -1,11 +1,12 @@
 .macro ACMultiplexed
-  cbi     ADCSRA, ADEN          ; disable ADC
-  in      temp1, SFIOR
-  sbr     temp1, (1<<ACME)      ; switch to comparator multiplexed
-  out     SFIOR, temp1
+   cbi    ADCSRA, ADEN          ; disable ADC
+   in     temp1, SFIOR
+   sbr    temp1, (1<<ACME)      ; switch to comparator multiplexed
+   out    SFIOR, temp1
 .endmacro  
 
 .macro ACNormal
+   in   temp1, SFIOR
    cbr  temp1, (1<<ACME)        ; set to AN1
    out  SFIOR, temp1
    sbi  ADCSRA, ADEN            ; enable ADC
