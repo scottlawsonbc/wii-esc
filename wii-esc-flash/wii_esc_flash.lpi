@@ -35,7 +35,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="5">
       <Unit0>
         <Filename Value="wii_esc_flash.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -59,6 +59,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="UComPort"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="utl\UMetadata.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="UMetadata"/>
+      </Unit4>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -80,9 +85,8 @@
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
-      <SmallerCode Value="True"/>
       <Optimizations>
-        <OptimizationLevel Value="3"/>
+        <VariablesInRegisters Value="True"/>
       </Optimizations>
     </CodeGeneration>
     <Linking>

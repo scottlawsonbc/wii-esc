@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ComCtrls, LResources, UComPort, Windows, ShellApi, types;
+  ComCtrls, LResources, UComPort, Windows, ShellApi, UMetadata;
 
 type
   { TFrmMain }
@@ -32,7 +32,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
-    { private declarations }
+    FMetadata: TMetadata;
   public
     { public declarations }
   end; 
@@ -42,13 +42,19 @@ var
 
 implementation
 
+uses IniFiles;
+
 {$R *.lfm}
 
 { TFrmMain }
 procedure TFrmMain.FormCreate(Sender: TObject);
 var
-  i: integer;
+  lini: TInifile;
 begin
+  FMetadata := TMetadata.Create;
+  lini := TInifile.Create('E:\!Work\Unsorted\wii-esc\wii-esc-flash\metadata\__metadata.ini');
+  FMetadata.LoadFromIni(lini);
+  lini.Free;
   GetSerialPortRegNames(CmbPorts.Items);
 end;
 
