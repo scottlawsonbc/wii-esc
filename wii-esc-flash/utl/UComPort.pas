@@ -72,6 +72,7 @@ var
   l: TStringList;
   i: integer;
 begin
+  v.Clear;
   reg := TRegistry.Create;
   l := TStringList.Create;
   try
