@@ -13,6 +13,7 @@ uses
 {$R *.res}
 
 begin
+  Application.Title:='Wii-ESC Flash Tool';
   RequireDerivedFormResource := True;
   Application.Initialize;
   Application.CreateForm(TFrmMain, FrmMain);
