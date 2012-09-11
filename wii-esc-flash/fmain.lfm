@@ -1,82 +1,80 @@
 object FrmMain: TFrmMain
   Left = 614
-  Height = 322
+  Height = 485
   Top = 313
-  Width = 441
+  Width = 483
   Caption = 'WII-ESC Flash Tool'
-  ClientHeight = 322
-  ClientWidth = 441
+  ClientHeight = 485
+  ClientWidth = 483
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
   LCLVersion = '1.0.1.3'
   object gbProgrammer: TGroupBox
     Left = 8
     Height = 73
     Top = 8
-    Width = 424
+    Width = 466
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Programmer Settings'
     ClientHeight = 55
-    ClientWidth = 420
+    ClientWidth = 462
     TabOrder = 0
     object CmbPgmType: TComboBox
       Left = 6
-      Height = 21
+      Height = 23
       Top = 24
-      Width = 232
+      Width = 274
       Anchors = [akTop, akLeft, akRight]
-      ItemHeight = 13
-      ItemIndex = 0
-      Items.Strings = (
-        'avrisp'
-        'arduino'
-        'usbisp'
-      )
+      Enabled = False
+      ItemHeight = 15
+      OnChange = CmbPgmTypeChange
       Style = csDropDownList
       TabOrder = 0
-      Text = 'avrisp'
     end
     object Label1: TLabel
       Left = 6
-      Height = 14
+      Height = 16
       Top = 6
-      Width = 25
+      Width = 27
       Caption = 'Type'
       ParentColor = False
     end
     object CmbPorts: TComboBox
-      Left = 242
-      Height = 21
+      Left = 284
+      Height = 23
       Top = 24
       Width = 84
       Anchors = [akTop, akRight]
-      ItemHeight = 13
+      Enabled = False
+      ItemHeight = 15
       TabOrder = 1
-      Text = 'COM1'
     end
     object Label2: TLabel
-      Left = 242
-      Height = 14
+      Left = 282
+      Height = 16
       Top = 8
-      Width = 21
+      Width = 23
       Anchors = [akTop, akRight]
       Caption = 'Port'
       ParentColor = False
     end
-    object CmbPgmType2: TComboBox
-      Left = 330
-      Height = 21
+    object CmbBaud: TComboBox
+      Left = 372
+      Height = 23
       Top = 24
       Width = 84
       Anchors = [akTop, akRight]
-      ItemHeight = 13
+      Enabled = False
+      ItemHeight = 15
       TabOrder = 2
       Text = '57600'
     end
     object Label3: TLabel
-      Left = 330
-      Height = 14
+      Left = 370
+      Height = 16
       Top = 8
-      Width = 31
+      Width = 33
       Anchors = [akTop, akRight]
       Caption = 'Speed'
       ParentColor = False
@@ -84,9 +82,9 @@ object FrmMain: TFrmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 302
-    Width = 441
+    Height = 23
+    Top = 462
+    Width = 483
     Panels = <    
       item
         Width = 50
@@ -100,19 +98,20 @@ object FrmMain: TFrmMain
     Left = 8
     Height = 113
     Top = 80
-    Width = 424
+    Width = 466
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Firmware'
     ClientHeight = 95
-    ClientWidth = 420
+    ClientWidth = 462
     TabOrder = 2
-    object CmbPgmType3: TComboBox
+    object CmbTarget: TComboBox
       Left = 6
-      Height = 21
+      Height = 23
       Top = 24
-      Width = 232
+      Width = 274
       Anchors = [akTop, akLeft, akRight]
-      ItemHeight = 13
+      Enabled = False
+      ItemHeight = 15
       Items.Strings = (
         'bs_nfet.hex'
         'bs.hex'
@@ -123,29 +122,31 @@ object FrmMain: TFrmMain
     end
     object Label4: TLabel
       Left = 6
-      Height = 14
+      Height = 16
       Top = 6
-      Width = 33
+      Width = 35
       Caption = 'Target'
       ParentColor = False
     end
     object Button1: TButton
-      Left = 242
+      Left = 284
       Height = 25
       Top = 22
       Width = 84
       Anchors = [akTop, akRight]
       Caption = 'Information'
+      Enabled = False
       OnClick = Button1Click
       TabOrder = 1
     end
     object CmbPgmType4: TComboBox
       Left = 6
-      Height = 21
+      Height = 23
       Top = 66
-      Width = 232
+      Width = 274
       Anchors = [akTop, akLeft, akRight]
-      ItemHeight = 13
+      Enabled = False
+      ItemHeight = 15
       Items.Strings = (
         'default'
         'extended'
@@ -157,14 +158,14 @@ object FrmMain: TFrmMain
     end
     object Label5: TLabel
       Left = 6
-      Height = 14
+      Height = 16
       Top = 48
-      Width = 66
+      Width = 75
       Caption = 'Configuration'
       ParentColor = False
     end
     object Button2: TButton
-      Left = 242
+      Left = 284
       Height = 25
       Top = 64
       Width = 84
@@ -174,7 +175,7 @@ object FrmMain: TFrmMain
       TabOrder = 3
     end
     object Button3: TButton
-      Left = 330
+      Left = 372
       Height = 25
       Top = 22
       Width = 84
@@ -184,7 +185,7 @@ object FrmMain: TFrmMain
       TabOrder = 4
     end
     object Button4: TButton
-      Left = 330
+      Left = 372
       Height = 25
       Top = 64
       Width = 84
@@ -196,14 +197,21 @@ object FrmMain: TFrmMain
   end
   object MemLog: TMemo
     Left = 8
-    Height = 94
+    Height = 257
     Top = 200
-    Width = 424
+    Width = 466
     Anchors = [akTop, akLeft, akRight, akBottom]
     ReadOnly = True
     ScrollBars = ssBoth
     TabOrder = 3
     TabStop = False
     WordWrap = False
+  end
+  object TmLoadDelay: TTimer
+    Enabled = False
+    Interval = 500
+    OnTimer = TmLoadDelayTimer
+    left = 32
+    top = 208
   end
 end

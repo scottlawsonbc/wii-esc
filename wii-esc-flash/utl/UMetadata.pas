@@ -48,9 +48,11 @@ type
   TMetadataFirmware = class(TMetadataBase)
   private
     FDescription: String;
+    FInfoURL: String;
     FName: String;
     FURL: String;
     procedure SetDescription(AValue: String);
+    procedure SetInfoURL(AValue: String);
     procedure SetName(AValue: String);
     procedure SetURL(AValue: String);
   protected
@@ -59,6 +61,7 @@ type
     property Name: String read FName write SetName;
     property Description: String read FDescription write SetDescription;
     property URL: String read FURL write SetURL;
+    property InfoURL: String read FInfoURL write SetInfoURL;
   end;
 
   { TMetadata }
@@ -74,6 +77,8 @@ type
     destructor Destroy; override;
     procedure Clear;
     procedure LoadFromIni(Ini: TIniFile); overload;
+    procedure GetProgrammers(SL: TStrings);
+    procedure GetFirmwares(SL: TStrings);
   end;
 
 
@@ -102,7 +107,6 @@ begin
     SL.Free;
   end;
 end;
-
 
 { TMetadataBase }
 procedure TMetadataBase.SetCmdLine(AValue: String);
@@ -164,6 +168,12 @@ begin
   FDescription:=AValue;
 end;
 
+procedure TMetadataFirmware.SetInfoURL(AValue: String);
+begin
+  if FInfoURL=AValue then Exit;
+  FInfoURL:=AValue;
+end;
+
 procedure TMetadataFirmware.SetName(AValue: String);
 begin
   if FName=AValue then Exit;
@@ -183,6 +193,7 @@ begin
   begin
     FName := ASection;
     FURL := ReadString(ASection, 'URL', '');
+    FInfoURL := ReadString(ASection, 'Info', '');
     FDescription := _ReadString(Ini, ASection, 'Description', '')
   end;
 end;
@@ -241,7 +252,7 @@ begin
     for i := 0 to Count - 1 do
     begin
       lFirm := TMetadataFirmware.Create;
-      FProgrammers.Add(lFirm);
+      FFirmwares.Add(lFirm);
       lFirm.LoadFromIni(Ini, Strings[i]);
     end;
   finally
@@ -252,6 +263,24 @@ end;
 procedure TMetadata.LoadFromIni(Ini: TIniFile);
 begin
   LoadFromIni(Ini, 'General');
+end;
+
+procedure TMetadata.GetProgrammers(SL: TStrings);
+var
+  i: integer;
+begin
+  SL.Clear;
+  for i := 0 to FProgrammers.Count - 1 do
+    SL.AddObject(TMetadataProgrammer(FProgrammers[i]).Name, FProgrammers[i]);
+end;
+
+procedure TMetadata.GetFirmwares(SL: TStrings);
+var
+  i: integer;
+begin
+  SL.Clear;
+  for i := 0 to FFirmwares.Count - 1 do
+    SL.AddObject(TMetadataFirmware(FFirmwares[i]).Name, FFirmwares[i]);
 end;
 
 

@@ -85,14 +85,16 @@
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
-      <Optimizations>
-        <VariablesInRegisters Value="True"/>
-      </Optimizations>
+      <SmartLinkUnit Value="True"/>
+      <Checks>
+        <IOChecks Value="True"/>
+        <RangeChecks Value="True"/>
+        <OverflowChecks Value="True"/>
+        <StackChecks Value="True"/>
+      </Checks>
+      <VerifyObjMethodCallValidity Value="True"/>
     </CodeGeneration>
     <Linking>
-      <Debugging>
-        <GenerateDebugInfo Value="False"/>
-      </Debugging>
       <LinkSmart Value="True"/>
       <Options>
         <Win32>
