@@ -22,48 +22,47 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="167"/>
-        <CursorPos X="42" Y="177"/>
+        <CursorPos X="43" Y="196"/>
         <UsageCount Value="45"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
-        <Filename Value="utl\UWgetTask.pas"/>
-        <UnitName Value="UWgetTask"/>
-        <EditorIndex Value="8"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="115"/>
-        <CursorPos X="19" Y="115"/>
-        <UsageCount Value="45"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit2>
-      <Unit3>
         <Filename Value="utl\UComPort.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UComPort"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="46"/>
         <CursorPos X="11" Y="75"/>
         <UsageCount Value="41"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit3>
-      <Unit4>
+      </Unit2>
+      <Unit3>
         <Filename Value="utl\UMetadata.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UMetadata"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="313"/>
-        <CursorPos X="82" Y="356"/>
+        <CursorPos X="65" Y="328"/>
         <UsageCount Value="40"/>
         <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="utl\UWgetTask.pas"/>
+        <UnitName Value="UWgetTask"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="115"/>
+        <CursorPos X="19" Y="115"/>
+        <UsageCount Value="45"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -162,71 +161,56 @@
       <Unit16>
         <Filename Value="D:\lazarus\lcl\dialogs.pp"/>
         <UnitName Value="Dialogs"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="14"/>
         <CursorPos X="38" Y="38"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit16>
       <Unit17>
         <Filename Value="D:\lazarus\lcl\propertystorage.pas"/>
         <UnitName Value="PropertyStorage"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="71"/>
         <CursorPos X="15" Y="98"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit17>
       <Unit18>
         <Filename Value="D:\lazarus\lcl\inipropstorage.pas"/>
         <UnitName Value="IniPropStorage"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="244"/>
         <CursorPos X="76" Y="250"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit18>
       <Unit19>
         <Filename Value="D:\lazarus\fpc\2.6.0\source\rtl\objpas\sysutils\osutilsh.inc"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="32" Y="23"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit19>
       <Unit20>
         <Filename Value="D:\lazarus\fpc\2.6.0\source\rtl\objpas\sysutils\osutil.inc"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="83"/>
         <CursorPos X="10" Y="109"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit20>
       <Unit21>
         <Filename Value="D:\lazarus\fpc\2.6.0\source\rtl\win\sysutils.pp"/>
         <UnitName Value="sysutils"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="967"/>
         <CursorPos X="3" Y="972"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit21>
       <Unit22>
         <Filename Value="D:\lazarus\fpc\2.6.0\source\packages\fcl-process\src\process.pp"/>
         <UnitName Value="process"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="44" Y="33"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit22>
     </Units>
     <General>

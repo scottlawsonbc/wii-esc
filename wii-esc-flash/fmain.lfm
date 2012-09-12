@@ -14,7 +14,7 @@ object FrmMain: TFrmMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  SessionProperties = 'ActiveControl;Width;Height;Left;Top;CmbPgmType.ItemIndex;CmbPorts.Top;CmbPorts.Text;CmbTarget.ItemIndex'
+  SessionProperties = 'ActiveControl;CmbPgmType.ItemIndex;CmbPorts.Text;CmbPorts.Top;CmbTarget.ItemIndex;Height;Left;Top;Width;CmbConfigurations.ItemIndex'
   LCLVersion = '1.0.1.3'
   object gbProgrammer: TGroupBox
     Left = 8
@@ -28,7 +28,7 @@ object FrmMain: TFrmMain
     TabOrder = 0
     object CmbPgmType: TComboBox
       Left = 6
-      Height = 23
+      Height = 21
       Top = 24
       Width = 251
       Anchors = [akTop, akLeft, akRight]
@@ -48,7 +48,7 @@ object FrmMain: TFrmMain
     end
     object CmbPorts: TComboBox
       Left = 261
-      Height = 23
+      Height = 21
       Top = 24
       Width = 84
       Anchors = [akTop, akRight]
@@ -67,7 +67,7 @@ object FrmMain: TFrmMain
     end
     object CmbBaud: TComboBox
       Left = 349
-      Height = 23
+      Height = 21
       Top = 24
       Width = 84
       Anchors = [akTop, akRight]
@@ -112,7 +112,7 @@ object FrmMain: TFrmMain
     TabOrder = 2
     object CmbTarget: TComboBox
       Left = 6
-      Height = 23
+      Height = 21
       Top = 24
       Width = 315
       Anchors = [akTop, akLeft, akRight]
@@ -286,18 +286,12 @@ object FrmMain: TFrmMain
     end
     object CmbConfigurations: TComboBox
       Left = 6
-      Height = 23
+      Height = 21
       Top = 24
       Width = 315
       Anchors = [akTop, akLeft, akRight]
       Enabled = False
       ItemHeight = 13
-      Items.Strings = (
-        'default'
-        'extended'
-        'free_flight'
-        'ultra_pwm'
-      )
       OnChange = GlobChange
       Style = csDropDownList
       TabOrder = 0
