@@ -149,6 +149,8 @@ procedure TFrmMain.UnpackResources;
 begin
   ExtractFile('avrdude.conf');
   ExtractFile('avrdude.exe');
+  ExtractFile('libusb0.dll');
+  ExtractFile('libusb0_x64.dll');
 end;
 
 procedure TFrmMain.Button1Click(Sender: TObject);
