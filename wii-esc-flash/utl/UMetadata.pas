@@ -86,9 +86,13 @@ type
 
   TMetadata = class(TMetadataBase)
   private
+    FMetadataVersion: integer;
     FProgrammers: TList;
     FFirmwares: TList;
     FConfigurations: TList;
+    FVersion: String;
+    procedure SetMetadataVersion(AValue: integer);
+    procedure SetVersion(AValue: String);
   protected
     procedure LoadFromIni(Ini: TIniFile; const ASection: String); override; overload;
   public
@@ -99,6 +103,9 @@ type
     procedure GetProgrammers(SL: TStrings);
     procedure GetFirmwares(SL: TStrings);
     procedure GetConfigurations(SL: TStrings);
+  published
+    property MetadataVersion: integer read FMetadataVersion write SetMetadataVersion;
+    property Version: String read FVersion write SetVersion;
   end;
 
 
@@ -291,6 +298,18 @@ begin
   end;
 end;
 
+procedure TMetadata.SetMetadataVersion(AValue: integer);
+begin
+  if FMetadataVersion=AValue then Exit;
+  FMetadataVersion:=AValue;
+end;
+
+procedure TMetadata.SetVersion(AValue: String);
+begin
+  if FVersion=AValue then Exit;
+  FVersion:=AValue;
+end;
+
 procedure TMetadata.LoadFromIni(Ini: TIniFile; const ASection: String);
 var
   i: integer;
@@ -299,6 +318,8 @@ var
   lConf: TMetadataConfiguration;
 begin
   inherited;
+  FMetadataVersion := Ini.ReadInteger(ASection, 'MetadataVersion', 999);
+  FVersion := Ini.ReadString(ASection, 'Version', '');
   with TStringList.Create do
   try
     CommaText := Ini.ReadString(ASection, 'Programmers', '');

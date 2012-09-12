@@ -86,14 +86,14 @@ object FrmMain: TFrmMain
       ParentColor = False
     end
   end
-  object StatusBar1: TStatusBar
+  object Stb: TStatusBar
     Left = 0
-    Height = 23
-    Top = 482
+    Height = 20
+    Top = 485
     Width = 460
     Panels = <    
       item
-        Width = 50
+        Width = 90
       end    
       item
         Width = 50
@@ -425,7 +425,6 @@ object FrmMain: TFrmMain
     StoredValues = <>
     IniSection = 'UI'
     Active = False
-    OnRestoreProperties = PermStorageRestoreProperties
     left = 104
     top = 320
   end

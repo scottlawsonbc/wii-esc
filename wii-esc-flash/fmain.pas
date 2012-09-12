@@ -43,7 +43,7 @@ type
     MemLog: TMemo;
     BtnFirmwareInfo: TSpeedButton;
     BtnConfigurationInfo: TSpeedButton;
-    StatusBar1: TStatusBar;
+    Stb: TStatusBar;
     TmLoadDelay: TTimer;
     procedure BtnConfigurationInfoClick(Sender: TObject);
     procedure BtnLoadConfigurationClick(Sender: TObject);
@@ -54,7 +54,6 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Label6Click(Sender: TObject);
-    procedure PermStorageRestoreProperties(Sender: TObject);
     procedure BtnFirmwareInfoClick(Sender: TObject);
     procedure TmLoadDelayTimer(Sender: TObject);
   private
@@ -122,11 +121,6 @@ begin
   ShellExecute(0, 'open', 'http://wiki.openpilot.org/display/Doc/RapidESC+Database', '', nil, SW_SHOW);
 end;
 
-procedure TFrmMain.PermStorageRestoreProperties(Sender: TObject);
-begin
-
-end;
-
 procedure TFrmMain.BtnFirmwareInfoClick(Sender: TObject);
 begin
   if Assigned(CurrentFirmware) then
@@ -186,6 +180,7 @@ begin
   if (CmbPgmType.Items.Count > 0) then CmbPgmType.ItemIndex := 0;
   if (CmbTarget.Items.Count > 0) then CmbTarget.ItemIndex := 0;
   if (CmbConfigurations.Items.Count > 0) then CmbConfigurations.ItemIndex := 0;
+  Stb.Panels[0].Text := FMetadata.Version;
 end;
 
 procedure TFrmMain.UpdateControls;
