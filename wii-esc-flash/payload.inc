@@ -3734,434 +3734,548 @@ LazarusResources.Add('avrdude','CONF',[
   +','#13#10'                          " a7  a6  a5  a4     a3  a2  a1  a0", '
   +#13#10'                          "  i   i   i   i      i   i   i   i";'#13#10
   +#13#10#9'mode'#9#9'= 0x04;'#13#10#9'delay'#9#9'= 20;'#13#10#9'blocksize'#9'='
-  +' 128;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10'    memory "flash"'
-  +#13#10'        paged           = yes;'#13#10'        size            = 8192;'
-  +#13#10'        page_size       = 64;'#13#10'        num_pages       = 128;'
-  +#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500'
-  +';'#13#10'        readback_p1     = 0xff;'#13#10'        readback_p2     = 0'
-  +'x00;'#13#10'        read_lo         = "  0   0   1   0    0   0   0   0",'
-  +#13#10'                          "  0   0   0   0  a11 a10  a9  a8",'#13#10
-  +'                          " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'      '
-  +'                    "  o   o   o   o    o   o   o   o";'#13#10#13#10'      '
-  +'  read_hi         = "  0   0   1   0    1   0   0   0",'#13#10'            '
-  +'              "  0   0   0   0  a11 a10  a9  a8",'#13#10'                  '
-  +'        " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'                        '
-  +'  "  o   o   o   o    o   o   o   o";'#13#10#13#10'        loadpage_lo     '
-  +'= "  0   1   0   0      0   0   0   0",'#13#10'                          " '
-  +' 0   0   0   0      x   x   x   x",'#13#10'                          "  x  '
-  +' x   x  a4     a3  a2  a1  a0",'#13#10'                          "  i   i  '
-  +' i   i      i   i   i   i";'#13#10#13#10'        loadpage_hi     = "  0   1'
-  +'   0   0      1   0   0   0",'#13#10'                          "  0   0   0'
-  +'   0      x   x   x   x",'#13#10'                          "  x   x   x  a4'
-  +'     a3  a2  a1  a0",'#13#10'                          "  i   i   i   i    '
-  +'  i   i   i   i";'#13#10#13#10'        writepage       = "  0   1   0   0  '
-  +'    1   1   0   0",'#13#10'                          "  0   0   0   0    a1'
-  +'1 a10  a9  a8",'#13#10'                          " a7  a6  a5   x      x   '
-  +'x   x   x",'#13#10'                          "  x   x   x   x      x   x   '
-  +'x   x";'#13#10#13#10#9'mode'#9#9'= 0x21;'#13#10#9'delay'#9#9'= 10;'#13#10#9
-  +'blocksize'#9'= 64;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10#13#10
-  +'    memory "lfuse"'#13#10'        size            = 1;'#13#10'        min_w'
-  +'rite_delay = 2000;'#13#10'        max_write_delay = 2000;'#13#10'        re'
-  +'ad            = "0 1 0 1  0 0 0 0   0 0 0 0  0 0 0 0",'#13#10'             '
-  +'             "x x x x  x x x x   o o o o  o o o o";'#13#10#13#10'        wr'
-  +'ite           = "1 0 1 0  1 1 0 0   1 0 1 0  0 0 0 0",'#13#10'             '
-  +'             "x x x x  x x x x   i i i i  i i i i";'#13#10'      ;'#13#10#13
-  +#10'    memory "hfuse"'#13#10'        size            = 1;'#13#10'        mi'
-  +'n_write_delay = 2000;'#13#10'        max_write_delay = 2000;'#13#10'       '
-  +' read            = "0 1 0 1  1 0 0 0   0 0 0 0  1 0 0 0",'#13#10'          '
-  +'                "x x x x  x x x x   o o o o  o o o o";'#13#10#13#10'       '
-  +' write           = "1 0 1 0  1 1 0 0   1 0 1 0  1 0 0 0",'#13#10'          '
-  +'                "x x x x  x x x x   i i i i  i i i i";'#13#10'      ;'#13#10
-  +#13#10'    memory "lock"'#13#10'        size            = 1;'#13#10'        '
-  +'min_write_delay = 2000;'#13#10'        max_write_delay = 2000;'#13#10'     '
-  +'   read            = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 0 0",'#13#10'        '
-  ,'                  "x x x x  x x x x   x x o o  o o o o";'#13#10#13#10'     '
-  +'   write           = "1 0 1 0  1 1 0 0   1 1 1 x  x x x x",'#13#10'        '
-  +'                  "x x x x  x x x x   1 1 i i  i i i i";'#13#10'      ;'#13
-  +#10#13#10'    memory "calibration"'#13#10'        size            = 4;'#13#10
-  +'        read            = "0  0  1  1   1  0  0  0   0  0  x  x   x  x  x  '
-  +'x",'#13#10'                          "0  0  0  0   0  0 a1 a0   o  o  o  o '
-  +'  o  o  o  o";'#13#10'      ;'#13#10#13#10'    memory "signature"'#13#10'  '
-  +'      size            = 3;'#13#10'        read            = "0  0  1  1   0'
-  +'  0  0  0   x  x  x  x   x  x  x  x",'#13#10'                          "x  '
-  +'x  x  x   x  x a1 a0   o  o  o  o   o  o  o  o";'#13#10'      ;'#13#10'  ;'
-  +#13#10#13#10#13#10#13#10'#--------------------------------------------------'
-  +'----------'#13#10'# ATmega8515'#13#10'#------------------------------------'
-  +'------------------------'#13#10#13#10'part'#13#10'    id               = "m'
-  +'8515";'#13#10'    desc             = "ATMEGA8515";'#13#10'    stk500_devcod'
-  +'e   = 0x63;'#13#10'    avr910_devcode   = 0x3A;'#13#10'    signature       '
-  +' = 0x1e 0x93 0x06;'#13#10'    chip_erase_delay = 9000;'#13#10'    pgm_enabl'
-  +'e       = "1 0 1 0  1 1 0 0    0 1 0 1  0 0 1 1",'#13#10'                  '
-  +'     "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'    chip_erase   '
-  +'    = "1 0 1 0  1 1 0 0    1 0 0 x  x x x x",'#13#10'                      '
-  +' "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 20'
-  +'0;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10
-  +'    synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollind'
-  +'ex'#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1'
-  +';'#13#10'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10#13
-  +#10'    pp_controlstack     ='#13#10'        0x0E, 0x1E, 0x0F, 0x1F, 0x2E, 0'
-  +'x3E, 0x2F, 0x3F,'#13#10'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E, 0x6F, 0'
-  +'x7F,'#13#10'        0x66, 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10
-  +'        0xBE, 0xFD, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventers'
-  +'tabdelay    = 100;'#13#10'    progmodedelay       = 0;'#13#10'    latchcycl'
-  +'es         = 6;'#13#10'    togglevtg           = 0;'#13#10'    poweroffdela'
-  +'y       = 0;'#13#10'    resetdelayms        = 0;'#13#10'    resetdelayus   '
-  +'     = 0;'#13#10'    hvleavestabdelay    = 15;'#13#10'    chiperasepulsewid'
-  +'th = 0;'#13#10'    chiperasepolltimeout = 10;'#13#10'    programfusepulsewi'
-  +'dth = 0;'#13#10'    programfusepolltimeout = 5;'#13#10'    programlockpulse'
-  +'width = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10'    memory "'
-  +'eeprom"'#13#10'        size            = 512;'#13#10'        min_write_dela'
-  +'y = 9000;'#13#10'        max_write_delay = 9000;'#13#10'        readback_p1'
-  +'     = 0xff;'#13#10'        readback_p2     = 0xff;'#13#10' read           '
-  +' = "  1   0   1   0      0   0   0   0",'#13#10'                          "'
-  +'  0   0   x   x      x   x   x  a8",'#13#10'                          " a7 '
-  +' a6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  o   o '
-  +'  o   o      o   o   o   o";'#13#10#13#10' write           = "  1   1   0  '
-  +' 0      0   0   0   0",'#13#10'                          "  0   0   x   x  '
-  +'    x   x   x  a8",'#13#10'                          " a7  a6  a5  a4     a'
-  +'3  a2  a1  a0",'#13#10'                          "  i   i   i   i      i   '
-  +'i   i   i";'#13#10#13#10#9'mode'#9#9'= 0x04;'#13#10#9'delay'#9#9'= 20;'#13
-  +#10#9'blocksize'#9'= 128;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10
-  +'    memory "flash"'#13#10'        paged           = yes;'#13#10'        siz'
-  +'e            = 8192;'#13#10'        page_size       = 64;'#13#10'        nu'
-  +'m_pages       = 128;'#13#10'        min_write_delay = 4500;'#13#10'        '
-  +'max_write_delay = 4500;'#13#10'        readback_p1     = 0xff;'#13#10'     '
-  +'   readback_p2     = 0xff;'#13#10'        read_lo         = "  0   0   1   '
-  +'0    0   0   0   0",'#13#10'                          "  0   0   0   0  a11'
-  +' a10  a9  a8",'#13#10'                          " a7  a6  a5  a4   a3  a2  '
-  +'a1  a0",'#13#10'                          "  o   o   o   o    o   o   o   o'
-  +'";'#13#10#13#10'        read_hi         = "  0   0   1   0    1   0   0   0'
-  +'",'#13#10'                          "  0   0   0   0  a11 a10  a9  a8",'#13
-  +#10'                          " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'   '
-  +'                       "  o   o   o   o    o   o   o   o";'#13#10#13#10'   '
-  +'     loadpage_lo     = "  0   1   0   0      0   0   0   0",'#13#10'       '
-  +'                   "  0   0   0   0      x   x   x   x",'#13#10'           '
-  +'               "  x   x   x  a4     a3  a2  a1  a0",'#13#10'               '
-  +'           "  i   i   i   i      i   i   i   i";'#13#10#13#10'        loadp'
-  +'age_hi     = "  0   1   0   0      1   0   0   0",'#13#10'                 '
-  ,'         "  0   0   0   0      x   x   x   x",'#13#10'                     '
-  +'     "  x   x   x  a4     a3  a2  a1  a0",'#13#10'                         '
-  +' "  i   i   i   i      i   i   i   i";'#13#10#13#10'        writepage      '
-  +' = "  0   1   0   0      1   1   0   0",'#13#10'                          "'
-  +'  0   0   0   0    a11 a10  a9  a8",'#13#10'                          " a7 '
-  +' a6  a5   x      x   x   x   x",'#13#10'                          "  x   x '
-  +'  x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'= 0x21;'#13#10#9'dela'
-  +'y'#9#9'= 6;'#13#10#9'blocksize'#9'= 64;'#13#10#9'readsize'#9'= 256;'#13#10
-  +'      ;'#13#10#13#10'    memory "lfuse"'#13#10'        size            = 1;'
-  +#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500'
-  +';'#13#10'        read            = "0 1 0 1  0 0 0 0   0 0 0 0  0 0 0 0",'
-  +#13#10'                          "x x x x  x x x x   o o o o  o o o o";'#13
-  +#10#13#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0  0 0 0 0",'
-  +#13#10'                          "x x x x  x x x x   i i i i  i i i i";'#13
-  +#10'      ;'#13#10#13#10'    memory "hfuse"'#13#10'        size            ='
-  +' 1;'#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay ='
-  +' 4500;'#13#10'        read            = "0 1 0 1  1 0 0 0   0 0 0 0  1 0 0 '
-  +'0",'#13#10'                          "x x x x  x x x x   o o o o  o o o o";'
-  +#13#10#13#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0  1 0 0 0"'
-  +','#13#10'                          "x x x x  x x x x   i i i i  i i i i";'
-  +#13#10'      ;'#13#10#13#10'    memory "lock"'#13#10'        size           '
-  +' = 1;'#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay'
-  +' = 4500;'#13#10'        read            = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 '
-  +'0 0",'#13#10'                          "x x x x  x x x x   x x o o  o o o o'
-  +'";'#13#10#13#10'        write           = "1 0 1 0  1 1 0 0   1 1 1 x  x x '
-  +'x x",'#13#10'                          "x x x x  x x x x   1 1 i i  i i i i'
-  +'";'#13#10'      ;'#13#10#13#10'    memory "calibration"'#13#10'        size'
-  +'            = 4;'#13#10'        read            = "0 0 1 1  1 0 0 0     0 0'
-  +' x x  x x x x",'#13#10'                          "0 0 0 0  0 0 a1 a0   o o '
-  +'o o  o o o o";'#13#10'      ;'#13#10#13#10'    memory "signature"'#13#10'  '
-  +'      size            = 3;'#13#10'        read            = "0  0  1  1   0'
-  +'  0  0  0   x  x  x  x   x  x  x  x",'#13#10'                          "x  '
-  +'x  x  x   x  x a1 a0   o  o  o  o   o  o  o  o";'#13#10'      ;'#13#10'  ;'
-  +#13#10#13#10#13#10#13#10#13#10'#--------------------------------------------'
-  +'----------------'#13#10'# ATmega8535'#13#10'#------------------------------'
-  +'------------------------------'#13#10#13#10'part'#13#10'    id             '
-  +'  = "m8535";'#13#10'    desc             = "ATMEGA8535";'#13#10'    stk500_'
-  +'devcode   = 0x64;'#13#10'    avr910_devcode   = 0x69;'#13#10'    signature '
-  +'       = 0x1e 0x93 0x08;'#13#10'    pagel            = 0xd7;'#13#10'    bs2'
-  +'              = 0xa0;'#13#10'    chip_erase_delay = 9000;'#13#10'    pgm_en'
-  +'able       = "1 0 1 0  1 1 0 0    0 1 0 1  0 0 1 1",'#13#10'               '
-  +'        "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'    chip_erase'
-  +'       = "1 0 1 0  1 1 0 0    1 0 0 x  x x x x",'#13#10'                   '
-  +'    "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'='
-  +' 200;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13
-  +#10'    synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    poll'
-  +'index'#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9
-  +'= 1;'#13#10'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10
-  +#13#10'    pp_controlstack     ='#13#10'        0x0E, 0x1E, 0x0F, 0x1F, 0x2E'
-  +', 0x3E, 0x2F, 0x3F,'#13#10'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E, 0x6F'
-  +', 0x7F,'#13#10'        0x66, 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13
-  +#10'        0xBE, 0xFD, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00;'#13#10'    hvent'
-  +'erstabdelay    = 100;'#13#10'    progmodedelay       = 0;'#13#10'    latchc'
-  +'ycles         = 6;'#13#10'    togglevtg           = 0;'#13#10'    poweroffd'
-  +'elay       = 0;'#13#10'    resetdelayms        = 0;'#13#10'    resetdelayus'
-  +'        = 0;'#13#10'    hvleavestabdelay    = 15;'#13#10'    chiperasepulse'
-  +'width = 0;'#13#10'    chiperasepolltimeout = 10;'#13#10'    programfusepuls'
-  +'ewidth = 0;'#13#10'    programfusepolltimeout = 5;'#13#10'    programlockpu'
-  +'lsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10'    memor'
-  +'y "eeprom"'#13#10'        size            = 512;'#13#10'        min_write_d'
-  +'elay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'        readback'
-  +'_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'#13#10#9'read       '
-  +'     = "  1   0   1   0      0   0   0   0",'#13#10'                       '
-  +'   "  0   0   x   x      x   x   x  a8",'#13#10'                          "'
-  ,' a7  a6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  o '
-  +'  o   o   o      o   o   o   o";'#13#10#13#10#9'write           = "  1   1 '
-  +'  0   0      0   0   0   0",'#13#10'                          "  0   0   x '
-  +'  x      x   x   x  a8",'#13#10'                          " a7  a6  a5  a4 '
-  +'    a3  a2  a1  a0",'#13#10'                          "  i   i   i   i     '
-  +' i   i   i   i";'#13#10#13#10#9'mode'#9#9'= 0x04;'#13#10#9'delay'#9#9'= 20;'
-  +#13#10#9'blocksize'#9'= 128;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13
-  +#10'    memory "flash"'#13#10'        paged           = yes;'#13#10'        '
-  +'size            = 8192;'#13#10'        page_size       = 64;'#13#10'       '
-  +' num_pages       = 128;'#13#10'        min_write_delay = 4500;'#13#10'     '
-  +'   max_write_delay = 4500;'#13#10'        readback_p1     = 0xff;'#13#10'  '
-  +'      readback_p2     = 0xff;'#13#10'        read_lo         = "  0   0   1'
-  +'   0    0   0   0   0",'#13#10'                          "  0   0   0   0  '
-  +'a11 a10  a9  a8",'#13#10'                          " a7  a6  a5  a4   a3  a'
-  +'2  a1  a0",'#13#10'                          "  o   o   o   o    o   o   o '
-  +'  o";'#13#10#13#10'        read_hi         = "  0   0   1   0    1   0   0 '
-  +'  0",'#13#10'                          "  0   0   0   0  a11 a10  a9  a8",'
-  +#13#10'                          " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10
-  +'                          "  o   o   o   o    o   o   o   o";'#13#10#13#10
-  +'        loadpage_lo     = "  0   1   0   0      0   0   0   0",'#13#10'    '
-  +'                      "  0   0   0   0      x   x   x   x",'#13#10'        '
-  +'                  "  x   x   x  a4     a3  a2  a1  a0",'#13#10'            '
-  +'              "  i   i   i   i      i   i   i   i";'#13#10#13#10'        lo'
-  +'adpage_hi     = "  0   1   0   0      1   0   0   0",'#13#10'              '
-  +'            "  0   0   0   0      x   x   x   x",'#13#10'                  '
-  +'        "  x   x   x  a4     a3  a2  a1  a0",'#13#10'                      '
-  +'    "  i   i   i   i      i   i   i   i";'#13#10#13#10'        writepage   '
-  +'    = "  0   1   0   0      1   1   0   0",'#13#10'                        '
-  +'  "  0   0   0   0    a11 a10  a9  a8",'#13#10'                          " '
-  +'a7  a6  a5   x      x   x   x   x",'#13#10'                          "  x  '
-  +' x   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'= 0x21;'#13#10#9'd'
-  +'elay'#9#9'= 6;'#13#10#9'blocksize'#9'= 64;'#13#10#9'readsize'#9'= 256;'#13
-  +#10'      ;'#13#10#13#10'    memory "lfuse"'#13#10'        size            ='
-  +' 1;'#13#10'        min_write_delay = 2000;'#13#10'        max_write_delay ='
-  +' 2000;'#13#10'        read            = "0 1 0 1  0 0 0 0   0 0 0 0  0 0 0 '
-  +'0",'#13#10'                          "x x x x  x x x x   o o o o  o o o o";'
-  +#13#10#13#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0  0 0 0 0"'
-  +','#13#10'                          "x x x x  x x x x   i i i i  i i i i";'
-  +#13#10'      ;'#13#10#13#10'    memory "hfuse"'#13#10'        size          '
-  +'  = 1;'#13#10'        min_write_delay = 2000;'#13#10'        max_write_dela'
-  +'y = 2000;'#13#10'        read            = "0 1 0 1  1 0 0 0   0 0 0 0  1 0'
-  +' 0 0",'#13#10'                          "x x x x  x x x x   o o o o  o o o '
-  +'o";'#13#10#13#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0  1 0'
-  +' 0 0",'#13#10'                          "x x x x  x x x x   i i i i  i i i '
-  +'i";'#13#10'      ;'#13#10#13#10'    memory "lock"'#13#10'        size      '
-  +'      = 1;'#13#10'        min_write_delay = 2000;'#13#10'        max_write_'
-  +'delay = 2000;'#13#10'        read            = "0 1 0 1  1 0 0 0   0 0 0 0 '
-  +' 0 0 0 0",'#13#10'                          "x x x x  x x x x   x x o o  o '
-  +'o o o";'#13#10#13#10'        write           = "1 0 1 0  1 1 0 0   1 1 1 x '
-  +' x x x x",'#13#10'                          "x x x x  x x x x   1 1 i i  i '
-  +'i i i";'#13#10'      ;'#13#10#13#10'    memory "calibration"'#13#10'       '
-  +' size            = 4;'#13#10'        read            = "0 0 1 1  1 0 0 0   '
-  +'0 0 x x  x x x x",'#13#10'                          "0 0 0 0  0 0 a1 a0 o o'
-  +' o o  o o o o";'#13#10'      ;'#13#10#13#10'    memory "signature"'#13#10' '
-  +'       size            = 3;'#13#10'        read            = "0  0  1  1   '
-  +'0  0  0  0   x  x  x  x   x  x  x  x",'#13#10'                          "x '
-  +' x  x  x   x  x a1 a0   o  o  o  o   o  o  o  o";'#13#10'      ;'#13#10'  ;'
-  +#13#10#13#10#13#10'#--------------------------------------------------------'
-  +'----'#13#10'# ATtiny26'#13#10'#--------------------------------------------'
-  +'----------------'#13#10#13#10'part'#13#10'    id                  = "t26";'
-  +#13#10'    desc                = "ATTINY26";'#13#10'    stk500_devcode      '
-  +'= 0x21;'#13#10'    avr910_devcode      = 0x5e;'#13#10'    signature        '
-  +'   = 0x1e 0x91 0x09;'#13#10'    pagel               = 0xb3;'#13#10'    bs2 '
-  +'                = 0xb2;'#13#10'    chip_erase_delay    = 9000;'#13#10'    p'
-  ,'gm_enable          = "1 0 1 0  1 1 0 0   0 1 0 1  0 0 1 1",'#13#10'        '
-  +'                  "x x x x  x x x x   x x x x  x x x x";'#13#10#13#10'    c'
-  +'hip_erase          = "1 0 1 0  1 1 0 0   1 0 0 x  x x x x",'#13#10'        '
-  +'                  "x x x x  x x x x   x x x x  x x x x";'#13#10#13#10'    t'
-  +'imeout'#9#9'= 200;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'
-  +#9#9'= 25;'#13#10'    synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'
-  +#13#10'    pollindex'#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    '
-  +'predelay'#9#9'= 1;'#13#10'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9
-  +'= 0;'#13#10#13#10'    pp_controlstack     ='#13#10'        0xC4, 0xE4, 0xC4'
-  +', 0xE4, 0xCC, 0xEC, 0xCC, 0xEC,'#13#10'        0xD4, 0xF4, 0xD4, 0xF4, 0xDC'
-  +', 0xFC, 0xDC, 0xFC,'#13#10'        0xC8, 0xE8, 0xD8, 0xF8, 0x4C, 0x6C, 0x5C'
-  +', 0x7C,'#13#10'        0xEC, 0xBC, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00;'#13
-  +#10'    hventerstabdelay    = 100;'#13#10'    progmodedelay       = 0;'#13#10
-  +'    latchcycles         = 5;'#13#10'    togglevtg           = 1;'#13#10'   '
-  +' poweroffdelay       = 15;'#13#10'    resetdelayms        = 2;'#13#10'    r'
-  +'esetdelayus        = 0;'#13#10'    hvleavestabdelay    = 15;'#13#10'    chi'
-  +'perasepulsewidth = 0;'#13#10'    chiperasepolltimeout = 10;'#13#10'    prog'
-  +'ramfusepulsewidth = 0;'#13#10'    programfusepolltimeout = 5;'#13#10'    pr'
-  +'ogramlockpulsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10
-  +'    memory "eeprom"'#13#10'        size            = 128;'#13#10'        mi'
-  +'n_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'       '
-  +' readback_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'#13#10'    '
-  +'    read            = "1  0  1  0   0  0  0  0    x x x x  x x x x",'#13#10
-  +'                          "x a6 a5 a4  a3 a2 a1 a0    o o o o  o o o o";'#13
-  +#10#13#10'        write           = "1  1  0  0   0  0  0  0    x x x x  x x'
-  +' x x",'#13#10'                          "x a6 a5 a4  a3 a2 a1 a0    i i i i'
-  +'  i i i i";'#13#10#13#10#9'mode'#9#9'= 0x04;'#13#10#9'delay'#9#9'= 10;'#13
-  +#10#9'blocksize'#9'= 64;'#13#10#9'readsize'#9'= 256;'#13#10'    ;'#13#10#13
-  +#10'    memory "flash"'#13#10'        paged           = yes;'#13#10'        '
-  +'size            = 2048;'#13#10'        page_size       = 32;'#13#10'       '
-  +' num_pages       = 64;'#13#10'        min_write_delay = 4500;'#13#10'      '
-  +'  max_write_delay = 4500;'#13#10'        readback_p1     = 0xff;'#13#10'   '
-  +'     readback_p2     = 0xff;'#13#10'        read_lo         = "  0  0  1  0'
-  +'   0  0  0  0",'#13#10'                          "  x  x  x  x   x  x a9 a8'
-  +'",'#13#10'                          " a7 a6 a5 a4  a3 a2 a1 a0",'#13#10'   '
-  +'                       "  o  o  o  o   o  o  o  o";'#13#10#13#10'        re'
-  +'ad_hi         = "  0  0  1  0   1  0  0  0",'#13#10'                       '
-  +'   "  x  x  x  x   x  x a9 a8",'#13#10'                          " a7 a6 a5'
-  +' a4  a3 a2 a1 a0",'#13#10'                          "  o  o  o  o   o  o  o'
-  +'  o";'#13#10#13#10'        loadpage_lo     = "  0  1  0  0   0  0  0  0",'
-  +#13#10'                          "  x  x  x  x   x  x  x  x",'#13#10'       '
-  +'                   "  x  x  x  x  a3 a2 a1 a0",'#13#10'                    '
-  +'      "  i  i  i  i   i  i  i  i";'#13#10#13#10'        loadpage_hi     = "'
-  +'  0  1  0  0   1  0  0  0",'#13#10'                          "  x  x  x  x '
-  +'  x  x  x  x",'#13#10'                          "  x  x  x  x  a3 a2 a1 a0"'
-  +','#13#10'                          "  i  i  i  i   i  i  i  i";'#13#10#13#10
-  +'        writepage       = "  0  1  0  0   1  1  0  0",'#13#10'             '
-  +'             "  x  x  x  x   x  x a9 a8",'#13#10'                          '
-  +'" a7 a6 a5 a4   x  x  x  x",'#13#10'                          "  x  x  x  x'
-  +'   x  x  x  x";'#13#10#13#10#9'mode'#9#9'= 0x21;'#13#10#9'delay'#9#9'= 6;'
-  +#13#10#9'blocksize'#9'= 16;'#13#10#9'readsize'#9'= 256;'#13#10'    ;'#13#10
-  +#13#10'    memory "signature"'#13#10'        size            = 3;'#13#10'   '
-  +'     read            = "0  0  1  1   0  0  0  0    x x x x  x x x x",'#13#10
-  +'                          "0  0  0  0   0  0 a1 a0    o o o o  o o o o";'#13
-  +#10'    ;'#13#10#13#10'    memory "lock"'#13#10'        size            = 1;'
-  +#13#10'        read            = "0  1  0  1   1  0  0  0    x x x x  x x x '
-  +'x",'#13#10'                          "x  x  x  x   x  x  x  x    x x x x  x'
-  +' x o o";'#13#10#13#10'        write           = "1  0  1  0   1  1  0  0   '
-  +' 1 1 1 1  1 1 i i",'#13#10'                          "x  x  x  x   x  x  x '
-  +' x    x x x x  x x x x";'#13#10'        min_write_delay = 9000;'#13#10'    '
-  +'    max_write_delay = 9000;'#13#10'    ;'#13#10#13#10'    memory "lfuse"'#13
-  +#10'        size            = 1;'#13#10'        write           = "1 0 1 0  '
-  +'1 1 0 0  1 0 1 0  0 0 0 0",'#13#10'                          "x x x x  x x '
-  +'x x  i i i i  i i i i";'#13#10#13#10'        read            = "0 1 0 1  0 '
-  ,'0 0 0  0 0 0 0  0 0 0 0",'#13#10'                          "x x x x  x x x '
-  +'x  o o o o  o o o o";'#13#10'        min_write_delay = 9000;'#13#10'       '
-  +' max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "hfuse"'#13
-  +#10'        size            = 1;'#13#10'        write           = "1 0 1 0  '
-  +'1 1 0 0  1 0 1 0  1 0 0 0",'#13#10'                          "x x x x  x x '
-  +'x x  x x x i  i i i i";'#13#10#13#10'        read            = "0 1 0 1  1 '
-  +'0 0 0  0 0 0 0  1 0 0 0",'#13#10'                          "x x x x  x x x '
-  +'x  x x x o  o o o o";'#13#10'        min_write_delay = 9000;'#13#10'       '
-  +' max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "calibratio'
-  +'n"'#13#10'        size            = 4;'#13#10'        read            = "0 '
-  +' 0  1  1   1  0  0  0    x x x x  x x x x",'#13#10'                        '
-  +'  "0  0  0  0   0  0 a1 a0    o o o o  o o o o";'#13#10'    ;'#13#10#13#10
-  +';'#13#10#13#10#13#10'#-----------------------------------------------------'
-  +'-------'#13#10'# ATtiny261'#13#10'#----------------------------------------'
-  +'--------------------'#13#10'# Close to ATtiny26'#13#10#13#10'part'#13#10'  '
-  +'  id                  = "t261";'#13#10'    desc                = "ATTINY261'
-  +'";'#13#10'     has_debugwire = yes;'#13#10'     flash_instr   = 0xB4, 0x00,'
-  +' 0x10;'#13#10'     eeprom_instr  = 0xBB, 0xFF, 0xBB, 0xEE, 0xBB, 0xCC, 0xB2'
-  +', 0x0D,'#13#10#9'             0xBC, 0x00, 0xB4, 0x00, 0xBA, 0x0D, 0xBB, 0xB'
-  +'C,'#13#10#9'             0x99, 0xE1, 0xBB, 0xAC;'#13#10'#    stk500_devcode'
-  +'      = 0x21;'#13#10'#    avr910_devcode      = 0x5e;'#13#10'    signature '
-  +'          = 0x1e 0x91 0x0c;'#13#10'    pagel               = 0xb3;'#13#10' '
-  +'   bs2                 = 0xb2;'#13#10'    chip_erase_delay    = 4000;'#13#10
-  +#13#10'    pgm_enable          = "1 0 1 0  1 1 0 0   0 1 0 1  0 0 1 1",'#13
-  +#10'                          "x x x x  x x x x   x x x x  x x x x";'#13#10
-  +#13#10'    chip_erase          = "1 0 1 0  1 1 0 0   1 0 0 x  x x x x",'#13
-  +#10'                          "x x x x  x x x x   x x x x  x x x x";'#13#10
-  +#13#10'    timeout'#9#9'= 200;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    c'
-  +'mdexedelay'#9#9'= 25;'#13#10'    synchloops'#9#9'= 32;'#13#10'    bytedelay'
-  +#9#9'= 0;'#13#10'    pollindex'#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'
-  +#13#10'    predelay'#9#9'= 1;'#13#10'    postdelay'#9#9'= 1;'#13#10'    poll'
-  +'method'#9#9'= 0;'#13#10#13#10'    pp_controlstack     ='#13#10'        0xC4'
-  +', 0xE4, 0xC4, 0xE4, 0xCC, 0xEC, 0xCC, 0xEC,'#13#10'        0xD4, 0xF4, 0xD4'
-  +', 0xF4, 0xDC, 0xFC, 0xDC, 0xFC,'#13#10'        0xC8, 0xE8, 0xD8, 0xF8, 0x4C'
-  +', 0x6C, 0x5C, 0x7C,'#13#10'        0xEC, 0xBC, 0x00, 0x06, 0x00, 0x00, 0x00'
-  +', 0x00;'#13#10'    hventerstabdelay    = 100;'#13#10'    progmodedelay     '
-  +'  = 0;'#13#10'    latchcycles         = 5;'#13#10'    togglevtg           ='
-  +' 1;'#13#10'    poweroffdelay       = 15;'#13#10'    resetdelayms        = 2'
-  +';'#13#10'    resetdelayus        = 0;'#13#10'    hvleavestabdelay    = 15;'
-  +#13#10'    chiperasepulsewidth = 0;'#13#10'    chiperasepolltimeout = 10;'#13
-  +#10'    programfusepulsewidth = 0;'#13#10'    programfusepolltimeout = 5;'#13
-  +#10'    programlockpulsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13
-  +#10#13#10'    memory "eeprom"'#13#10'        paged           = no;'#13#10'  '
-  +'      size            = 128;'#13#10'        page_size       = 4;'#13#10'   '
-  +'     num_pages       = 32;'#13#10'        min_write_delay = 4000;'#13#10'  '
-  +'      max_write_delay = 4000;'#13#10'        readback_p1     = 0xff;'#13#10
-  +'        readback_p2     = 0xff;'#13#10#13#10'        read            = "1  '
-  +'0  1  0   0  0  0  0    x x x x  x x x x",'#13#10'                         '
-  +' "x a6 a5 a4  a3 a2 a1 a0    o o o o  o o o o";'#13#10#13#10'        write '
-  +'          = "1  1  0  0   0  0  0  0    x x x x  x x x x",'#13#10'         '
-  +'                 "x a6 a5 a4  a3 a2 a1 a0    i i i i  i i i i";'#13#10#13#10
-  +#9'loadpage_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  '
-  +'0   0   0   0      0   0   0   0",'#13#10#9#9#9'  "  0   0   0   0      0  '
-  +' 0  a1  a0",'#13#10#9#9#9'  "  i   i   i   i      i   i   i   i";'#13#10#13
-  +#10#9'writepage'#9'= "  1   1   0   0      0   0   1   0",'#13#10#9#9#9'  " '
-  +' 0   0   x   x      x   x   x   x",'#13#10#9#9#9'  "  x  a6  a5  a4     a3 '
-  +' a2   0   0",'#13#10#9#9#9'  "  x   x   x   x      x   x   x   x";'#13#10#13
-  +#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 10;'#13#10#9'blocksize'#9'= 4;'
-  +#13#10#9'readsize'#9'= 256;'#13#10'    ;'#13#10#13#10'    memory "flash"'#13
-  +#10'        paged           = yes;'#13#10'        size            = 2048;'#13
-  +#10'        page_size       = 32;'#13#10'        num_pages       = 64;'#13#10
+  +' 128;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10'    memory "eeprom-'
+  +'fast"'#13#10'        size            = 512;'#13#10'        page_size       '
+  +'= 256;'#13#10'        min_write_delay = 9000;'#13#10'        max_write_dela'
+  +'y = 9000;'#13#10'        readback_p1     = 0xff;'#13#10'        readback_p2'
+  +'     = 0xff;'#13#10#9'read            = "  1   0   1   0      0   0   0   0'
+  +'",'#13#10'                          "  0   0   x   x      x   x   x  a8",'
+  +#13#10'                          " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10
+  +'                          "  o   o   o   o      o   o   o   o";'#13#10#13#10
+  +#9'write           = "  1   1   0   0      0   0   0   0",'#13#10'          '
+  +'                "  0   0   x   x      x   x   x  a8",'#13#10'              '
+  +'            " a7  a6  a5  a4     a3  a2  a1  a0", '#13#10'                 '
+  +'         "  i   i   i   i      i   i   i   i";'#13#10#13#10#9'mode'#9#9'= 0'
+  +'x04;'#13#10#9'delay'#9#9'= 20;'#13#10'        blocksize       = 256;'#13#10
+  +#9'readsize'#9'= 256;'#13#10'      ;'#13#10'    memory "flash"'#13#10'      '
+  +'  paged           = yes;'#13#10'        size            = 8192;'#13#10'    '
+  +'    page_size       = 64;'#13#10'        num_pages       = 128;'#13#10'    '
+  +'    min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10' '
+  +'       readback_p1     = 0xff;'#13#10'        readback_p2     = 0x00;'#13#10
+  +'        read_lo         = "  0   0   1   0    0   0   0   0",'#13#10'      '
+  +'                    "  0   0   0   0  a11 a10  a9  a8",'#13#10'            '
+  +'              " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'                  '
+  +'        "  o   o   o   o    o   o   o   o";'#13#10#13#10'        read_hi   '
+  +'      = "  0   0   1   0    1   0   0   0",'#13#10'                        '
+  +'  "  0   0   0   0  a11 a10  a9  a8",'#13#10'                          " a7'
+  +'  a6  a5  a4   a3  a2  a1  a0",'#13#10'                          "  o   o  '
+  +' o   o    o   o   o   o";'#13#10#13#10'        loadpage_lo     = "  0   1  '
+  +' 0   0      0   0   0   0",'#13#10'                          "  0   0   0  '
+  +' 0      x   x   x   x",'#13#10'                          "  x   x   x  a4  '
+  +'   a3  a2  a1  a0",'#13#10'                          "  i   i   i   i      '
+  +'i   i   i   i";'#13#10#13#10'        loadpage_hi     = "  0   1   0   0    '
+  +'  1   0   0   0",'#13#10'                          "  0   0   0   0      x '
+  +'  x   x   x",'#13#10'                          "  x   x   x  a4     a3  a2 '
+  +' a1  a0",'#13#10'                          "  i   i   i   i      i   i   i '
+  +'  i";'#13#10#13#10'        writepage       = "  0   1   0   0      1   1   '
+  +'0   0",'#13#10'                          "  0   0   0   0    a11 a10  a9  a'
+  +'8",'#13#10'                          " a7  a6  a5   x      x   x   x   x",'
+  +#13#10'                          "  x   x   x   x      x   x   x   x";'#13#10
+  +#13#10#9'mode'#9#9'= 0x21;'#13#10#9'delay'#9#9'= 10;'#13#10#9'blocksize'#9'='
+  +' 64;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10#13#10'    memory "lf'
+  +'use"'#13#10'        size            = 1;'#13#10'        min_write_delay = 2'
+  +'000;'#13#10'        max_write_delay = 2000;'#13#10'        read            '
+  ,'= "0 1 0 1  0 0 0 0   0 0 0 0  0 0 0 0",'#13#10'                          "'
+  +'x x x x  x x x x   o o o o  o o o o";'#13#10#13#10'        write           '
+  +'= "1 0 1 0  1 1 0 0   1 0 1 0  0 0 0 0",'#13#10'                          "'
+  +'x x x x  x x x x   i i i i  i i i i";'#13#10'      ;'#13#10#13#10'    memor'
+  +'y "hfuse"'#13#10'        size            = 1;'#13#10'        min_write_dela'
+  +'y = 2000;'#13#10'        max_write_delay = 2000;'#13#10'        read       '
+  +'     = "0 1 0 1  1 0 0 0   0 0 0 0  1 0 0 0",'#13#10'                      '
+  +'    "x x x x  x x x x   o o o o  o o o o";'#13#10#13#10'        write      '
+  +'     = "1 0 1 0  1 1 0 0   1 0 1 0  1 0 0 0",'#13#10'                      '
+  +'    "x x x x  x x x x   i i i i  i i i i";'#13#10'      ;'#13#10#13#10'    '
+  +'memory "lock"'#13#10'        size            = 1;'#13#10'        min_write_'
+  +'delay = 2000;'#13#10'        max_write_delay = 2000;'#13#10'        read   '
+  +'         = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 0 0",'#13#10'                  '
+  +'        "x x x x  x x x x   x x o o  o o o o";'#13#10#13#10'        write  '
+  +'         = "1 0 1 0  1 1 0 0   1 1 1 x  x x x x",'#13#10'                  '
+  +'        "x x x x  x x x x   1 1 i i  i i i i";'#13#10'      ;'#13#10#13#10
+  +'    memory "calibration"'#13#10'        size            = 4;'#13#10'       '
+  +' read            = "0  0  1  1   1  0  0  0   0  0  x  x   x  x  x  x",'#13
+  +#10'                          "0  0  0  0   0  0 a1 a0   o  o  o  o   o  o  '
+  +'o  o";'#13#10'      ;'#13#10#13#10'    memory "signature"'#13#10'        si'
+  +'ze            = 3;'#13#10'        read            = "0  0  1  1   0  0  0  '
+  +'0   x  x  x  x   x  x  x  x",'#13#10'                          "x  x  x  x '
+  +'  x  x a1 a0   o  o  o  o   o  o  o  o";'#13#10'      ;'#13#10'  ;'#13#10#13
+  +#10#13#10#13#10'#-----------------------------------------------------------'
+  +'-'#13#10'# ATmega8515'#13#10'#---------------------------------------------'
+  +'---------------'#13#10#13#10'part'#13#10'    id               = "m8515";'#13
+  +#10'    desc             = "ATMEGA8515";'#13#10'    stk500_devcode   = 0x63;'
+  +#13#10'    avr910_devcode   = 0x3A;'#13#10'    signature        = 0x1e 0x93 '
+  +'0x06;'#13#10'    chip_erase_delay = 9000;'#13#10'    pgm_enable       = "1 '
+  +'0 1 0  1 1 0 0    0 1 0 1  0 0 1 1",'#13#10'                       "x x x x'
+  +'  x x x x    x x x x  x x x x";'#13#10#13#10'    chip_erase       = "1 0 1 '
+  +'0  1 1 0 0    1 0 0 x  x x x x",'#13#10'                       "x x x x  x '
+  +'x x x    x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'#13#10'   '
+  +' stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'    synchlo'
+  +'ops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollindex'#9#9'= 3'
+  +';'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13#10'  '
+  +'  postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10#13#10'    pp_c'
+  +'ontrolstack     ='#13#10'        0x0E, 0x1E, 0x0F, 0x1F, 0x2E, 0x3E, 0x2F, '
+  +'0x3F,'#13#10'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E, 0x6F, 0x7F,'#13#10
+  +'        0x66, 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10'        0xBE'
+  +', 0xFD, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay    '
+  +'= 100;'#13#10'    progmodedelay       = 0;'#13#10'    latchcycles         ='
+  +' 6;'#13#10'    togglevtg           = 0;'#13#10'    poweroffdelay       = 0;'
+  +#13#10'    resetdelayms        = 0;'#13#10'    resetdelayus        = 0;'#13
+  +#10'    hvleavestabdelay    = 15;'#13#10'    chiperasepulsewidth = 0;'#13#10
+  +'    chiperasepolltimeout = 10;'#13#10'    programfusepulsewidth = 0;'#13#10
+  +'    programfusepolltimeout = 5;'#13#10'    programlockpulsewidth = 0;'#13#10
+  +'    programlockpolltimeout = 5;'#13#10#13#10'    memory "eeprom"'#13#10'   '
+  +'     size            = 512;'#13#10'        min_write_delay = 9000;'#13#10' '
+  +'       max_write_delay = 9000;'#13#10'        readback_p1     = 0xff;'#13#10
+  +'        readback_p2     = 0xff;'#13#10' read            = "  1   0   1   0 '
+  +'     0   0   0   0",'#13#10'                          "  0   0   x   x     '
+  +' x   x   x  a8",'#13#10'                          " a7  a6  a5  a4     a3  '
+  +'a2  a1  a0",'#13#10'                          "  o   o   o   o      o   o  '
+  +' o   o";'#13#10#13#10' write           = "  1   1   0   0      0   0   0   '
+  +'0",'#13#10'                          "  0   0   x   x      x   x   x  a8",'
+  +#13#10'                          " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10
+  +'                          "  i   i   i   i      i   i   i   i";'#13#10#13#10
+  +#9'mode'#9#9'= 0x04;'#13#10#9'delay'#9#9'= 20;'#13#10#9'blocksize'#9'= 128;'
+  +#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10'    memory "flash"'#13#10
+  +'        paged           = yes;'#13#10'        size            = 8192;'#13#10
+  +'        page_size       = 64;'#13#10'        num_pages       = 128;'#13#10
   +'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13
   +#10'        readback_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'
-  +#13#10#13#10'        read_lo         = "  0  0  1  0   0  0  0  0",'#13#10' '
-  ,'                         "  x  x  x  x   x  x a9 a8",'#13#10'              '
-  +'            " a7 a6 a5 a4  a3 a2 a1 a0",'#13#10'                          "'
-  +'  o  o  o  o   o  o  o  o";'#13#10#13#10'        read_hi         = "  0  0 '
-  +' 1  0   1  0  0  0",'#13#10'                          "  x  x  x  x   x  x '
-  +'a9 a8",'#13#10'                          " a7 a6 a5 a4  a3 a2 a1 a0",'#13#10
-  +'                          "  o  o  o  o   o  o  o  o";'#13#10#13#10'       '
-  +' loadpage_lo     = "  0  1  0  0   0  0  0  0",'#13#10'                    '
-  +'      "  x  x  x  x   x  x  x  x",'#13#10'                          "  x  x'
-  +'  x  x  a3 a2 a1 a0",'#13#10'                          "  i  i  i  i   i  i'
-  +'  i  i";'#13#10#13#10'        loadpage_hi     = "  0  1  0  0   1  0  0  0"'
-  +','#13#10'                          "  x  x  x  x   x  x  x  x",'#13#10'    '
-  +'                      "  x  x  x  x  a3 a2 a1 a0",'#13#10'                 '
-  +'         "  i  i  i  i   i  i  i  i";'#13#10#13#10'        writepage       '
-  +'= "  0  1  0  0   1  1  0  0",'#13#10'                          "  x  x  x '
-  +' x   x  x a9 a8",'#13#10'                          " a7 a6 a5 a4   x  x  x '
-  +' x",'#13#10'                          "  x  x  x  x   x  x  x  x";'#13#10#13
-  +#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= 32;'
-  +#13#10#9'readsize'#9'= 256;'#13#10'    ;'#13#10#13#10'    memory "signature"'
-  +#13#10'        size            = 3;'#13#10'        read            = "0  0  '
-  +'1  1   0  0  0  0    x x x x  x x x x",'#13#10'                          "0'
-  +'  0  0  0   0  0 a1 a0    o o o o  o o o o";'#13#10'    ;'#13#10#13#10'    '
-  +'memory "lock"'#13#10'        size            = 1;'#13#10'        read      '
-  +'      = "0  1  0  1   1  0  0  0    x x x x  x x x x",'#13#10'             '
-  +'             "x  x  x  x   x  x  x  x    x x x x  x x o o";'#13#10#13#10'  '
-  +'      write           = "1  0  1  0   1  1  0  0    1 1 1 1  1 1 i i",'#13
-  +#10'                          "x  x  x  x   x  x  x  x    x x x x  x x x x";'
-  +#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500'
-  +';'#13#10'    ;'#13#10#13#10'    memory "lfuse"'#13#10'        size         '
-  +'   = 1;'#13#10'        write           = "1 0 1 0  1 1 0 0  1 0 1 0  0 0 0 '
-  +'0",'#13#10'                          "x x x x  x x x x  i i i i  i i i i";'
-  +#13#10#13#10'        read            = "0 1 0 1  0 0 0 0  0 0 0 0  0 0 0 0",'
-  +#13#10'                          "x x x x  x x x x  o o o o  o o o o";'#13#10
-  +'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13
-  +#10'      ;'#13#10#13#10'    memory "hfuse"'#13#10'        size            ='
-  +' 1;'#13#10'        write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'
-  +#13#10'                          "x x x x  x x x x  i i i i  i i i i";'#13#10
-  +#13#10'        read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10
-  +'                          "x x x x  x x x x  o o o o  o o o o";'#13#10'    '
-  +'    min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10' '
-  +'     ;'#13#10#13#10'    memory "efuse"'#13#10'        size            = 1;'
-  +#13#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0  0 1 0 0",'#13
-  +#10'                          "x x x x  x x x x   x x x x  x x x i";'#13#10
-  +#13#10'        read            = "0 1 0 1  0 0 0 0   0 0 0 0  1 0 0 0",'#13
-  +#10'                          "x x x x  x x x x   x x x x  x x x o";'#13#10
-  +'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13
-  +#10'      ;'#13#10#13#10'    memory "calibration"'#13#10'        size       '
-  +'     = 1;'#13#10'        read            = "0  0  1  1   1  0  0  0    x x '
-  +'x x  x x x x",'#13#10'                          "0  0  0  0   0  0  0  0   '
-  +' o o o o  o o o o";'#13#10'    ;'#13#10#13#10';'#13#10#13#10#13#10'#-------'
-  +'-----------------------------------------------------'#13#10'# ATtiny461'#13
-  +#10'#------------------------------------------------------------'#13#10'# C'
-  +'lose to ATtiny261'#13#10#13#10'part'#13#10'    id                  = "t461"'
-  +';'#13#10'    desc                = "ATTINY461";'#13#10'     has_debugwire ='
-  +' yes;'#13#10'     flash_instr   = 0xB4, 0x00, 0x10;'#13#10'     eeprom_inst'
-  +'r  = 0xBB, 0xFF, 0xBB, 0xEE, 0xBB, 0xCC, 0xB2, 0x0D,'#13#10#9'             '
-  +'0xBC, 0x00, 0xB4, 0x00, 0xBA, 0x0D, 0xBB, 0xBC,'#13#10#9'             0x99,'
-  +' 0xE1, 0xBB, 0xAC;'#13#10'#    stk500_devcode      = 0x21;'#13#10'#    avr9'
-  +'10_devcode      = 0x5e;'#13#10'    signature           = 0x1e 0x92 0x08;'#13
-  +#10'    pagel               = 0xb3;'#13#10'    bs2                 = 0xb2;'
-  +#13#10'    chip_erase_delay    = 4000;'#13#10#13#10'    pgm_enable          '
-  +'= "1 0 1 0  1 1 0 0   0 1 0 1  0 0 1 1",'#13#10'                          "'
-  +'x x x x  x x x x   x x x x  x x x x";'#13#10#13#10'    chip_erase          '
-  +'= "1 0 1 0  1 1 0 0   1 0 0 x  x x x x",'#13#10'                          "'
-  +'x x x x  x x x x   x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'
-  ,#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'  '
-  +'  synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollindex'
-  +#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13
+  ,#13#10'        read_lo         = "  0   0   1   0    0   0   0   0",'#13#10
+  +'                          "  0   0   0   0  a11 a10  a9  a8",'#13#10'      '
+  +'                    " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'            '
+  +'              "  o   o   o   o    o   o   o   o";'#13#10#13#10'        read'
+  +'_hi         = "  0   0   1   0    1   0   0   0",'#13#10'                  '
+  +'        "  0   0   0   0  a11 a10  a9  a8",'#13#10'                        '
+  +'  " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'                          "  o'
+  +'   o   o   o    o   o   o   o";'#13#10#13#10'        loadpage_lo     = "  0'
+  +'   1   0   0      0   0   0   0",'#13#10'                          "  0   0'
+  +'   0   0      x   x   x   x",'#13#10'                          "  x   x   x'
+  +'  a4     a3  a2  a1  a0",'#13#10'                          "  i   i   i   i'
+  +'      i   i   i   i";'#13#10#13#10'        loadpage_hi     = "  0   1   0  '
+  +' 0      1   0   0   0",'#13#10'                          "  0   0   0   0  '
+  +'    x   x   x   x",'#13#10'                          "  x   x   x  a4     a'
+  +'3  a2  a1  a0",'#13#10'                          "  i   i   i   i      i   '
+  +'i   i   i";'#13#10#13#10'        writepage       = "  0   1   0   0      1 '
+  +'  1   0   0",'#13#10'                          "  0   0   0   0    a11 a10 '
+  +' a9  a8",'#13#10'                          " a7  a6  a5   x      x   x   x '
+  +'  x",'#13#10'                          "  x   x   x   x      x   x   x   x"'
+  +';'#13#10#13#10#9'mode'#9#9'= 0x21;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocks'
+  +'ize'#9'= 64;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10#13#10'    me'
+  +'mory "lfuse"'#13#10'        size            = 1;'#13#10'        min_write_d'
+  +'elay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'        read    '
+  +'        = "0 1 0 1  0 0 0 0   0 0 0 0  0 0 0 0",'#13#10'                   '
+  +'       "x x x x  x x x x   o o o o  o o o o";'#13#10#13#10'        write   '
+  +'        = "1 0 1 0  1 1 0 0   1 0 1 0  0 0 0 0",'#13#10'                   '
+  +'       "x x x x  x x x x   i i i i  i i i i";'#13#10'      ;'#13#10#13#10' '
+  +'   memory "hfuse"'#13#10'        size            = 1;'#13#10'        min_wr'
+  +'ite_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'        rea'
+  +'d            = "0 1 0 1  1 0 0 0   0 0 0 0  1 0 0 0",'#13#10'              '
+  +'            "x x x x  x x x x   o o o o  o o o o";'#13#10#13#10'        wri'
+  +'te           = "1 0 1 0  1 1 0 0   1 0 1 0  1 0 0 0",'#13#10'              '
+  +'            "x x x x  x x x x   i i i i  i i i i";'#13#10'      ;'#13#10#13
+  +#10'    memory "lock"'#13#10'        size            = 1;'#13#10'        min'
+  +'_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'        '
+  +'read            = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 0 0",'#13#10'           '
+  +'               "x x x x  x x x x   x x o o  o o o o";'#13#10#13#10'        '
+  +'write           = "1 0 1 0  1 1 0 0   1 1 1 x  x x x x",'#13#10'           '
+  +'               "x x x x  x x x x   1 1 i i  i i i i";'#13#10'      ;'#13#10
+  +#13#10'    memory "calibration"'#13#10'        size            = 4;'#13#10' '
+  +'       read            = "0 0 1 1  1 0 0 0     0 0 x x  x x x x",'#13#10'  '
+  +'                        "0 0 0 0  0 0 a1 a0   o o o o  o o o o";'#13#10'   '
+  +'   ;'#13#10#13#10'    memory "signature"'#13#10'        size            = 3'
+  +';'#13#10'        read            = "0  0  1  1   0  0  0  0   x  x  x  x   '
+  +'x  x  x  x",'#13#10'                          "x  x  x  x   x  x a1 a0   o '
+  +' o  o  o   o  o  o  o";'#13#10'      ;'#13#10'  ;'#13#10#13#10#13#10#13#10
+  +#13#10'#------------------------------------------------------------'#13#10
+  +'# ATmega8535'#13#10'#------------------------------------------------------'
+  +'------'#13#10#13#10'part'#13#10'    id               = "m8535";'#13#10'    '
+  +'desc             = "ATMEGA8535";'#13#10'    stk500_devcode   = 0x64;'#13#10
+  +'    avr910_devcode   = 0x69;'#13#10'    signature        = 0x1e 0x93 0x08;'
+  +#13#10'    pagel            = 0xd7;'#13#10'    bs2              = 0xa0;'#13
+  +#10'    chip_erase_delay = 9000;'#13#10'    pgm_enable       = "1 0 1 0  1 1'
+  +' 0 0    0 1 0 1  0 0 1 1",'#13#10'                       "x x x x  x x x x '
+  +'   x x x x  x x x x";'#13#10#13#10'    chip_erase       = "1 0 1 0  1 1 0 0'
+  +'    1 0 0 x  x x x x",'#13#10'                       "x x x x  x x x x    x'
+  +' x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'#13#10'    stabdelay'
+  +#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'    synchloops'#9#9'= 3'
+  +'2;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollindex'#9#9'= 3;'#13#10'   '
+  +' pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13#10'    postdelay'
+  +#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10#13#10'    pp_controlstack  '
+  +'   ='#13#10'        0x0E, 0x1E, 0x0F, 0x1F, 0x2E, 0x3E, 0x2F, 0x3F,'#13#10
+  +'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E, 0x6F, 0x7F,'#13#10'        0x66'
+  +', 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10'        0xBE, 0xFD, 0x00'
+  ,', 0x01, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay    = 100;'#13#10
+  +'    progmodedelay       = 0;'#13#10'    latchcycles         = 6;'#13#10'   '
+  +' togglevtg           = 0;'#13#10'    poweroffdelay       = 0;'#13#10'    re'
+  +'setdelayms        = 0;'#13#10'    resetdelayus        = 0;'#13#10'    hvlea'
+  +'vestabdelay    = 15;'#13#10'    chiperasepulsewidth = 0;'#13#10'    chipera'
+  +'sepolltimeout = 10;'#13#10'    programfusepulsewidth = 0;'#13#10'    progra'
+  +'mfusepolltimeout = 5;'#13#10'    programlockpulsewidth = 0;'#13#10'    prog'
+  +'ramlockpolltimeout = 5;'#13#10#13#10'    memory "eeprom"'#13#10'        siz'
+  +'e            = 512;'#13#10'        min_write_delay = 9000;'#13#10'        m'
+  +'ax_write_delay = 9000;'#13#10'        readback_p1     = 0xff;'#13#10'      '
+  +'  readback_p2     = 0xff;'#13#10#9'read            = "  1   0   1   0      '
+  +'0   0   0   0",'#13#10'                          "  0   0   x   x      x   '
+  +'x   x  a8",'#13#10'                          " a7  a6  a5  a4     a3  a2  a'
+  +'1  a0",'#13#10'                          "  o   o   o   o      o   o   o   '
+  +'o";'#13#10#13#10#9'write           = "  1   1   0   0      0   0   0   0",'
+  +#13#10'                          "  0   0   x   x      x   x   x  a8",'#13#10
+  +'                          " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10'    '
+  +'                      "  i   i   i   i      i   i   i   i";'#13#10#13#10#9
+  +'mode'#9#9'= 0x04;'#13#10#9'delay'#9#9'= 20;'#13#10#9'blocksize'#9'= 128;'#13
+  +#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10'    memory "flash"'#13#10'   '
+  +'     paged           = yes;'#13#10'        size            = 8192;'#13#10' '
+  +'       page_size       = 64;'#13#10'        num_pages       = 128;'#13#10' '
+  +'       min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10
+  +'        readback_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'#13
+  +#10'        read_lo         = "  0   0   1   0    0   0   0   0",'#13#10'   '
+  +'                       "  0   0   0   0  a11 a10  a9  a8",'#13#10'         '
+  +'                 " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'               '
+  +'           "  o   o   o   o    o   o   o   o";'#13#10#13#10'        read_hi'
+  +'         = "  0   0   1   0    1   0   0   0",'#13#10'                     '
+  +'     "  0   0   0   0  a11 a10  a9  a8",'#13#10'                          "'
+  +' a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'                          "  o   '
+  +'o   o   o    o   o   o   o";'#13#10#13#10'        loadpage_lo     = "  0   '
+  +'1   0   0      0   0   0   0",'#13#10'                          "  0   0   '
+  +'0   0      x   x   x   x",'#13#10'                          "  x   x   x  a'
+  +'4     a3  a2  a1  a0",'#13#10'                          "  i   i   i   i   '
+  +'   i   i   i   i";'#13#10#13#10'        loadpage_hi     = "  0   1   0   0 '
+  +'     1   0   0   0",'#13#10'                          "  0   0   0   0     '
+  +' x   x   x   x",'#13#10'                          "  x   x   x  a4     a3  '
+  +'a2  a1  a0",'#13#10'                          "  i   i   i   i      i   i  '
+  +' i   i";'#13#10#13#10'        writepage       = "  0   1   0   0      1   1'
+  +'   0   0",'#13#10'                          "  0   0   0   0    a11 a10  a9'
+  +'  a8",'#13#10'                          " a7  a6  a5   x      x   x   x   x'
+  +'",'#13#10'                          "  x   x   x   x      x   x   x   x";'
+  +#13#10#13#10#9'mode'#9#9'= 0x21;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'
+  +#9'= 64;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10#13#10'    memory '
+  +'"lfuse"'#13#10'        size            = 1;'#13#10'        min_write_delay '
+  +'= 2000;'#13#10'        max_write_delay = 2000;'#13#10'        read         '
+  +'   = "0 1 0 1  0 0 0 0   0 0 0 0  0 0 0 0",'#13#10'                        '
+  +'  "x x x x  x x x x   o o o o  o o o o";'#13#10#13#10'        write        '
+  +'   = "1 0 1 0  1 1 0 0   1 0 1 0  0 0 0 0",'#13#10'                        '
+  +'  "x x x x  x x x x   i i i i  i i i i";'#13#10'      ;'#13#10#13#10'    me'
+  +'mory "hfuse"'#13#10'        size            = 1;'#13#10'        min_write_d'
+  +'elay = 2000;'#13#10'        max_write_delay = 2000;'#13#10'        read    '
+  +'        = "0 1 0 1  1 0 0 0   0 0 0 0  1 0 0 0",'#13#10'                   '
+  +'       "x x x x  x x x x   o o o o  o o o o";'#13#10#13#10'        write   '
+  +'        = "1 0 1 0  1 1 0 0   1 0 1 0  1 0 0 0",'#13#10'                   '
+  +'       "x x x x  x x x x   i i i i  i i i i";'#13#10'      ;'#13#10#13#10' '
+  +'   memory "lock"'#13#10'        size            = 1;'#13#10'        min_wri'
+  +'te_delay = 2000;'#13#10'        max_write_delay = 2000;'#13#10'        read'
+  +'            = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 0 0",'#13#10'               '
+  +'           "x x x x  x x x x   x x o o  o o o o";'#13#10#13#10'        writ'
+  +'e           = "1 0 1 0  1 1 0 0   1 1 1 x  x x x x",'#13#10'               '
+  +'           "x x x x  x x x x   1 1 i i  i i i i";'#13#10'      ;'#13#10#13
+  +#10'    memory "calibration"'#13#10'        size            = 4;'#13#10'    '
+  ,'    read            = "0 0 1 1  1 0 0 0   0 0 x x  x x x x",'#13#10'       '
+  +'                   "0 0 0 0  0 0 a1 a0 o o o o  o o o o";'#13#10'      ;'#13
+  +#10#13#10'    memory "signature"'#13#10'        size            = 3;'#13#10
+  +'        read            = "0  0  1  1   0  0  0  0   x  x  x  x   x  x  x  '
+  +'x",'#13#10'                          "x  x  x  x   x  x a1 a0   o  o  o  o '
+  +'  o  o  o  o";'#13#10'      ;'#13#10'  ;'#13#10#13#10#13#10'#--------------'
+  +'----------------------------------------------'#13#10'# ATtiny26'#13#10'#--'
+  +'----------------------------------------------------------'#13#10#13#10'par'
+  +'t'#13#10'    id                  = "t26";'#13#10'    desc                = '
+  +'"ATTINY26";'#13#10'    stk500_devcode      = 0x21;'#13#10'    avr910_devcod'
+  +'e      = 0x5e;'#13#10'    signature           = 0x1e 0x91 0x09;'#13#10'    '
+  +'pagel               = 0xb3;'#13#10'    bs2                 = 0xb2;'#13#10' '
+  +'   chip_erase_delay    = 9000;'#13#10'    pgm_enable          = "1 0 1 0  1'
+  +' 1 0 0   0 1 0 1  0 0 1 1",'#13#10'                          "x x x x  x x '
+  +'x x   x x x x  x x x x";'#13#10#13#10'    chip_erase          = "1 0 1 0  1'
+  +' 1 0 0   1 0 0 x  x x x x",'#13#10'                          "x x x x  x x '
+  +'x x   x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'#13#10'    st'
+  +'abdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'    synchloops'
+  +#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollindex'#9#9'= 3;'#13
+  +#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13#10'    post'
+  +'delay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10#13#10'    pp_control'
+  +'stack     ='#13#10'        0xC4, 0xE4, 0xC4, 0xE4, 0xCC, 0xEC, 0xCC, 0xEC,'
+  +#13#10'        0xD4, 0xF4, 0xD4, 0xF4, 0xDC, 0xFC, 0xDC, 0xFC,'#13#10'      '
+  +'  0xC8, 0xE8, 0xD8, 0xF8, 0x4C, 0x6C, 0x5C, 0x7C,'#13#10'        0xEC, 0xBC'
+  +', 0x00, 0x06, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay    = 100;'
+  +#13#10'    progmodedelay       = 0;'#13#10'    latchcycles         = 5;'#13
+  +#10'    togglevtg           = 1;'#13#10'    poweroffdelay       = 15;'#13#10
+  +'    resetdelayms        = 2;'#13#10'    resetdelayus        = 0;'#13#10'   '
+  +' hvleavestabdelay    = 15;'#13#10'    chiperasepulsewidth = 0;'#13#10'    c'
+  +'hiperasepolltimeout = 10;'#13#10'    programfusepulsewidth = 0;'#13#10'    '
+  +'programfusepolltimeout = 5;'#13#10'    programlockpulsewidth = 0;'#13#10'  '
+  +'  programlockpolltimeout = 5;'#13#10#13#10'    memory "eeprom"'#13#10'     '
+  +'   size            = 128;'#13#10'        min_write_delay = 9000;'#13#10'   '
+  +'     max_write_delay = 9000;'#13#10'        readback_p1     = 0xff;'#13#10
+  +'        readback_p2     = 0xff;'#13#10'        read            = "1  0  1  '
+  +'0   0  0  0  0    x x x x  x x x x",'#13#10'                          "x a6'
+  +' a5 a4  a3 a2 a1 a0    o o o o  o o o o";'#13#10#13#10'        write       '
+  +'    = "1  1  0  0   0  0  0  0    x x x x  x x x x",'#13#10'               '
+  +'           "x a6 a5 a4  a3 a2 a1 a0    i i i i  i i i i";'#13#10#13#10#9'mo'
+  +'de'#9#9'= 0x04;'#13#10#9'delay'#9#9'= 10;'#13#10#9'blocksize'#9'= 64;'#13#10
+  +#9'readsize'#9'= 256;'#13#10'    ;'#13#10#13#10'    memory "flash"'#13#10'  '
+  +'      paged           = yes;'#13#10'        size            = 2048;'#13#10
+  +'        page_size       = 32;'#13#10'        num_pages       = 64;'#13#10' '
+  +'       min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10
+  +'        readback_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'#13
+  +#10'        read_lo         = "  0  0  1  0   0  0  0  0",'#13#10'          '
+  +'                "  x  x  x  x   x  x a9 a8",'#13#10'                       '
+  +'   " a7 a6 a5 a4  a3 a2 a1 a0",'#13#10'                          "  o  o  o'
+  +'  o   o  o  o  o";'#13#10#13#10'        read_hi         = "  0  0  1  0   1'
+  +'  0  0  0",'#13#10'                          "  x  x  x  x   x  x a9 a8",'
+  +#13#10'                          " a7 a6 a5 a4  a3 a2 a1 a0",'#13#10'       '
+  +'                   "  o  o  o  o   o  o  o  o";'#13#10#13#10'        loadpa'
+  +'ge_lo     = "  0  1  0  0   0  0  0  0",'#13#10'                          "'
+  +'  x  x  x  x   x  x  x  x",'#13#10'                          "  x  x  x  x '
+  +' a3 a2 a1 a0",'#13#10'                          "  i  i  i  i   i  i  i  i"'
+  +';'#13#10#13#10'        loadpage_hi     = "  0  1  0  0   1  0  0  0",'#13#10
+  +'                          "  x  x  x  x   x  x  x  x",'#13#10'             '
+  +'             "  x  x  x  x  a3 a2 a1 a0",'#13#10'                          '
+  +'"  i  i  i  i   i  i  i  i";'#13#10#13#10'        writepage       = "  0  1'
+  +'  0  0   1  1  0  0",'#13#10'                          "  x  x  x  x   x  x'
+  +' a9 a8",'#13#10'                          " a7 a6 a5 a4   x  x  x  x",'#13
+  +#10'                          "  x  x  x  x   x  x  x  x";'#13#10#13#10#9'mo'
+  +'de'#9#9'= 0x21;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= 16;'#13#10
+  +#9'readsize'#9'= 256;'#13#10'    ;'#13#10#13#10'    memory "signature"'#13#10
+  ,'        size            = 3;'#13#10'        read            = "0  0  1  1  '
+  +' 0  0  0  0    x x x x  x x x x",'#13#10'                          "0  0  0'
+  +'  0   0  0 a1 a0    o o o o  o o o o";'#13#10'    ;'#13#10#13#10'    memory'
+  +' "lock"'#13#10'        size            = 1;'#13#10'        read            '
+  +'= "0  1  0  1   1  0  0  0    x x x x  x x x x",'#13#10'                   '
+  +'       "x  x  x  x   x  x  x  x    x x x x  x x o o";'#13#10#13#10'        '
+  +'write           = "1  0  1  0   1  1  0  0    1 1 1 1  1 1 i i",'#13#10'   '
+  +'                       "x  x  x  x   x  x  x  x    x x x x  x x x x";'#13#10
+  +'        min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13
+  +#10'    ;'#13#10#13#10'    memory "lfuse"'#13#10'        size            = 1'
+  +';'#13#10'        write           = "1 0 1 0  1 1 0 0  1 0 1 0  0 0 0 0",'#13
+  +#10'                          "x x x x  x x x x  i i i i  i i i i";'#13#10#13
+  +#10'        read            = "0 1 0 1  0 0 0 0  0 0 0 0  0 0 0 0",'#13#10' '
+  +'                         "x x x x  x x x x  o o o o  o o o o";'#13#10'     '
+  +'   min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'  '
+  +'    ;'#13#10#13#10'    memory "hfuse"'#13#10'        size            = 1;'
+  +#13#10'        write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10
+  +'                          "x x x x  x x x x  x x x i  i i i i";'#13#10#13#10
+  +'        read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'    '
+  +'                      "x x x x  x x x x  x x x o  o o o o";'#13#10'        '
+  +'min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'     '
+  +' ;'#13#10#13#10'    memory "calibration"'#13#10'        size            = 4'
+  +';'#13#10'        read            = "0  0  1  1   1  0  0  0    x x x x  x x'
+  +' x x",'#13#10'                          "0  0  0  0   0  0 a1 a0    o o o o'
+  +'  o o o o";'#13#10'    ;'#13#10#13#10';'#13#10#13#10#13#10'#---------------'
+  +'---------------------------------------------'#13#10'# ATtiny261'#13#10'#--'
+  +'----------------------------------------------------------'#13#10'# Close t'
+  +'o ATtiny26'#13#10#13#10'part'#13#10'    id                  = "t261";'#13#10
+  +'    desc                = "ATTINY261";'#13#10'     has_debugwire = yes;'#13
+  +#10'     flash_instr   = 0xB4, 0x00, 0x10;'#13#10'     eeprom_instr  = 0xBB,'
+  +' 0xFF, 0xBB, 0xEE, 0xBB, 0xCC, 0xB2, 0x0D,'#13#10#9'             0xBC, 0x00'
+  +', 0xB4, 0x00, 0xBA, 0x0D, 0xBB, 0xBC,'#13#10#9'             0x99, 0xE1, 0xB'
+  +'B, 0xAC;'#13#10'#    stk500_devcode      = 0x21;'#13#10'#    avr910_devcode'
+  +'      = 0x5e;'#13#10'    signature           = 0x1e 0x91 0x0c;'#13#10'    p'
+  +'agel               = 0xb3;'#13#10'    bs2                 = 0xb2;'#13#10'  '
+  +'  chip_erase_delay    = 4000;'#13#10#13#10'    pgm_enable          = "1 0 1'
+  +' 0  1 1 0 0   0 1 0 1  0 0 1 1",'#13#10'                          "x x x x '
+  +' x x x x   x x x x  x x x x";'#13#10#13#10'    chip_erase          = "1 0 1'
+  +' 0  1 1 0 0   1 0 0 x  x x x x",'#13#10'                          "x x x x '
+  +' x x x x   x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'#13#10' '
+  +'   stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'    synch'
+  +'loops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollindex'#9#9'='
+  +' 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13#10
+  +'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10#13#10'    pp'
+  +'_controlstack     ='#13#10'        0xC4, 0xE4, 0xC4, 0xE4, 0xCC, 0xEC, 0xCC'
+  +', 0xEC,'#13#10'        0xD4, 0xF4, 0xD4, 0xF4, 0xDC, 0xFC, 0xDC, 0xFC,'#13
+  +#10'        0xC8, 0xE8, 0xD8, 0xF8, 0x4C, 0x6C, 0x5C, 0x7C,'#13#10'        0'
+  +'xEC, 0xBC, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay '
+  +'   = 100;'#13#10'    progmodedelay       = 0;'#13#10'    latchcycles       '
+  +'  = 5;'#13#10'    togglevtg           = 1;'#13#10'    poweroffdelay       ='
+  +' 15;'#13#10'    resetdelayms        = 2;'#13#10'    resetdelayus        = 0'
+  +';'#13#10'    hvleavestabdelay    = 15;'#13#10'    chiperasepulsewidth = 0;'
+  +#13#10'    chiperasepolltimeout = 10;'#13#10'    programfusepulsewidth = 0;'
+  +#13#10'    programfusepolltimeout = 5;'#13#10'    programlockpulsewidth = 0;'
+  +#13#10'    programlockpolltimeout = 5;'#13#10#13#10'    memory "eeprom"'#13
+  +#10'        paged           = no;'#13#10'        size            = 128;'#13
+  +#10'        page_size       = 4;'#13#10'        num_pages       = 32;'#13#10
+  +'        min_write_delay = 4000;'#13#10'        max_write_delay = 4000;'#13
+  +#10'        readback_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'
+  +#13#10#13#10'        read            = "1  0  1  0   0  0  0  0    x x x x  '
+  +'x x x x",'#13#10'                          "x a6 a5 a4  a3 a2 a1 a0    o o '
+  +'o o  o o o o";'#13#10#13#10'        write           = "1  1  0  0   0  0  0'
+  +'  0    x x x x  x x x x",'#13#10'                          "x a6 a5 a4  a3 '
+  +'a2 a1 a0    i i i i  i i i i";'#13#10#13#10#9'loadpage_lo'#9'= "  1   1   0'
+  ,'   0      0   0   0   1",'#13#10#9#9#9'  "  0   0   0   0      0   0   0   '
+  +'0",'#13#10#9#9#9'  "  0   0   0   0      0   0  a1  a0",'#13#10#9#9#9'  "  '
+  +'i   i   i   i      i   i   i   i";'#13#10#13#10#9'writepage'#9'= "  1   1  '
+  +' 0   0      0   0   1   0",'#13#10#9#9#9'  "  0   0   x   x      x   x   x '
+  +'  x",'#13#10#9#9#9'  "  x  a6  a5  a4     a3  a2   0   0",'#13#10#9#9#9'  "'
+  +'  x   x   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'= 0x41;'#13#10
+  +#9'delay'#9#9'= 10;'#13#10#9'blocksize'#9'= 4;'#13#10#9'readsize'#9'= 256;'
+  +#13#10'    ;'#13#10#13#10'    memory "flash"'#13#10'        paged           '
+  +'= yes;'#13#10'        size            = 2048;'#13#10'        page_size     '
+  +'  = 32;'#13#10'        num_pages       = 64;'#13#10'        min_write_delay'
+  +' = 4500;'#13#10'        max_write_delay = 4500;'#13#10'        readback_p1 '
+  +'    = 0xff;'#13#10'        readback_p2     = 0xff;'#13#10#13#10'        rea'
+  +'d_lo         = "  0  0  1  0   0  0  0  0",'#13#10'                        '
+  +'  "  x  x  x  x   x  x a9 a8",'#13#10'                          " a7 a6 a5 '
+  +'a4  a3 a2 a1 a0",'#13#10'                          "  o  o  o  o   o  o  o '
+  +' o";'#13#10#13#10'        read_hi         = "  0  0  1  0   1  0  0  0",'#13
+  +#10'                          "  x  x  x  x   x  x a9 a8",'#13#10'          '
+  +'                " a7 a6 a5 a4  a3 a2 a1 a0",'#13#10'                       '
+  +'   "  o  o  o  o   o  o  o  o";'#13#10#13#10'        loadpage_lo     = "  0'
+  +'  1  0  0   0  0  0  0",'#13#10'                          "  x  x  x  x   x'
+  +'  x  x  x",'#13#10'                          "  x  x  x  x  a3 a2 a1 a0",'
+  +#13#10'                          "  i  i  i  i   i  i  i  i";'#13#10#13#10' '
+  +'       loadpage_hi     = "  0  1  0  0   1  0  0  0",'#13#10'              '
+  +'            "  x  x  x  x   x  x  x  x",'#13#10'                          "'
+  +'  x  x  x  x  a3 a2 a1 a0",'#13#10'                          "  i  i  i  i '
+  +'  i  i  i  i";'#13#10#13#10'        writepage       = "  0  1  0  0   1  1 '
+  +' 0  0",'#13#10'                          "  x  x  x  x   x  x a9 a8",'#13#10
+  +'                          " a7 a6 a5 a4   x  x  x  x",'#13#10'             '
+  +'             "  x  x  x  x   x  x  x  x";'#13#10#13#10#9'mode'#9#9'= 0x41;'
+  +#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= 32;'#13#10#9'readsize'#9'= '
+  +'256;'#13#10'    ;'#13#10#13#10'    memory "signature"'#13#10'        size  '
+  +'          = 3;'#13#10'        read            = "0  0  1  1   0  0  0  0   '
+  +' x x x x  x x x x",'#13#10'                          "0  0  0  0   0  0 a1 '
+  +'a0    o o o o  o o o o";'#13#10'    ;'#13#10#13#10'    memory "lock"'#13#10
+  +'        size            = 1;'#13#10'        read            = "0  1  0  1  '
+  +' 1  0  0  0    x x x x  x x x x",'#13#10'                          "x  x  x'
+  +'  x   x  x  x  x    x x x x  x x o o";'#13#10#13#10'        write          '
+  +' = "1  0  1  0   1  1  0  0    1 1 1 1  1 1 i i",'#13#10'                  '
+  +'        "x  x  x  x   x  x  x  x    x x x x  x x x x";'#13#10'        min_w'
+  +'rite_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'    ;'#13
+  +#10#13#10'    memory "lfuse"'#13#10'        size            = 1;'#13#10'    '
+  +'    write           = "1 0 1 0  1 1 0 0  1 0 1 0  0 0 0 0",'#13#10'        '
+  +'                  "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10'      '
+  +'  read            = "0 1 0 1  0 0 0 0  0 0 0 0  0 0 0 0",'#13#10'          '
+  +'                "x x x x  x x x x  o o o o  o o o o";'#13#10'        min_wr'
+  +'ite_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'      ;'#13
+  +#10#13#10'    memory "hfuse"'#13#10'        size            = 1;'#13#10'    '
+  +'    write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10'        '
+  +'                  "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10'      '
+  +'  read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'          '
+  +'                "x x x x  x x x x  o o o o  o o o o";'#13#10'        min_wr'
+  +'ite_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'      ;'#13
+  +#10#13#10'    memory "efuse"'#13#10'        size            = 1;'#13#10'    '
+  +'    write           = "1 0 1 0  1 1 0 0   1 0 1 0  0 1 0 0",'#13#10'       '
+  +'                   "x x x x  x x x x   x x x x  x x x i";'#13#10#13#10'    '
+  +'    read            = "0 1 0 1  0 0 0 0   0 0 0 0  1 0 0 0",'#13#10'       '
+  +'                   "x x x x  x x x x   x x x x  x x x o";'#13#10'        mi'
+  +'n_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'      ;'
+  +#13#10#13#10'    memory "calibration"'#13#10'        size            = 1;'#13
+  +#10'        read            = "0  0  1  1   1  0  0  0    x x x x  x x x x",'
+  +#13#10'                          "0  0  0  0   0  0  0  0    o o o o  o o o '
+  +'o";'#13#10'    ;'#13#10#13#10';'#13#10#13#10#13#10'#-----------------------'
+  +'-------------------------------------'#13#10'# ATtiny461'#13#10'#----------'
+  +'--------------------------------------------------'#13#10'# Close to ATtiny'
+  ,'261'#13#10#13#10'part'#13#10'    id                  = "t461";'#13#10'    d'
+  +'esc                = "ATTINY461";'#13#10'     has_debugwire = yes;'#13#10' '
+  +'    flash_instr   = 0xB4, 0x00, 0x10;'#13#10'     eeprom_instr  = 0xBB, 0xF'
+  +'F, 0xBB, 0xEE, 0xBB, 0xCC, 0xB2, 0x0D,'#13#10#9'             0xBC, 0x00, 0x'
+  +'B4, 0x00, 0xBA, 0x0D, 0xBB, 0xBC,'#13#10#9'             0x99, 0xE1, 0xBB, 0'
+  +'xAC;'#13#10'#    stk500_devcode      = 0x21;'#13#10'#    avr910_devcode    '
+  +'  = 0x5e;'#13#10'    signature           = 0x1e 0x92 0x08;'#13#10'    pagel'
+  +'               = 0xb3;'#13#10'    bs2                 = 0xb2;'#13#10'    ch'
+  +'ip_erase_delay    = 4000;'#13#10#13#10'    pgm_enable          = "1 0 1 0  '
+  +'1 1 0 0   0 1 0 1  0 0 1 1",'#13#10'                          "x x x x  x x'
+  +' x x   x x x x  x x x x";'#13#10#13#10'    chip_erase          = "1 0 1 0  '
+  +'1 1 0 0   1 0 0 x  x x x x",'#13#10'                          "x x x x  x x'
+  +' x x   x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'#13#10'    s'
+  +'tabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'    synchloop'
+  +'s'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollindex'#9#9'= 3;'
+  +#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13#10'    p'
+  +'ostdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10#13#10'    pp_cont'
+  +'rolstack     ='#13#10'        0xC4, 0xE4, 0xC4, 0xE4, 0xCC, 0xEC, 0xCC, 0xE'
+  +'C,'#13#10'        0xD4, 0xF4, 0xD4, 0xF4, 0xDC, 0xFC, 0xDC, 0xFC,'#13#10'  '
+  +'      0xC8, 0xE8, 0xD8, 0xF8, 0x4C, 0x6C, 0x5C, 0x7C,'#13#10'        0xEC, '
+  +'0xBC, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay    = '
+  +'100;'#13#10'    progmodedelay       = 0;'#13#10'    latchcycles         = 5'
+  +';'#13#10'    togglevtg           = 1;'#13#10'    poweroffdelay       = 15;'
+  +#13#10'    resetdelayms        = 2;'#13#10'    resetdelayus        = 0;'#13
+  +#10'    hvleavestabdelay    = 15;'#13#10'    chiperasepulsewidth = 0;'#13#10
+  +'    chiperasepolltimeout = 10;'#13#10'    programfusepulsewidth = 0;'#13#10
+  +'    programfusepolltimeout = 5;'#13#10'    programlockpulsewidth = 0;'#13#10
+  +'    programlockpolltimeout = 5;'#13#10#13#10'    memory "eeprom"'#13#10'   '
+  +'     paged           = no;'#13#10'        size            = 256;'#13#10'   '
+  +'     page_size       = 4;'#13#10'        num_pages       = 64;'#13#10'     '
+  +'   min_write_delay = 4000;'#13#10'        max_write_delay = 4000;'#13#10'  '
+  +'      readback_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'#13#10
+  +#13#10'        read            = " 1  0  1  0   0  0  0  0    x x x x  x x x'
+  +' x",'#13#10'                          "a7 a6 a5 a4  a3 a2 a1 a0    o o o o '
+  +' o o o o";'#13#10#13#10'        write           = " 1  1  0  0   0  0  0  0'
+  +'    x x x x  x x x x",'#13#10'                          "a7 a6 a5 a4  a3 a2'
+  +' a1 a0    i i i i  i i i i";'#13#10#13#10#9'loadpage_lo'#9'= "  1   1   0  '
+  +' 0      0   0   0   1",'#13#10#9#9#9'  "  0   0   0   0      0   0   0   0"'
+  +','#13#10#9#9#9'  "  0   0   0   0      0   0  a1  a0",'#13#10#9#9#9'  "  i '
+  +'  i   i   i      i   i   i   i";'#13#10#13#10#9'writepage'#9'= "  1   1   0'
+  +'   0      0   0   1   0",'#13#10#9#9#9'  "  0   0   x   x      x   x   x   '
+  +'x",'#13#10#9#9#9'  " a7  a6  a5  a4     a3  a2   0   0",'#13#10#9#9#9'  "  '
+  +'x   x   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'= 0x41;'#13#10#9
+  +'delay'#9#9'= 10;'#13#10#9'blocksize'#9'= 4;'#13#10#9'readsize'#9'= 256;'#13
+  +#10'    ;'#13#10#13#10'    memory "flash"'#13#10'        paged           = y'
+  +'es;'#13#10'        size            = 4096;'#13#10'        page_size       ='
+  +' 64;'#13#10'        num_pages       = 64;'#13#10'        min_write_delay = '
+  +'4500;'#13#10'        max_write_delay = 4500;'#13#10'        readback_p1    '
+  +' = 0xff;'#13#10'        readback_p2     = 0xff;'#13#10#13#10'        read_l'
+  +'o         = "  0  0  1  0   0   0  0  0",'#13#10'                          '
+  +'"  x  x  x  x   x a10 a9 a8",'#13#10'                          " a7 a6 a5 a'
+  +'4  a3  a2 a1 a0",'#13#10'                          "  o  o  o  o   o   o  o'
+  +'  o";'#13#10#13#10'        read_hi         = "  0  0  1  0   1   0  0  0",'
+  +#13#10'                          "  x  x  x  x   x a10 a9 a8",'#13#10'      '
+  +'                    " a7 a6 a5 a4  a3  a2 a1 a0",'#13#10'                  '
+  +'        "  o  o  o  o   o   o  o  o";'#13#10#13#10'        loadpage_lo     '
+  +'= "  0  1  0  0   0  0  0  0",'#13#10'                          "  x  x  x '
+  +' x   x  x  x  x",'#13#10'                          "  x  x  x a4  a3 a2 a1 '
+  +'a0",'#13#10'                          "  i  i  i  i   i  i  i  i";'#13#10#13
+  +#10'        loadpage_hi     = "  0  1  0  0   1  0  0  0",'#13#10'          '
+  +'                "  x  x  x  x   x  x  x  x",'#13#10'                       '
+  +'   "  x  x  x a4  a3 a2 a1 a0",'#13#10'                          "  i  i  i'
+  +'  i   i  i  i  i";'#13#10#13#10'        writepage       = "  0  1  0  0   1'
+  +'   1  0  0",'#13#10'                          "  x  x  x  x   x a10 a9 a8",'
+  ,#13#10'                          " a7 a6 a5  x   x   x  x  x",'#13#10'      '
+  +'                    "  x  x  x  x   x   x  x  x";'#13#10#13#10#9'mode'#9#9
+  +'= 0x41;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= 64;'#13#10#9'reads'
+  +'ize'#9'= 256;'#13#10'    ;'#13#10#13#10'    memory "signature"'#13#10'     '
+  +'   size            = 3;'#13#10'        read            = "0  0  1  1   0  0'
+  +'  0  0    x x x x  x x x x",'#13#10'                          "0  0  0  0  '
+  +' 0  0 a1 a0    o o o o  o o o o";'#13#10'    ;'#13#10#13#10'    memory "loc'
+  +'k"'#13#10'        size            = 1;'#13#10'        read            = "0 '
+  +' 1  0  1   1  0  0  0    x x x x  x x x x",'#13#10'                        '
+  +'  "x  x  x  x   x  x  x  x    x x x x  x x o o";'#13#10#13#10'        write'
+  +'           = "1  0  1  0   1  1  0  0    1 1 1 1  1 1 i i",'#13#10'        '
+  +'                  "x  x  x  x   x  x  x  x    x x x x  x x x x";'#13#10'   '
+  +'     min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10
+  +'    ;'#13#10#13#10'    memory "lfuse"'#13#10'        size            = 1;'
+  +#13#10'        write           = "1 0 1 0  1 1 0 0  1 0 1 0  0 0 0 0",'#13#10
+  +'                          "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10
+  +'        read            = "0 1 0 1  0 0 0 0  0 0 0 0  0 0 0 0",'#13#10'    '
+  +'                      "x x x x  x x x x  o o o o  o o o o";'#13#10'        '
+  +'min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'     '
+  +' ;'#13#10#13#10'    memory "hfuse"'#13#10'        size            = 1;'#13
+  +#10'        write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10' '
+  +'                         "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10
+  +'        read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'    '
+  +'                      "x x x x  x x x x  o o o o  o o o o";'#13#10'        '
+  +'min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'     '
+  +' ;'#13#10#13#10'    memory "efuse"'#13#10'        size            = 1;'#13
+  +#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0  0 1 0 0",'#13#10
+  +'                          "x x x x  x x x x   x x x x  x x x i";'#13#10#13
+  +#10'        read            = "0 1 0 1  0 0 0 0   0 0 0 0  1 0 0 0",'#13#10
+  +'                          "x x x x  x x x x   x x x x  x x x o";'#13#10'   '
+  +'     min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10
+  +'      ;'#13#10#13#10'    memory "calibration"'#13#10'        size          '
+  +'  = 1;'#13#10'        read            = "0  0  1  1   1  0  0  0    x x x x'
+  +'  x x x x",'#13#10'                          "0  0  0  0   0  0  0  0    o '
+  +'o o o  o o o o";'#13#10'    ;'#13#10#13#10';'#13#10#13#10#13#10'#----------'
+  +'--------------------------------------------------'#13#10'# ATtiny861'#13#10
+  +'#------------------------------------------------------------'#13#10'# Clos'
+  +'e to ATtiny461'#13#10#13#10'part'#13#10'    id                  = "t861";'
+  +#13#10'    desc                = "ATTINY861";'#13#10'     has_debugwire = ye'
+  +'s;'#13#10'     flash_instr   = 0xB4, 0x00, 0x10;'#13#10'     eeprom_instr  '
+  +'= 0xBB, 0xFF, 0xBB, 0xEE, 0xBB, 0xCC, 0xB2, 0x0D,'#13#10#9'             0xB'
+  +'C, 0x00, 0xB4, 0x00, 0xBA, 0x0D, 0xBB, 0xBC,'#13#10#9'             0x99, 0x'
+  +'E1, 0xBB, 0xAC;'#13#10'#    stk500_devcode      = 0x21;'#13#10'#    avr910_'
+  +'devcode      = 0x5e;'#13#10'    signature           = 0x1e 0x93 0x0d;'#13#10
+  +'    pagel               = 0xb3;'#13#10'    bs2                 = 0xb2;'#13
+  +#10'    chip_erase_delay    = 4000;'#13#10#13#10'    pgm_enable          = "'
+  +'1 0 1 0  1 1 0 0   0 1 0 1  0 0 1 1",'#13#10'                          "x x'
+  +' x x  x x x x   x x x x  x x x x";'#13#10#13#10'    chip_erase          = "'
+  +'1 0 1 0  1 1 0 0   1 0 0 x  x x x x",'#13#10'                          "x x'
+  +' x x  x x x x   x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'#13
+  +#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'    s'
+  +'ynchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollindex'#9
+  +#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13
   +#10'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10#13#10'   '
   +' pp_controlstack     ='#13#10'        0xC4, 0xE4, 0xC4, 0xE4, 0xCC, 0xEC, 0'
   +'xCC, 0xEC,'#13#10'        0xD4, 0xF4, 0xD4, 0xF4, 0xDC, 0xFC, 0xDC, 0xFC,'
@@ -4173,108 +4287,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'= 0;'#13#10'    hvleavestabdelay    = 15;'#13#10'    chiperasepulsewidth = '
   +'0;'#13#10'    chiperasepolltimeout = 10;'#13#10'    programfusepulsewidth ='
   +' 0;'#13#10'    programfusepolltimeout = 5;'#13#10'    programlockpulsewidth'
-  +' = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10'    memory "eepro'
-  +'m"'#13#10'        paged           = no;'#13#10'        size            = 25'
-  +'6;'#13#10'        page_size       = 4;'#13#10'        num_pages       = 64;'
-  +#13#10'        min_write_delay = 4000;'#13#10'        max_write_delay = 4000'
-  +';'#13#10'        readback_p1     = 0xff;'#13#10'        readback_p2     = 0'
-  +'xff;'#13#10#13#10'        read            = " 1  0  1  0   0  0  0  0    x '
-  +'x x x  x x x x",'#13#10'                          "a7 a6 a5 a4  a3 a2 a1 a0'
-  +'    o o o o  o o o o";'#13#10#13#10'        write           = " 1  1  0  0 '
-  +'  0  0  0  0    x x x x  x x x x",'#13#10'                          "a7 a6 '
-  +'a5 a4  a3 a2 a1 a0    i i i i  i i i i";'#13#10#13#10#9'loadpage_lo'#9'= " '
-  +' 1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  0   0   0   0      0 '
-  +'  0   0   0",'#13#10#9#9#9'  "  0   0   0   0      0   0  a1  a0",'#13#10#9
-  +#9#9'  "  i   i   i   i      i   i   i   i";'#13#10#13#10#9'writepage'#9'= "'
-  +'  1   1   0   0      0   0   1   0",'#13#10#9#9#9'  "  0   0   x   x      x'
-  +'   x   x   x",'#13#10#9#9#9'  " a7  a6  a5  a4     a3  a2   0   0",'#13#10#9
-  +#9#9'  "  x   x   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'= 0x41'
-  +';'#13#10#9'delay'#9#9'= 10;'#13#10#9'blocksize'#9'= 4;'#13#10#9'readsize'#9
-  +'= 256;'#13#10'    ;'#13#10#13#10'    memory "flash"'#13#10'        paged   '
-  +'        = yes;'#13#10'        size            = 4096;'#13#10'        page_s'
-  +'ize       = 64;'#13#10'        num_pages       = 64;'#13#10'        min_wri'
-  +'te_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10'        read'
-  +'back_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'#13#10#13#10'   '
-  +'     read_lo         = "  0  0  1  0   0   0  0  0",'#13#10'               '
-  +'           "  x  x  x  x   x a10 a9 a8",'#13#10'                          "'
-  +' a7 a6 a5 a4  a3  a2 a1 a0",'#13#10'                          "  o  o  o  o'
-  +'   o   o  o  o";'#13#10#13#10'        read_hi         = "  0  0  1  0   1  '
-  +' 0  0  0",'#13#10'                          "  x  x  x  x   x a10 a9 a8",'
-  +#13#10'                          " a7 a6 a5 a4  a3  a2 a1 a0",'#13#10'      '
-  +'                    "  o  o  o  o   o   o  o  o";'#13#10#13#10'        load'
-  +'page_lo     = "  0  1  0  0   0  0  0  0",'#13#10'                         '
-  +' "  x  x  x  x   x  x  x  x",'#13#10'                          "  x  x  x a'
-  +'4  a3 a2 a1 a0",'#13#10'                          "  i  i  i  i   i  i  i  '
-  +'i";'#13#10#13#10'        loadpage_hi     = "  0  1  0  0   1  0  0  0",'#13
-  +#10'                          "  x  x  x  x   x  x  x  x",'#13#10'          '
-  +'                "  x  x  x a4  a3 a2 a1 a0",'#13#10'                       '
-  +'   "  i  i  i  i   i  i  i  i";'#13#10#13#10'        writepage       = "  0'
-  +'  1  0  0   1   1  0  0",'#13#10'                          "  x  x  x  x   '
-  +'x a10 a9 a8",'#13#10'                          " a7 a6 a5  x   x   x  x  x"'
-  +','#13#10'                          "  x  x  x  x   x   x  x  x";'#13#10#13
-  +#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= 64;'
-  +#13#10#9'readsize'#9'= 256;'#13#10'    ;'#13#10#13#10'    memory "signature"'
-  +#13#10'        size            = 3;'#13#10'        read            = "0  0  '
-  +'1  1   0  0  0  0    x x x x  x x x x",'#13#10'                          "0'
-  +'  0  0  0   0  0 a1 a0    o o o o  o o o o";'#13#10'    ;'#13#10#13#10'    '
-  +'memory "lock"'#13#10'        size            = 1;'#13#10'        read      '
-  +'      = "0  1  0  1   1  0  0  0    x x x x  x x x x",'#13#10'             '
-  +'             "x  x  x  x   x  x  x  x    x x x x  x x o o";'#13#10#13#10'  '
-  +'      write           = "1  0  1  0   1  1  0  0    1 1 1 1  1 1 i i",'#13
-  +#10'                          "x  x  x  x   x  x  x  x    x x x x  x x x x";'
-  +#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500'
-  ,';'#13#10'    ;'#13#10#13#10'    memory "lfuse"'#13#10'        size         '
-  +'   = 1;'#13#10'        write           = "1 0 1 0  1 1 0 0  1 0 1 0  0 0 0 '
-  +'0",'#13#10'                          "x x x x  x x x x  i i i i  i i i i";'
-  +#13#10#13#10'        read            = "0 1 0 1  0 0 0 0  0 0 0 0  0 0 0 0",'
-  +#13#10'                          "x x x x  x x x x  o o o o  o o o o";'#13#10
-  +'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13
-  +#10'      ;'#13#10#13#10'    memory "hfuse"'#13#10'        size            ='
-  +' 1;'#13#10'        write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'
-  +#13#10'                          "x x x x  x x x x  i i i i  i i i i";'#13#10
-  +#13#10'        read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10
-  +'                          "x x x x  x x x x  o o o o  o o o o";'#13#10'    '
-  +'    min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10' '
-  +'     ;'#13#10#13#10'    memory "efuse"'#13#10'        size            = 1;'
-  +#13#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0  0 1 0 0",'#13
-  +#10'                          "x x x x  x x x x   x x x x  x x x i";'#13#10
-  +#13#10'        read            = "0 1 0 1  0 0 0 0   0 0 0 0  1 0 0 0",'#13
-  +#10'                          "x x x x  x x x x   x x x x  x x x o";'#13#10
-  +'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13
-  +#10'      ;'#13#10#13#10'    memory "calibration"'#13#10'        size       '
-  +'     = 1;'#13#10'        read            = "0  0  1  1   1  0  0  0    x x '
-  +'x x  x x x x",'#13#10'                          "0  0  0  0   0  0  0  0   '
-  +' o o o o  o o o o";'#13#10'    ;'#13#10#13#10';'#13#10#13#10#13#10'#-------'
-  +'-----------------------------------------------------'#13#10'# ATtiny861'#13
-  +#10'#------------------------------------------------------------'#13#10'# C'
-  +'lose to ATtiny461'#13#10#13#10'part'#13#10'    id                  = "t861"'
-  +';'#13#10'    desc                = "ATTINY861";'#13#10'     has_debugwire ='
-  +' yes;'#13#10'     flash_instr   = 0xB4, 0x00, 0x10;'#13#10'     eeprom_inst'
-  +'r  = 0xBB, 0xFF, 0xBB, 0xEE, 0xBB, 0xCC, 0xB2, 0x0D,'#13#10#9'             '
-  +'0xBC, 0x00, 0xB4, 0x00, 0xBA, 0x0D, 0xBB, 0xBC,'#13#10#9'             0x99,'
-  +' 0xE1, 0xBB, 0xAC;'#13#10'#    stk500_devcode      = 0x21;'#13#10'#    avr9'
-  +'10_devcode      = 0x5e;'#13#10'    signature           = 0x1e 0x93 0x0d;'#13
-  +#10'    pagel               = 0xb3;'#13#10'    bs2                 = 0xb2;'
-  +#13#10'    chip_erase_delay    = 4000;'#13#10#13#10'    pgm_enable          '
-  +'= "1 0 1 0  1 1 0 0   0 1 0 1  0 0 1 1",'#13#10'                          "'
-  +'x x x x  x x x x   x x x x  x x x x";'#13#10#13#10'    chip_erase          '
-  +'= "1 0 1 0  1 1 0 0   1 0 0 x  x x x x",'#13#10'                          "'
-  +'x x x x  x x x x   x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'
-  +#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'  '
-  +'  synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    pollindex'
-  +#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13
-  +#10'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 0;'#13#10#13#10'   '
-  +' pp_controlstack     ='#13#10'        0xC4, 0xE4, 0xC4, 0xE4, 0xCC, 0xEC, 0'
-  +'xCC, 0xEC,'#13#10'        0xD4, 0xF4, 0xD4, 0xF4, 0xDC, 0xFC, 0xDC, 0xFC,'
-  +#13#10'        0xC8, 0xE8, 0xD8, 0xF8, 0x4C, 0x6C, 0x5C, 0x7C,'#13#10'      '
-  +'  0xEC, 0xBC, 0x00, 0x06, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdel'
-  +'ay    = 100;'#13#10'    progmodedelay       = 0;'#13#10'    latchcycles    '
-  +'     = 5;'#13#10'    togglevtg           = 1;'#13#10'    poweroffdelay     '
-  +'  = 15;'#13#10'    resetdelayms        = 2;'#13#10'    resetdelayus        '
-  +'= 0;'#13#10'    hvleavestabdelay    = 15;'#13#10'    chiperasepulsewidth = '
-  +'0;'#13#10'    chiperasepolltimeout = 10;'#13#10'    programfusepulsewidth ='
-  +' 0;'#13#10'    programfusepolltimeout = 5;'#13#10'    programlockpulsewidth'
-  +' = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10'    memory "eepro'
+  ,' = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10'    memory "eepro'
   +'m"'#13#10'        paged           = no;'#13#10'        size            = 51'
   +'2;'#13#10'        num_pages       = 128;'#13#10'        page_size       = 4'
   +';'#13#10'        min_write_delay = 4000;'#13#10'        max_write_delay = 4'
@@ -4287,7 +4300,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  0   0   0   0  '
   +'    0   0   0   0",'#13#10#9#9#9'  "  0   0   0   0      0   0  a1  a0",'#13
   +#10#9#9#9'  "  i   i   i   i      i   i   i   i";'#13#10#13#10#9'writepage'#9
-  ,'= "  1   1   0   0      0   0   1   0",'#13#10#9#9#9'  "  0   0   x   x    '
+  +'= "  1   1   0   0      0   0   1   0",'#13#10#9#9#9'  "  0   0   x   x    '
   +'  x   x   x  a8",'#13#10#9#9#9'  " a7  a6  a5  a4     a3  a2   0   0",'#13
   +#10#9#9#9'  "  x   x   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'='
   +' 0x41;'#13#10#9'delay'#9#9'= 10;'#13#10#9'blocksize'#9'= 4;'#13#10#9'readsi'
@@ -4338,7 +4351,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'o";'#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay ='
   +' 4500;'#13#10'      ;'#13#10#13#10'    memory "efuse"'#13#10'        size  '
   +'          = 1;'#13#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0'
-  +'  0 1 0 0",'#13#10'                          "x x x x  x x x x   x x x x  x'
+  ,'  0 1 0 0",'#13#10'                          "x x x x  x x x x   x x x x  x'
   +' x x i";'#13#10#13#10'        read            = "0 1 0 1  0 0 0 0   0 0 0 0'
   +'  1 0 0 0",'#13#10'                          "x x x x  x x x x   x x x x  x'
   +' x x o";'#13#10'        min_write_delay = 4500;'#13#10'        max_write_de'
@@ -4351,7 +4364,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'----'#13#10#13#10'part'#13#10'    id               = "m48";'#13#10'    desc'
   +'             = "ATMEGA48";'#13#10'     has_debugwire = yes;'#13#10'     fla'
   +'sh_instr   = 0xB6, 0x01, 0x11;'#13#10'     eeprom_instr  = 0xBD, 0xF2, 0xBD'
-  ,', 0xE1, 0xBB, 0xCF, 0xB4, 0x00,'#13#10#9'             0xBE, 0x01, 0xB6, 0x0'
+  +', 0xE1, 0xBB, 0xCF, 0xB4, 0x00,'#13#10#9'             0xBE, 0x01, 0xB6, 0x0'
   +'1, 0xBC, 0x00, 0xBB, 0xBF,'#13#10#9'             0x99, 0xF9, 0xBB, 0xAF;'#13
   +#10'    stk500_devcode   = 0x59;'#13#10'#    avr910_devcode   = 0x;'#13#10' '
   +'   signature        = 0x1e 0x92 0x05;'#13#10'    pagel            = 0xd7;'
@@ -4402,7 +4415,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'      = "  0   0   1   0    0   0   0   0",'#13#10'                        '
   +'  "  0   0   0   0    0 a10  a9  a8",'#13#10'                          " a7'
   +'  a6  a5  a4   a3  a2  a1  a0",'#13#10'                          "  o   o  '
-  +' o   o    o   o   o   o";'#13#10#13#10'        read_hi         = "  0   0  '
+  ,' o   o    o   o   o   o";'#13#10#13#10'        read_hi         = "  0   0  '
   +' 1   0    1   0   0   0",'#13#10'                          "  0   0   0   0'
   +'    0 a10  a9  a8",'#13#10'                          " a7  a6  a5  a4   a3 '
   +' a2  a1  a0",'#13#10'                          "  o   o   o   o    o   o   '
@@ -4415,7 +4428,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'                         "  x   x   x  a4     a3  a2  a1  a0",'#13#10'     '
   +'                     "  i   i   i   i      i   i   i   i";'#13#10#13#10'   '
   +'     writepage       = "  0   1   0   0      1   1   0   0",'#13#10'       '
-  ,'                   "  0   0   0   0      0 a10  a9  a8",'#13#10'           '
+  +'                   "  0   0   0   0      0 a10  a9  a8",'#13#10'           '
   +'               " a7  a6  a5   x      x   x   x   x",'#13#10'               '
   +'           "  x   x   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'='
   +' 0x41;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= 64;'#13#10#9'readsi'
@@ -4466,7 +4479,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'ase       = "1 0 1 0  1 1 0 0    1 0 0 x  x x x x",'#13#10'                '
   +'       "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'    timeout'#9#9
   +'= 200;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'
-  +#13#10'    synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    p'
+  ,#13#10'    synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    p'
   +'ollindex'#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9
   +#9'= 1;'#13#10'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 1;'#13#10
   +#13#10'    pp_controlstack     ='#13#10#9'0x0E, 0x1E, 0x0F, 0x1F, 0x2E, 0x3E'
@@ -4479,7 +4492,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'vleavestabdelay    = 15;'#13#10'    resetdelay          = 15;'#13#10'    ch'
   +'iperasepulsewidth = 0;'#13#10'    chiperasepolltimeout = 10;'#13#10'    pro'
   +'gramfusepulsewidth = 0;'#13#10'    programfusepolltimeout = 5;'#13#10'    p'
-  ,'rogramlockpulsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13
+  +'rogramlockpulsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13
   +#10'    memory "eeprom"'#13#10'        paged           = no;'#13#10'        '
   +'page_size       = 4;'#13#10'        size            = 512;'#13#10'        m'
   +'in_write_delay = 3600;'#13#10'        max_write_delay = 3600;'#13#10'      '
@@ -4530,7 +4543,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'0 0 0 0",'#13#10'                          "x x x x  x x x x   o o o o  o o'
   +' o o";'#13#10#13#10'        write           = "1 0 1 0  1 1 0 0   1 0 1 0  '
   +'0 0 0 0",'#13#10'                          "x x x x  x x x x   i i i i  i i'
-  +' i i";'#13#10'      ;'#13#10#13#10'    memory "hfuse"'#13#10'        size  '
+  ,' i i";'#13#10'      ;'#13#10#13#10'    memory "hfuse"'#13#10'        size  '
   +'          = 1;'#13#10'        min_write_delay = 4500;'#13#10'        max_wr'
   +'ite_delay = 4500;'#13#10'        read            = "0 1 0 1  1 0 0 0   0 0 '
   +'0 0  1 0 0 0",'#13#10'                          "x x x x  x x x x   o o o o'
@@ -4543,7 +4556,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'x x x  x o o o";'#13#10#13#10'        write           = "1 0 1 0  1 1 0 0  '
   +' 1 0 1 0  0 1 0 0",'#13#10'                          "x x x x  x x x x   x '
   +'x x x  x i i i";'#13#10'      ;'#13#10#13#10'    memory "lock"'#13#10'     '
-  ,'   size            = 1;'#13#10'        min_write_delay = 4500;'#13#10'     '
+  +'   size            = 1;'#13#10'        min_write_delay = 4500;'#13#10'     '
   +'   max_write_delay = 4500;'#13#10'        read            = "0 1 0 1  1 0 0'
   +' 0   0 0 0 0  0 0 0 0",'#13#10'                          "x x x x  x x x x '
   +'  x x o o  o o o o";'#13#10#13#10'        write           = "1 0 1 0  1 1 0'
@@ -4594,7 +4607,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'                   "  0   0   0   x      x   x   x  a8",'#13#10'           '
   +'               " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10'               '
   +'           "  o   o   o   o      o   o   o   o";'#13#10#13#10'        write'
-  +'           = "  1   1   0   0      0   0   0   0",'#13#10'                 '
+  ,'           = "  1   1   0   0      0   0   0   0",'#13#10'                 '
   +'         "  0   0   0   x      x   x   x  a8",'#13#10'                     '
   +'     " a7  a6  a5  a4     a3  a2  a1  a0", '#13#10'                        '
   +'  "  i   i   i   i      i   i   i   i";'#13#10#13#10'        loadpage_lo   '
@@ -4607,7 +4620,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'a4     a3  a2   0   0",'#13#10'                          "  x   x   x   x  '
   +'    x   x   x   x";'#13#10#13#10'        mode            = 0x41;'#13#10'   '
   +'     delay           = 20;'#13#10'        blocksize       = 4;'#13#10'     '
-  ,'   readsize        = 256;'#13#10'      ;'#13#10'    memory "flash"'#13#10' '
+  +'   readsize        = 256;'#13#10'      ;'#13#10'    memory "flash"'#13#10' '
   +'       paged           = yes;'#13#10'        size            = 8192;'#13#10
   +'        page_size       = 64;'#13#10'        num_pages       = 128;'#13#10
   +'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13
@@ -4658,7 +4671,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' x x   x x o o  o o o o";'#13#10#13#10'        write           = "1 0 1 0  '
   +'1 1 0 0   1 1 1 x  x x x x",'#13#10'                          "x x x x  x x'
   +' x x   1 1 i i  i i i i";'#13#10'      ;'#13#10#13#10'    memory "calibrati'
-  +'on"'#13#10'        size            = 1;'#13#10'        read            = "0'
+  ,'on"'#13#10'        size            = 1;'#13#10'        read            = "0'
   +'  0  1  1   1  0  0  0   0  0  0  x   x  x  x  x",'#13#10'                 '
   +'         "0  0  0  0   0  0  0  0   o  o  o  o   o  o  o  o";'#13#10'      '
   +';'#13#10#13#10'    memory "signature"'#13#10'        size            = 3;'
@@ -4671,7 +4684,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'ATMEGA168";'#13#10'     has_debugwire = yes;'#13#10'     flash_instr   = 0x'
   +'B6, 0x01, 0x11;'#13#10'     eeprom_instr  = 0xBD, 0xF2, 0xBD, 0xE1, 0xBB, 0'
   +'xCF, 0xB4, 0x00,'#13#10#9'             0xBE, 0x01, 0xB6, 0x01, 0xBC, 0x00, '
-  ,'0xBB, 0xBF,'#13#10#9'             0x99, 0xF9, 0xBB, 0xAF;'#13#10'    stk500'
+  +'0xBB, 0xBF,'#13#10#9'             0x99, 0xF9, 0xBB, 0xAF;'#13#10'    stk500'
   +'_devcode  = 0x86;'#13#10'    # avr910_devcode = 0x;'#13#10'    signature   '
   +'    = 0x1e 0x94 0x06;'#13#10'    pagel           = 0xd7;'#13#10'    bs2    '
   +'         = 0xc2;'#13#10'    chip_erase_delay = 9000;'#13#10'    pgm_enable '
@@ -4722,7 +4735,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' o";'#13#10'        '#13#10'        read_hi          = " 0 0 1 0 1 0 0 0",'
   +#13#10'                           " 0 0 0 a12 a11 a10 a9 a8",'#13#10'       '
   +'                    " a7 a6 a5 a4 a3 a2 a1 a0",'#13#10'                    '
-  +'       " o o o o o o o o";'#13#10'        '#13#10'        loadpage_lo     ='
+  ,'       " o o o o o o o o";'#13#10'        '#13#10'        loadpage_lo     ='
   +' " 0 1 0 0 0 0 0 0",'#13#10'                          " 0 0 0 x x x x x",'
   +#13#10'                          " x x a5 a4 a3 a2 a1 a0",'#13#10'          '
   +'                " i i i i i i i i";'#13#10'        '#13#10'        loadpage'
@@ -4735,7 +4748,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'    mode        = 0x41;'#13#10'        delay       = 6;'#13#10'        bloc'
   +'ksize   = 128;'#13#10'        readsize    = 256;'#13#10#13#10'        ;'#13
   +#10'        '#13#10'    memory "lfuse"'#13#10'        size            = 1;'
-  ,#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500'
+  +#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500'
   +';'#13#10'        read            = "0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0",'#13#10
   +'                          "x x x x x x x x o o o o o o o o";'#13#10'       '
   +' '#13#10'        write           = "1 0 1 0 1 1 0 0 1 0 1 0 0 0 0 0",'#13#10
@@ -4786,7 +4799,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'   ='#13#10#9'0x0E, 0x1E, 0x0F, 0x1F, 0x2E, 0x3E, 0x2F, 0x3F,'#13#10#9'0x4E'
   +', 0x5E, 0x4F, 0x5F, 0x6E, 0x7E, 0x6F, 0x7F,'#13#10#9'0x66, 0x76, 0x67, 0x77'
   +', 0x6A, 0x7A, 0x6B, 0x7B,'#13#10#9'0xBE, 0xFD, 0x00, 0x01, 0x00, 0x00, 0x00'
-  +', 0x00;'#13#10'    hventerstabdelay    = 100;'#13#10'    progmodedelay     '
+  ,', 0x00;'#13#10'    hventerstabdelay    = 100;'#13#10'    progmodedelay     '
   +'  = 0;'#13#10'    latchcycles         = 5;'#13#10'    togglevtg           ='
   +' 1;'#13#10'    poweroffdelay       = 15;'#13#10'    resetdelayms        = 1'
   +';'#13#10'    resetdelayus        = 0;'#13#10'    hvleavestabdelay    = 15;'
@@ -4799,7 +4812,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'        max_write_delay = 3600;'#13#10'        readback_p1     = 0xff;'#13
   +#10'        readback_p2     = 0xff;'#13#10'        read            = " 1 0 1'
   +' 0 0 0 0 0",'#13#10'                          " 0 0 0 x x x x a8",'#13#10' '
-  ,'                         " a7 a6 a5 a4 a3 a2 a1 a0",'#13#10'               '
+  +'                         " a7 a6 a5 a4 a3 a2 a1 a0",'#13#10'               '
   +'           " o o o o o o o o";'#13#10'    '#13#10'        write           ='
   +' " 1 1 0 0 0 0 0 0",'#13#10'                          " 0 0 0 x x x x a8",'
   +#13#10'                          " a7 a6 a5 a4 a3 a2 a1 a0",'#13#10'        '
@@ -4850,7 +4863,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13
   +#10'        read            = "0 1 0 1 0 0 0 0 0 0 0 0 1 0 0 0",'#13#10'    '
   +'                      "x x x x x x x x x x x x x o o o";'#13#10'        '#13
-  +#10'        write           = "1 0 1 0 1 1 0 0 1 0 1 0 0 1 0 0",'#13#10'    '
+  ,#10'        write           = "1 0 1 0 1 1 0 0 1 0 1 0 0 1 0 0",'#13#10'    '
   +'                      "x x x x x x x x x x x x x i i i";'#13#10'        ;'
   +#13#10'    '#13#10'    memory "lock"'#13#10'        size            = 1;'#13
   +#10'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'
@@ -4863,7 +4876,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'                          "0 0 0 0 0 0 0 0 o o o o o o o o";'#13#10' '
   +'       ;'#13#10'    '#13#10'    memory "signature"'#13#10'        size     '
   +'       = 3;'#13#10'        read            = "0 0 1 1 0 0 0 0 0 0 0 x x x x'
-  ,' x",'#13#10'                          "x x x x x x a1 a0 o o o o o o o o";'
+  +' x",'#13#10'                          "x x x x x x a1 a0 o o o o o o o o";'
   +#13#10'        ;'#13#10';'#13#10#13#10'#------------------------------------'
   +'------------------------'#13#10'# ATtiny88'#13#10'#------------------------'
   +'------------------------------------'#13#10#13#10'part'#13#10'    id       '
@@ -4914,7 +4927,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 20;'#13#10#9'blocksize'#9'= 4;'
   +#13#10#9'readsize'#9'= 64;'#13#10'      ;'#13#10'    memory "flash"'#13#10' '
   +'       paged           = yes;'#13#10'        size            = 8192;'#13#10
-  +'        page_size       = 64;'#13#10'        num_pages       = 128;'#13#10
+  ,'        page_size       = 64;'#13#10'        num_pages       = 128;'#13#10
   +'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13
   +#10'        readback_p1     = 0xff;'#13#10'        readback_p2     = 0xff;'
   +#13#10'        read_lo         = "  0   0   1   0    0   0   0   0",'#13#10
@@ -4927,7 +4940,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'   o   o   o    o   o   o   o";'#13#10#13#10'        loadpage_lo     = "  0'
   +'   1   0   0      0   0   0   0",'#13#10'                          "  0   0'
   +'   0   x      x   x   x   x",'#13#10'                          "  x   x   x'
-  ,'  a4     a3  a2  a1  a0",'#13#10'                          "  i   i   i   i'
+  +'  a4     a3  a2  a1  a0",'#13#10'                          "  i   i   i   i'
   +'      i   i   i   i";'#13#10#13#10'        loadpage_hi     = "  0   1   0  '
   +' 0      1   0   0   0",'#13#10'                          "  0   0   0   x  '
   +'    x   x   x   x",'#13#10'                          "  x   x   x  a4     a'
@@ -4978,7 +4991,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'xBC, 0x00, 0xBB, 0xBF,'#13#10#9#9#9'  0x99, 0xF9, 0xBB, 0xAF;'#13#10'    st'
   +'k500_devcode'#9'= 0x86;'#13#10'    # avr910_devcode'#9'= 0x;'#13#10'    sig'
   +'nature'#9#9'= 0x1e 0x95 0x0F;'#13#10'    pagel'#9#9'= 0xd7;'#13#10'    bs2'
-  +#9#9#9'= 0xc2;'#13#10'    chip_erase_delay'#9'= 9000;'#13#10'    pgm_enable '
+  ,#9#9#9'= 0xc2;'#13#10'    chip_erase_delay'#9'= 9000;'#13#10'    pgm_enable '
   +'= "1 0 1 0 1 1 0 0 0 1 0 1 0 0 1 1",'#13#10#9#9' "x x x x x x x x x x x x x'
   +' x x x";'#13#10#13#10'    chip_erase = "1 0 1 0 1 1 0 0 1 0 0 x x x x x",'
   +#13#10#9#9' "x x x x x x x x x x x x x x x x";'#13#10#13#10'    timeout'#9'='
@@ -4991,7 +5004,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10#9'0xBE, 0xFD, 0x00, 0x01, 0x00, 0x00, '
   +'0x00, 0x00;'#13#10'    hventerstabdelay'#9'= 100;'#13#10'    progmodedelay'
   +#9'= 0;'#13#10'    latchcycles'#9#9'= 5;'#13#10'    togglevtg'#9#9'= 1;'#13
-  ,#10'    poweroffdelay'#9'= 15;'#13#10'    resetdelayms'#9'= 1;'#13#10'    re'
+  +#10'    poweroffdelay'#9'= 15;'#13#10'    resetdelayms'#9'= 1;'#13#10'    re'
   +'setdelayus'#9'= 0;'#13#10'    hvleavestabdelay'#9'= 15;'#13#10'    resetdel'
   +'ay'#9#9'= 15;'#13#10'    chiperasepulsewidth'#9'= 0;'#13#10'    chiperasepo'
   +'lltimeout = 10;'#13#10'    programfusepulsewidth = 0;'#13#10'    programfus'
@@ -5042,7 +5055,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' x x x x x x i i i";'#13#10'    ;'#13#10#13#10'    memory "lock"'#13#10#9's'
   +'ize = 1;'#13#10#9'min_write_delay = 4500;'#13#10#9'max_write_delay = 4500;'
   +#13#10#9'read = "0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0",'#13#10#9'       "x x x x '
-  +'x x x x x x o o o o o o";'#13#10#13#10#9'write = "1 0 1 0 1 1 0 0 1 1 1 x x'
+  ,'x x x x x x o o o o o o";'#13#10#13#10#9'write = "1 0 1 0 1 1 0 0 1 1 1 x x'
   +' x x x",'#13#10#9'      '#9'"x x x x x x x x 1 1 i i i i i i";'#13#10'    ;'
   +#13#10#13#10'    memory "calibration"'#13#10#9'size = 1;'#13#10#9'read = "0 '
   +'0 1 1 1 0 0 0 0 0 0 x x x x x",'#13#10#9'       "0 0 0 0 0 0 0 0 o o o o o '
@@ -5055,7 +5068,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'ny2313";'#13#10'     has_debugwire = yes;'#13#10'     flash_instr   = 0xB2,'
   +' 0x0F, 0x1F;'#13#10'     eeprom_instr  = 0xBB, 0xFE, 0xBB, 0xEE, 0xBB, 0xCC'
   +', 0xB2, 0x0D,'#13#10#9'             0xBA, 0x0F, 0xB2, 0x0F, 0xBA, 0x0D, 0xB'
-  ,'B, 0xBC,'#13#10#9'             0x99, 0xE1, 0xBB, 0xAC;'#13#10'     stk500_d'
+  +'B, 0xBC,'#13#10#9'             0x99, 0xE1, 0xBB, 0xAC;'#13#10'     stk500_d'
   +'evcode   = 0x23;'#13#10'##   Use the ATtiny26 devcode:'#13#10'     avr910_d'
   +'evcode   = 0x5e;'#13#10'     signature        = 0x1e 0x91 0x0a;'#13#10'    '
   +' pagel            = 0xD4;'#13#10'     bs2              = 0xD6;'#13#10'     '
@@ -5106,7 +5119,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' o   o   o";'#13#10#13#10'         read_hi         = "  0   0   1   0    1 '
   +'  0   0   0",'#13#10'                           "  0   0   0   0    0   0  '
   +'a9  a8",'#13#10'                           " a7  a6  a5  a4   a3  a2  a1  a'
-  +'0",'#13#10'                           "  o   o   o   o    o   o   o   o";'
+  ,'0",'#13#10'                           "  o   o   o   o    o   o   o   o";'
   +#13#10#13#10'# The information in the data sheet of April/2004 is wrong, thi'
   +'s works:'#13#10'         loadpage_lo     = "  0   1   0   0    0   0   0   '
   +'0",'#13#10'                           "  0   0   0   x    x   x   x   x",'
@@ -5119,7 +5132,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'               "  i   i   i   i    i   i   i   i";'#13#10#13#10'# The infor'
   +'mation in the data sheet of April/2004 is wrong, this works:'#13#10'       '
   +'  writepage       = "  0  1  0  0   1  1  0  0",'#13#10'                   '
-  ,'        "  0  0  0  0   0  0 a9 a8",'#13#10'                           " a7'
+  +'        "  0  0  0  0   0  0 a9 a8",'#13#10'                           " a7'
   +' a6 a5 a4   x  x  x  x",'#13#10'                           "  x  x  x  x   '
   +'x  x  x  x";'#13#10#13#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 6;'#13
   +#10#9'blocksize'#9'= 32;'#13#10#9'readsize'#9'= 256;'#13#10'       ;'#13#10
@@ -5170,7 +5183,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'   reset            = io;'#13#10'     chip_erase_delay = 9000;'#13#10#13#10
   +'     pgm_enable       = "1 0 1 0  1 1 0 0    0 1 0 1  0 0 1 1",'#13#10'    '
   +'                    "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'  '
-  +'   chip_erase       = "1 0 1 0  1 1 0 0    1 0 0 x  x x x x",'#13#10'      '
+  ,'   chip_erase       = "1 0 1 0  1 1 0 0    1 0 0 x  x x x x",'#13#10'      '
   +'                  "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'    '
   +'timeout'#9#9'= 200;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'
   +#9#9'= 25;'#13#10'    synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'
@@ -5183,7 +5196,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10'    hventerstabdelay    = 100;'#13#10'    progmodedelay       = 0;'#13#10
   +'    latchcycles         = 5;'#13#10'    togglevtg           = 1;'#13#10'   '
   +' poweroffdelay       = 15;'#13#10'    resetdelayms        = 1;'#13#10'    r'
-  ,'esetdelayus        = 0;'#13#10'    hvleavestabdelay    = 15;'#13#10'    chi'
+  +'esetdelayus        = 0;'#13#10'    hvleavestabdelay    = 15;'#13#10'    chi'
   +'perasepulsewidth = 0;'#13#10'    chiperasepolltimeout = 10;'#13#10'    prog'
   +'ramfusepulsewidth = 0;'#13#10'    programfusepolltimeout = 5;'#13#10'    pr'
   +'ogramlockpulsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10
@@ -5234,7 +5247,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'                      "x  x  x  x   x  x a1 a0   o  o  o  o   o  o  o  o";'
   +#13#10'       ;'#13#10'     memory "lock"'#13#10'         size            = '
   +'1;'#13#10'         write           = "1 0 1 0  1 1 0 0  1 1 1 x  x x x x",'
-  +#13#10'                           "x x x x  x x x x  1 1 i i  i i i i";'#13
+  ,#13#10'                           "x x x x  x x x x  1 1 i i  i i i i";'#13
   +#10'         read           = "0 1 0 1  1 0 0 0  0 0 0 0  0 0 0 0",'#13#10' '
   +'                         "x x x x  x x x x  x x o o  o o o o";'#13#10'     '
   +'   min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'  '
@@ -5247,7 +5260,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'       ;'#13#10#13#10'     memory "hfuse"'#13#10'         size       '
   +'     = 1;'#13#10'         write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0'
   +' 0 0",'#13#10'                           "x x x x  x x x x  i i i i  i i i '
-  ,'i";'#13#10#13#10'         read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0'
+  +'i";'#13#10#13#10'         read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0'
   +' 0 0",'#13#10'                           "x x x x  x x x x  o o o o  o o o '
   +'o";'#13#10'        min_write_delay = 9000;'#13#10'        max_write_delay ='
   +' 9000;'#13#10'       ;'#13#10#13#10'     memory "efuse"'#13#10'         siz'
@@ -5298,7 +5311,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' "a7 a6 a5 a4  a3 a2 a1 a0  o o o o  o o o o";'#13#10#13#10'         write '
   +'          = "1  1  0  0   0  0  0  0   0 0 0 x  x x x a8",'#13#10'         '
   +'                  "a7 a6 a5 a4  a3 a2 a1 a0  i i i i  i i i i";'#13#10#13#10
-  +#9'loadpage_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  '
+  ,#9'loadpage_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  '
   +'0   0   0   0      0   0   0   0",'#13#10#9#9#9'  "  0   0   0   0      0  '
   +' 0  a1  a0",'#13#10#9#9#9'  "  i   i   i   i      i   i   i   i";'#13#10#13
   +#10#9'writepage'#9'= "  1   1   0   0      0   0   1   0",'#13#10#9#9#9'  " '
@@ -5311,7 +5324,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10'         min_write_delay = 4500;'#13#10'         max_write_delay = 4500;'
   +#13#10'         readback_p1     = 0xff;'#13#10'         readback_p2     = 0x'
   +'ff;'#13#10'         read_lo         = "  0   0   1   0    0   0   0   0",'
-  ,#13#10'                           "  0   0   0   0   a11 a10 a9  a8",'#13#10
+  +#13#10'                           "  0   0   0   0   a11 a10 a9  a8",'#13#10
   +'                           " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'     '
   +'                      "  o   o   o   o    o   o   o   o";'#13#10#13#10'    '
   +'     read_hi         = "  0   0   1   0    1   0   0   0",'#13#10'         '
@@ -5362,7 +5375,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10#13#10'     memory "calibration"'#13#10'         size            = 1;'
   +#13#10'         read            = "0  0  1  1   1  0  0  0    0 0 0 x  x x x'
   +' x",'#13#10'                           "0  0  0  0   0  0  0  0    o o o o '
-  +' o o o o";'#13#10'     ;'#13#10'  ;'#13#10#13#10'#-------------------------'
+  ,' o o o o";'#13#10'     ;'#13#10'  ;'#13#10#13#10'#-------------------------'
   +'-----------------------------------'#13#10'# AT90PWM3'#13#10'#-------------'
   +'-----------------------------------------------'#13#10#13#10'# Completely i'
   +'dentical to AT90PWM2 (including the signature!)'#13#10#13#10'part'#13#10'  '
@@ -5375,7 +5388,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'81;'#13#10'     pagel            = 0xD8;'#13#10'     bs2              = 0xE'
   +'2;'#13#10'     reset            = io;'#13#10'     chip_erase_delay = 9000;'
   +#13#10#13#10'     pgm_enable       = "1 0 1 0  1 1 0 0    0 1 0 1  0 0 1 1",'
-  ,#13#10'                        "x x x x  x x x x    x x x x  x x x x";'#13#10
+  +#13#10'                        "x x x x  x x x x    x x x x  x x x x";'#13#10
   +#13#10'     chip_erase       = "1 0 1 0  1 1 0 0    1 0 0 x  x x x x",'#13#10
   +'                        "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10
   +'    timeout'#9#9'= 200;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexed'
@@ -5426,7 +5439,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  x   x",'#13#10'                           "  x   x   x  a4   a3  a2  a1  '
   +'a0",'#13#10'                           "  i   i   i   i    i   i   i   i";'
   +#13#10#13#10'         loadpage_hi     = "  0   1   0   0    1   0   0   0",'
-  +#13#10'                           "  0   0   0   x    x   x   x   x",'#13#10
+  ,#13#10'                           "  0   0   0   x    x   x   x   x",'#13#10
   +'                           "  x   x   x  a4   a3  a2  a1  a0",'#13#10'     '
   +'                      "  i   i   i   i    i   i   i   i";'#13#10#13#10'    '
   +'     writepage       = "  0  1  0  0   1   1   0   0",'#13#10'             '
@@ -5439,7 +5452,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'read            = "0  0  1  1   0  0  0  0   0  0  x  x   x  x  x  x",'#13
   +#10'                           "x  x  x  x   x  x a1 a0   o  o  o  o   o  o '
   +' o  o";'#13#10'       ;'#13#10'     memory "lock"'#13#10'         size     '
-  ,'       = 1;'#13#10'         write           = "1 0 1 0  1 1 0 0  1 1 1 x  x'
+  +'       = 1;'#13#10'         write           = "1 0 1 0  1 1 0 0  1 1 1 x  x'
   +' x x x",'#13#10'                           "x x x x  x x x x  1 1 i i  i i '
   +'i i";'#13#10#13#10'         read            = "0 1 0 1  1 0 0 0  0 0 0 0  0'
   +' 0 0 0",'#13#10'                           "x x x x  x x x x  x x o o  o o '
@@ -5490,7 +5503,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E, 0x6F, 0x7F,'#13#10'        0'
   +'x66, 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10'        0xBE, 0xFD, 0'
   +'x00, 0x01, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay    = 100;'#13
-  +#10'    progmodedelay       = 0;'#13#10'    latchcycles         = 5;'#13#10
+  ,#10'    progmodedelay       = 0;'#13#10'    latchcycles         = 5;'#13#10
   +'    togglevtg           = 1;'#13#10'    poweroffdelay       = 15;'#13#10'  '
   +'  resetdelayms        = 1;'#13#10'    resetdelayus        = 0;'#13#10'    h'
   +'vleavestabdelay    = 15;'#13#10'    chiperasepulsewidth = 0;'#13#10'    chi'
@@ -5503,7 +5516,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'         readback_p2     = 0xff;'#13#10'         read            = "1  0  1'
   +'  0   0  0  0  0   0 0 0 x  x x x a8",'#13#10'                           "a'
   +'7 a6 a5 a4  a3 a2 a1 a0  o o o o  o o o o";'#13#10#13#10'         write    '
-  ,'       = "1  1  0  0   0  0  0  0   0 0 0 x  x x x a8",'#13#10'            '
+  +'       = "1  1  0  0   0  0  0  0   0 0 0 x  x x x a8",'#13#10'            '
   +'               "a7 a6 a5 a4  a3 a2 a1 a0  i i i i  i i i i";'#13#10#13#10#9
   +'loadpage_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  0 '
   +'  0   0   0      0   0   0   0",'#13#10#9#9#9'  "  0   0   0   0      0   0'
@@ -5554,7 +5567,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'                      "x x x x  x x x x  o o o o  o o o o";'#13#10'        '
   +'min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'     '
   +'  ;'#13#10#13#10'     memory "hfuse"'#13#10'         size            = 1;'
-  +#13#10'         write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13
+  ,#13#10'         write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13
   +#10'                           "x x x x  x x x x  i i i i  i i i i";'#13#10
   +#13#10'         read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13
   +#10'                           "x x x x  x x x x  o o o o  o o o o";'#13#10
@@ -5567,7 +5580,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'        min_write_delay = 9000;'#13#10'        max_write_delay = 9000'
   +';'#13#10'     ;'#13#10#13#10'     memory "calibration"'#13#10'         size'
   +'            = 1;'#13#10'         read            = "0  0  1  1   1  0  0  0'
-  ,'    0 0 0 x  x x x x",'#13#10'                           "0  0  0  0   0  0'
+  +'    0 0 0 x  x x x x",'#13#10'                           "0  0  0  0   0  0'
   +'  0  0    o o o o  o o o o";'#13#10'     ;'#13#10'  ;'#13#10#13#10'#-------'
   +'-----------------------------------------------------'#13#10'# AT90PWM3B'#13
   +#10'#------------------------------------------------------------'#13#10#13
@@ -5618,7 +5631,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#9'readsize'#9'= 256;'#13#10'       ;'#13#10'     memory "flash"'#13#10'    '
   +'     paged           = yes;'#13#10'         size            = 8192;'#13#10
   +'         page_size       = 64;'#13#10'         num_pages       = 128;'#13#10
-  +'         min_write_delay = 4500;'#13#10'         max_write_delay = 4500;'#13
+  ,'         min_write_delay = 4500;'#13#10'         max_write_delay = 4500;'#13
   +#10'         readback_p1     = 0xff;'#13#10'         readback_p2     = 0xff;'
   +#13#10'         read_lo         = "  0   0   1   0    0   0   0   0",'#13#10
   +'                           "  0   0   0   0   a11 a10 a9  a8",'#13#10'     '
@@ -5631,7 +5644,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  = "  0   1   0   0    0   0   0   0",'#13#10'                           "'
   +'  0   0   0   x    x   x   x   x",'#13#10'                           "  x  '
   +' x   x  a4   a3  a2  a1  a0",'#13#10'                           "  i   i   '
-  ,'i   i    i   i   i   i";'#13#10#13#10'         loadpage_hi     = "  0   1  '
+  +'i   i    i   i   i   i";'#13#10#13#10'         loadpage_hi     = "  0   1  '
   +' 0   0    1   0   0   0",'#13#10'                           "  0   0   0   '
   +'x    x   x   x   x",'#13#10'                           "  x   x   x  a4   a'
   +'3  a2  a1  a0",'#13#10'                           "  i   i   i   i    i   i'
@@ -5682,7 +5695,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'e in XML file, use the ATtiny45 one'#13#10'     stk500_devcode   = 0x14;'#13
   +#10'##  avr910_devcode   = ?;'#13#10'##  Try the AT90S2313 devcode:'#13#10' '
   +'    avr910_devcode   = 0x20;'#13#10'     signature        = 0x1e 0x91 0x08;'
-  +#13#10'     reset            = io;'#13#10'     chip_erase_delay = 4500;'#13
+  ,#13#10'     reset            = io;'#13#10'     chip_erase_delay = 4500;'#13
   +#10#13#10'     pgm_enable       = "1 0 1 0  1 1 0 0    0 1 0 1  0 0 1 1",'#13
   +#10'                        "x x x x  x x x x    x x x x  x x x x";'#13#10#13
   +#10'     chip_erase       = "1 0 1 0  1 1 0 0    1 0 0 x  x x x x",'#13#10' '
@@ -5695,7 +5708,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'0x1C, 0x2C, 0x3C, 0x64, 0x74, 0x66,'#13#10'        0x68, 0x78, 0x68, 0x68, '
   +'0x7A, 0x6A, 0x68, 0x78,'#13#10'        0x78, 0x7D, 0x6D, 0x0C, 0x80, 0x40, '
   +'0x20, 0x10,'#13#10'        0x11, 0x08, 0x04, 0x02, 0x03, 0x08, 0x04, 0x00;'
-  ,#13#10'    hventerstabdelay    = 100;'#13#10'    hvspcmdexedelay     = 0;'#13
+  +#13#10'    hventerstabdelay    = 100;'#13#10'    hvspcmdexedelay     = 0;'#13
   +#10'    synchcycles         = 6;'#13#10'    latchcycles         = 1;'#13#10
   +'    togglevtg           = 1;'#13#10'    poweroffdelay       = 25;'#13#10'  '
   +'  resetdelayms        = 1;'#13#10'    resetdelayus        = 0;'#13#10'    h'
@@ -5746,7 +5759,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'iny25 has Signature Bytes: 0x1E 0x91 0x08.'#13#10'     memory "signature"'
   +#13#10'         size            = 3;'#13#10'         read            = "0  0'
   +'  1  1   0  0  0  0   0  0  0  x   x  x  x  x",'#13#10'                    '
-  +'       "x  x  x  x   x  x a1 a0   o  o  o  o   o  o  o  o";'#13#10'       ;'
+  ,'       "x  x  x  x   x  x a1 a0   o  o  o  o   o  o  o  o";'#13#10'       ;'
   +#13#10'     memory "lock"'#13#10'         size            = 1;'#13#10'      '
   +'   write           = "1 0 1 0  1 1 0 0  1 1 1 x  x x x x",'#13#10'         '
   +'                  "x x x x  x x x x  1 1 i i  i i i i";'#13#10'        min_'
@@ -5759,7 +5772,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'   '
   +'    ;'#13#10#13#10'     memory "hfuse"'#13#10'         size            = 1;'
   +#13#10'         write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13
-  ,#10'                           "x x x x  x x x x  i i i i  i i i i";'#13#10
+  +#10'                           "x x x x  x x x x  i i i i  i i i i";'#13#10
   +#13#10'         read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13
   +#10'                           "x x x x  x x x x  o o o o  o o o o";'#13#10
   +'        min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13
@@ -5810,7 +5823,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' 0  0  0    0 0 0 x  x x x x",'#13#10'                           "a7 a6 a5 '
   +'a4  a3 a2 a1 a0   o o o o  o o o o";'#13#10#13#10'         write           '
   +'= "1  1  0  0   0  0  0  0    0 0 0 x  x x x x",'#13#10'                   '
-  +'        "a7 a6 a5 a4  a3 a2 a1 a0   i i i i  i i i i";'#13#10#13#10#9'loadp'
+  ,'        "a7 a6 a5 a4  a3 a2 a1 a0   i i i i  i i i i";'#13#10#13#10#9'loadp'
   +'age_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  0   0  '
   +' 0   0      0   0   0   0",'#13#10#9#9#9'  "  0   0   0   0      0   0  a1 '
   +' a0",'#13#10#9#9#9'  "  i   i   i   i      i   i   i   i";'#13#10#13#10#9'w'
@@ -5823,7 +5836,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'         page_size       = 64;'#13#10'         num_pages       = 64;'#13#10
   +'         min_write_delay = 4500;'#13#10'         max_write_delay = 4500;'#13
   +#10'         readback_p1     = 0xff;'#13#10'         readback_p2     = 0xff;'
-  ,#13#10'         read_lo         = "  0   0   1   0    0   0   0   0",'#13#10
+  +#13#10'         read_lo         = "  0   0   1   0    0   0   0   0",'#13#10
   +'                           "  0   0   0   0    0  a10 a9  a8",'#13#10'     '
   +'                      " a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'          '
   +'                 "  o   o   o   o    o   o   o   o";'#13#10#13#10'         '
@@ -5874,7 +5887,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'ibration"'#13#10'         size            = 2;'#13#10'         read        '
   +'    = "0  0  1  1   1  0  0  0    0 0 0 x  x x x x",'#13#10'               '
   +'            "0  0  0  0   0  0  0  a0   o o o o  o o o o";'#13#10'     ;'#13
-  +#10'  ;'#13#10#13#10'#------------------------------------------------------'
+  ,#10'  ;'#13#10#13#10'#------------------------------------------------------'
   +'------'#13#10'# ATtiny85'#13#10'#------------------------------------------'
   +'------------------'#13#10#13#10'part'#13#10'     id            = "t85";'#13
   +#10'     desc          = "ATtiny85";'#13#10'     has_debugwire = yes;'#13#10
@@ -5887,7 +5900,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'signature        = 0x1e 0x93 0x0b;'#13#10'     reset            = io;'#13#10
   +'     chip_erase_delay = 4500;'#13#10#13#10'     pgm_enable       = "1 0 1 0'
   +'  1 1 0 0    0 1 0 1  0 0 1 1",'#13#10'                        "x x x x  x '
-  ,'x x x    x x x x  x x x x";'#13#10#13#10'     chip_erase       = "1 0 1 0  '
+  +'x x x    x x x x  x x x x";'#13#10#13#10'     chip_erase       = "1 0 1 0  '
   +'1 1 0 0    1 0 0 x  x x x x",'#13#10'                        "x x x x  x x '
   +'x x    x x x x  x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'#13#10'    s'
   +'tabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'#13#10'    synchloop'
@@ -5938,7 +5951,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'        "  x   x   x  a4   a3  a2  a1  a0",'#13#10'                        '
   +'   "  i   i   i   i    i   i   i   i";'#13#10#13#10'         loadpage_hi   '
   +'  = "  0   1   0   0    1   0   0   0",'#13#10'                           "'
-  +'  0   0   0   x    x   x   x   x",'#13#10'                           "  x  '
+  ,'  0   0   0   x    x   x   x   x",'#13#10'                           "  x  '
   +' x   x  a4   a3  a2  a1  a0",'#13#10'                           "  i   i   '
   +'i   i    i   i   i   i";'#13#10#13#10'         writepage       = "  0  1  0'
   +'  0   1   1   0  0",'#13#10'                           "  0  0  0  0  a11 a'
@@ -5951,7 +5964,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' 0  0  0  x   x  x  x  x",'#13#10'                           "x  x  x  x   '
   +'x  x a1 a0   o  o  o  o   o  o  o  o";'#13#10'       ;'#13#10'     memory "'
   +'lock"'#13#10'         size            = 1;'#13#10'         write           '
-  ,'= "1 0 1 0  1 1 0 0  1 1 1 x  x x x x",'#13#10'                           "'
+  +'= "1 0 1 0  1 1 0 0  1 1 1 x  x x x x",'#13#10'                           "'
   +'x x x x  x x x x  1 1 i i  i i i i";'#13#10'        min_write_delay = 9000;'
   +#13#10'        max_write_delay = 9000;'#13#10'       ;'#13#10#13#10'     mem'
   +'ory "lfuse"'#13#10'         size            = 1;'#13#10'         write     '
@@ -6002,7 +6015,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'delayus        = 0;'#13#10'    hvleavestabdelay    = 15;'#13#10'    chipera'
   +'sepulsewidth = 0;'#13#10'    chiperasepolltimeout = 10;'#13#10'    programf'
   +'usepulsewidth = 0;'#13#10'    programfusepolltimeout = 5;'#13#10'    progra'
-  +'mlockpulsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10'  '
+  ,'mlockpulsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13#10#13#10'  '
   +'  idr                 = 0x31;'#13#10'    spmcr               = 0x57;'#13#10
   +'    rampz               = 0x3b;'#13#10'    allowfullpagebitstream = no;'#13
   +#10#13#10'    memory "eeprom"'#13#10'        paged           = no; /* leave '
@@ -6015,7 +6028,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  '
   +'o   o   o   o      o   o   o   o";'#13#10#13#10'        write           = "'
   +'  1   1   0   0      0   0   0   0",'#13#10'                          "  x '
-  ,'  x   x   x    a11 a10  a9  a8",'#13#10'                          " a7  a6 '
+  +'  x   x   x    a11 a10  a9  a8",'#13#10'                          " a7  a6 '
   +' a5  a4     a3  a2  a1  a0", '#13#10'                          "  i   i   i'
   +'   i      i   i   i   i";'#13#10#13#10#9'loadpage_lo'#9'= "  1   1   0   0 '
   +'     0   0   0   1",'#13#10#9#9#9'  "  0   0   0   0      0   0   0   0",'
@@ -6066,7 +6079,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'se"'#13#10'        size            = 1;'#13#10'        write           = "1'
   +' 0 1 0  1 1 0 0  1 0 1 0  0 1 0 0",'#13#10'                          "x x x'
   +' x  x x x x  x x x x  x i i i";'#13#10#13#10'        read            = "0 1'
-  +' 0 1  0 0 0 0  0 0 0 0  1 0 0 0",'#13#10'                          "x x x x'
+  ,' 0 1  0 0 0 0  0 0 0 0  1 0 0 0",'#13#10'                          "x x x x'
   +'  x x x x  o o o o  o o o o";'#13#10'        min_write_delay = 9000;'#13#10
   +'        max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "loc'
   +'k"'#13#10'        size            = 1;'#13#10'        read            = "0 '
@@ -6079,7 +6092,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'     = "0 0 1 1  1 0 0 0    x x x x  x x x x",'#13#10'                     '
   +'     "0 0 0 0  0 0 0 0    o o o o  o o o o";'#13#10'      ;'#13#10#13#10'  '
   +'  memory "signature"'#13#10'        size            = 3;'#13#10'        rea'
-  ,'d            = "0  0  1  1   0  0  0  0   x  x  x  x   x  x  x  x",'#13#10
+  +'d            = "0  0  1  1   0  0  0  0   x  x  x  x   x  x  x  x",'#13#10
   +'                          "x  x  x  x   x  x a1 a0   o  o  o  o   o  o  o  '
   +'o";'#13#10'      ;'#13#10'  ;'#13#10#13#10'#-------------------------------'
   +'-----------------------------'#13#10'# ATmega1280'#13#10'#-----------------'
@@ -6130,7 +6143,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10#9#9#9'  " a7  a6  a5  a4     a3   0   0   0",'#13#10#9#9#9'  "  x   x'
   +'   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'= 0x41;'#13#10#9'del'
   +'ay'#9#9'= 10;'#13#10#9'blocksize'#9'= 8;'#13#10#9'readsize'#9'= 256;'#13#10
-  +'      ;'#13#10#13#10'    memory "flash"'#13#10'        paged           = ye'
+  ,'      ;'#13#10#13#10'    memory "flash"'#13#10'        paged           = ye'
   +'s;'#13#10'        size            = 131072;'#13#10'        page_size       '
   +'= 256;'#13#10'        num_pages       = 512;'#13#10'        min_write_delay'
   +' = 4500;'#13#10'        max_write_delay = 4500;'#13#10'        readback_p1 '
@@ -6143,7 +6156,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'a14 a13 a12    a11 a10  a9  a8",'#13#10'                          " a7  a6 '
   +' a5  a4     a3  a2  a1  a0",'#13#10'                          "  o   o   o '
   +'  o      o   o   o   o";'#13#10#13#10'        loadpage_lo     = "  0   1   '
-  ,'0   0      0   0   0   0",'#13#10'                          "  x   x   x   '
+  +'0   0      0   0   0   0",'#13#10'                          "  x   x   x   '
   +'x      x   x   x   x",'#13#10'                          "  x  a6  a5  a4   '
   +'  a3  a2  a1  a0",'#13#10'                          "  i   i   i   i      i'
   +'   i   i   i";'#13#10#13#10'        loadpage_hi     = "  0   1   0   0     '
@@ -6194,7 +6207,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'    has_jtag         = yes;'#13#10'#    stk500_devcode   = 0xB2;'#13
   +#10'#    avr910_devcode   = 0x43;'#13#10'    chip_erase_delay = 9000;'#13#10
   +'    pagel            = 0xD7;'#13#10'    bs2              = 0xA0;'#13#10'   '
-  +' reset            = dedicated;'#13#10'    pgm_enable       = "1 0 1 0  1 1 '
+  ,' reset            = dedicated;'#13#10'    pgm_enable       = "1 0 1 0  1 1 '
   +'0 0    0 1 0 1  0 0 1 1",'#13#10'                       "x x x x  x x x x  '
   +'  x x x x  x x x x";'#13#10#13#10'    chip_erase       = "1 0 1 0  1 1 0 0 '
   +'   1 0 0 0  0 0 0 0",'#13#10'                       "x x x x  x x x x    x '
@@ -6207,7 +6220,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E, 0x6F, 0x7F,'#13#10'        0x66'
   +', 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10'        0xBE, 0xFD, 0x00'
   +', 0x01, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay    = 100;'#13#10
-  ,'    progmodedelay       = 0;'#13#10'    latchcycles         = 5;'#13#10'   '
+  +'    progmodedelay       = 0;'#13#10'    latchcycles         = 5;'#13#10'   '
   +' togglevtg           = 1;'#13#10'    poweroffdelay       = 15;'#13#10'    r'
   +'esetdelayms        = 1;'#13#10'    resetdelayus        = 0;'#13#10'    hvle'
   +'avestabdelay    = 15;'#13#10'    chiperasepulsewidth = 0;'#13#10'    chiper'
@@ -6258,7 +6271,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'   i   i      i   i   i   i";'#13#10#13#10'        writepage       = "  0  '
   +' 1   0   0      1   1   0   0",'#13#10'                          "a15 a14 a'
   +'13 a12    a11 a10  a9  a8",'#13#10'                          " a7   x   x  '
-  +' x      x   x   x   x",'#13#10'                          "  x   x   x   x  '
+  ,' x      x   x   x   x",'#13#10'                          "  x   x   x   x  '
   +'    x   x   x   x";'#13#10#13#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= '
   +'10;'#13#10#9'blocksize'#9'= 256;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'
   +#13#10#13#10'    memory "lfuse"'#13#10'        size            = 1;'#13#10' '
@@ -6271,7 +6284,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'       write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10'     '
   +'                     "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10'   '
   +'     read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'       '
-  ,'                   "x x x x  x x x x  o o o o  o o o o";'#13#10'        min'
+  +'                   "x x x x  x x x x  o o o o  o o o o";'#13#10'        min'
   +'_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'      ;'
   +#13#10#13#10'    memory "efuse"'#13#10'        size            = 1;'#13#10' '
   +'       write           = "1 0 1 0  1 1 0 0  1 0 1 0  0 1 0 0",'#13#10'     '
@@ -6322,7 +6335,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  spmcr               = 0x57;'#13#10'    rampz               = 0x3b;'#13#10
   +'    allowfullpagebitstream = no;'#13#10#13#10'    memory "eeprom"'#13#10'  '
   +'      paged           = no; /* leave this "no" */'#13#10'        page_size '
-  +'      = 8;  /* for parallel programming */'#13#10'        size            ='
+  ,'      = 8;  /* for parallel programming */'#13#10'        size            ='
   +' 4096;'#13#10'        min_write_delay = 9000;'#13#10'        max_write_dela'
   +'y = 9000;'#13#10'        readback_p1     = 0x00;'#13#10'        readback_p2'
   +'     = 0x00;'#13#10'        read            = "  1   0   1   0      0   0  '
@@ -6335,7 +6348,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'                   "  i   i   i   i      i   i   i   i";'#13#10#13#10#9'loa'
   +'dpage_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  0   0'
   +'   0   0      0   0   0   0",'#13#10#9#9#9'  "  0   0   0   0      0  a2  a'
-  ,'1  a0",'#13#10#9#9#9'  "  i   i   i   i      i   i   i   i";'#13#10#13#10#9
+  +'1  a0",'#13#10#9#9#9'  "  i   i   i   i      i   i   i   i";'#13#10#13#10#9
   +'writepage'#9'= "  1   1   0   0      0   0   1   0",'#13#10#9#9#9'  "  0   '
   +'0   x   x    a11 a10  a9  a8",'#13#10#9#9#9'  " a7  a6  a5  a4     a3   0  '
   +' 0   0",'#13#10#9#9#9'  "  x   x   x   x      x   x   x   x";'#13#10#13#10#9
@@ -6386,7 +6399,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'ite           = "1 0 1 0  1 1 0 0  1 0 1 0  0 1 0 0",'#13#10'              '
   +'            "x x x x  x x x x  x x x x  x i i i";'#13#10#13#10'        read'
   +'            = "0 1 0 1  0 0 0 0  0 0 0 0  1 0 0 0",'#13#10'                '
-  +'          "x x x x  x x x x  o o o o  o o o o";'#13#10'        min_write_de'
+  ,'          "x x x x  x x x x  o o o o  o o o o";'#13#10'        min_write_de'
   +'lay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'      ;'#13#10#13
   +#10'    memory "lock"'#13#10'        size            = 1;'#13#10'        rea'
   +'d            = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 0 0",'#13#10'              '
@@ -6399,7 +6412,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'                       "0 0 0 0  0 0 0 0    o o o o  o o o o";'#13#10'     '
   +' ;'#13#10#13#10'    memory "signature"'#13#10'        size            = 3;'
   +#13#10'        read            = "0  0  1  1   0  0  0  0   x  x  x  x   x  '
-  ,'x  x  x",'#13#10'                          "x  x  x  x   x  x a1 a0   o  o '
+  +'x  x  x",'#13#10'                          "x  x  x  x   x  x a1 a0   o  o '
   +' o  o   o  o  o  o";'#13#10'      ;'#13#10'  ;'#13#10#13#10'#--------------'
   +'----------------------------------------------'#13#10'# ATmega2561'#13#10'#'
   +'------------------------------------------------------------'#13#10#13#10'p'
@@ -6450,7 +6463,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10#9#9#9'  "  x   x   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9
   +'= 0x41;'#13#10#9'delay'#9#9'= 10;'#13#10#9'blocksize'#9'= 8;'#13#10#9'reads'
   +'ize'#9'= 256;'#13#10'      ;'#13#10#13#10'    memory "flash"'#13#10'       '
-  +' paged           = yes;'#13#10'        size            = 262144;'#13#10'   '
+  ,' paged           = yes;'#13#10'        size            = 262144;'#13#10'   '
   +'     page_size       = 256;'#13#10'        num_pages       = 1024;'#13#10' '
   +'       min_write_delay = 4500;'#13#10'        max_write_delay = 4500;'#13#10
   +'        readback_p1     = 0x00;'#13#10'        readback_p2     = 0x00;'#13
@@ -6463,7 +6476,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'           " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10'                   '
   +'       "  o   o   o   o      o   o   o   o";'#13#10#13#10'        loadpage_'
   +'lo     = "  0   1   0   0      0   0   0   0",'#13#10'                     '
-  ,'     "  x   x   x   x      x   x   x   x",'#13#10'                         '
+  +'     "  x   x   x   x      x   x   x   x",'#13#10'                         '
   +' "  x  a6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  '
   +'i   i   i   i      i   i   i   i";'#13#10#13#10'        loadpage_hi     = "'
   +'  0   1   0   0      1   0   0   0",'#13#10'                          "  x '
@@ -6514,7 +6527,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'------------------------------------------------------------'#13#10'# Ident'
   +'ical to ATmega2561 but half the ROM'#13#10#13#10'part'#13#10'    id        '
   +'       = "m128rfa1";'#13#10'    desc             = "ATMEGA128RFA1";'#13#10
-  +'    signature        = 0x1e 0xa7 0x01;'#13#10'    has_jtag         = yes;'
+  ,'    signature        = 0x1e 0xa7 0x01;'#13#10'    has_jtag         = yes;'
   +#13#10'#    stk500_devcode   = 0xB2;'#13#10'#    avr910_devcode   = 0x43;'#13
   +#10'    chip_erase_delay = 55000;'#13#10'    pagel            = 0xD7;'#13#10
   +'    bs2              = 0xE2;'#13#10'    reset            = dedicated;'#13#10
@@ -6527,7 +6540,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'    pollindex'#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predel'
   +'ay'#9#9'= 1;'#13#10'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 1;'
   +#13#10#13#10'    pp_controlstack     ='#13#10'        0x0E, 0x1E, 0x0F, 0x1F'
-  ,', 0x2E, 0x3E, 0x2F, 0x3F,'#13#10'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E'
+  +', 0x2E, 0x3E, 0x2F, 0x3F,'#13#10'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E'
   +', 0x6F, 0x7F,'#13#10'        0x66, 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B'
   +','#13#10'        0xBE, 0xFD, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02;'#13#10'   '
   +' hventerstabdelay    = 100;'#13#10'    progmodedelay       = 0;'#13#10'    '
@@ -6578,7 +6591,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' i   i   i   i";'#13#10#13#10'        loadpage_hi     = "  0   1   0   0   '
   +'   1   0   0   0",'#13#10'                          "  x   x   x   x      x'
   +'   x   x   x",'#13#10'                          "  x  a6  a5  a4     a3  a2'
-  +'  a1  a0",'#13#10'                          "  i   i   i   i      i   i   i'
+  ,'  a1  a0",'#13#10'                          "  i   i   i   i      i   i   i'
   +'   i";'#13#10#13#10'        writepage       = "  0   1   0   0      1   1  '
   +' 0   0",'#13#10'                          "a15 a14 a13 a12    a11 a10  a9  '
   +'a8",'#13#10'                          " a7   x   x   x      x   x   x   x",'
@@ -6591,7 +6604,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' 1 0 1  0 0 0 0  0 0 0 0  0 0 0 0",'#13#10'                          "x x x'
   +' x  x x x x  o o o o  o o o o";'#13#10'        min_write_delay = 9000;'#13
   +#10'        max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "'
-  ,'hfuse"'#13#10'        size            = 1;'#13#10'        write           ='
+  +'hfuse"'#13#10'        size            = 1;'#13#10'        write           ='
   +' "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10'                          "x '
   +'x x x  x x x x  i i i i  i i i i";'#13#10#13#10'        read            = "'
   +'0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'                          "x x '
@@ -6642,7 +6655,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' hventerstabdelay    = 100;'#13#10'    hvspcmdexedelay     = 0;'#13#10'    '
   +'synchcycles         = 6;'#13#10'    latchcycles         = 1;'#13#10'    tog'
   +'glevtg           = 1;'#13#10'    poweroffdelay       = 25;'#13#10'    reset'
-  +'delayms        = 0;'#13#10'    resetdelayus        = 70;'#13#10'    hvleave'
+  ,'delayms        = 0;'#13#10'    resetdelayus        = 70;'#13#10'    hvleave'
   +'stabdelay    = 100;'#13#10'    resetdelay          = 25;'#13#10'    chipera'
   +'sepolltimeout = 40;'#13#10'    chiperasetime       = 0;'#13#10'    programf'
   +'usepolltimeout = 25;'#13#10'    programlockpolltimeout = 25;'#13#10#13#10' '
@@ -6655,7 +6668,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10#13#10'         write           = "1  1  0  0   0  0  0  0   0 0 0 x  '
   +'x x x x",'#13#10'                           "x a6 a5 a4  a3 a2 a1 a0   i i '
   +'i i  i i i i";'#13#10#13#10#9'loadpage_lo'#9'= "  1   1   0   0      0   0 '
-  ,'  0   1",'#13#10#9#9#9'  "  0   0   0   0      0   0   0   0",'#13#10#9#9#9
+  +'  0   1",'#13#10#9#9#9'  "  0   0   0   0      0   0   0   0",'#13#10#9#9#9
   +'  "  0   0   0   0      0   0  a1  a0",'#13#10#9#9#9'  "  i   i   i   i    '
   +'  i   i   i   i";'#13#10#13#10#9'writepage'#9'= "  1   1   0   0      0   0'
   +'   1   0",'#13#10#9#9#9'  "  0   0   x   x      x   x   x   x",'#13#10#9#9#9
@@ -6706,7 +6719,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'     memory "hfuse"'#13#10'         size            = 1;'#13#10'     '
   +'    write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10'        '
   +'                   "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10'     '
-  +'    read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'        '
+  ,'    read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'        '
   +'                   "x x x x  x x x x  o o o o  o o o o";'#13#10'        min'
   +'_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'       ;'
   +#13#10#13#10'     memory "efuse"'#13#10'         size            = 1;'#13#10
@@ -6719,7 +6732,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'= 1;'#13#10'         read            = "0  0  1  1   1  0  0  0    0 0 0 x '
   +' x x x x",'#13#10'                           "0  0  0  0   0  0  0  a0   o '
   +'o o o  o o o o";'#13#10'     ;'#13#10'  ;'#13#10#13#10'#-------------------'
-  ,'-----------------------------------------'#13#10'# ATtiny44'#13#10'#-------'
+  +'-----------------------------------------'#13#10'# ATtiny44'#13#10'#-------'
   +'-----------------------------------------------------'#13#10#13#10'part'#13
   +#10'     id            = "t44";'#13#10'     desc          = "ATtiny44";'#13
   +#10'     has_debugwire = yes;'#13#10'     flash_instr   = 0xB4, 0x07, 0x17;'
@@ -6770,7 +6783,7 @@ LazarusResources.Add('avrdude','CONF',[
   +';'#13#10'         num_pages       = 64;'#13#10'         min_write_delay = 4'
   +'500;'#13#10'         max_write_delay = 4500;'#13#10'         readback_p1   '
   +'  = 0xff;'#13#10'         readback_p2     = 0xff;'#13#10'         read_lo  '
-  +'       = "  0   0   1   0    0   0   0   0",'#13#10'                       '
+  ,'       = "  0   0   1   0    0   0   0   0",'#13#10'                       '
   +'    "  0   0   0   0    0  a10 a9  a8",'#13#10'                           "'
   +' a7  a6  a5  a4   a3  a2  a1  a0",'#13#10'                           "  o  '
   +' o   o   o    o   o   o   o";'#13#10#13#10'         read_hi         = "  0 '
@@ -6783,7 +6796,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  a0",'#13#10'                           "  i   i   i   i    i   i   i   i"'
   +';'#13#10#13#10'         loadpage_hi     = "  0   1   0   0    1   0   0   0'
   +'",'#13#10'                           "  0   0   0   x    x   x   x   x",'#13
-  ,#10'                           "  x   x   x  a4   a3  a2  a1  a0",'#13#10'  '
+  +#10'                           "  x   x   x  a4   a3  a2  a1  a0",'#13#10'  '
   +'                         "  i   i   i   i    i   i   i   i";'#13#10#13#10' '
   +'        writepage       = "  0  1  0  0   1  1  0  0",'#13#10'             '
   +'              "  0  0  0  0   0 a10 a9 a8",'#13#10'                        '
@@ -6834,7 +6847,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'evcode:'#13#10'     avr910_devcode   = 0x20;'#13#10'     signature        ='
   +' 0x1e 0x93 0x0c;'#13#10'     reset            = io;'#13#10'     chip_erase_'
   +'delay = 4500;'#13#10#13#10'     pgm_enable       = "1 0 1 0  1 1 0 0    0 1'
-  +' 0 1  0 0 1 1",'#13#10'                        "x x x x  x x x x    x x x x'
+  ,' 0 1  0 0 1 1",'#13#10'                        "x x x x  x x x x    x x x x'
   +'  x x x x";'#13#10#13#10'     chip_erase       = "1 0 1 0  1 1 0 0    1 0 0'
   +' x  x x x x",'#13#10'                        "x x x x  x x x x    x x x x  '
   +'x x x x";'#13#10#13#10'    timeout'#9#9'= 200;'#13#10'    stabdelay'#9#9'= '
@@ -6847,7 +6860,7 @@ LazarusResources.Add('avrdude','CONF',[
   +', 0x6D, 0x0C, 0x80, 0x40, 0x20, 0x10,'#13#10'        0x11, 0x08, 0x04, 0x02'
   +', 0x03, 0x08, 0x04, 0x0F;'#13#10'    hventerstabdelay    = 100;'#13#10'    '
   +'hvspcmdexedelay     = 0;'#13#10'    synchcycles         = 6;'#13#10'    lat'
-  ,'chcycles         = 1;'#13#10'    togglevtg           = 1;'#13#10'    powero'
+  +'chcycles         = 1;'#13#10'    togglevtg           = 1;'#13#10'    powero'
   +'ffdelay       = 25;'#13#10'    resetdelayms        = 0;'#13#10'    resetdel'
   +'ayus        = 70;'#13#10'    hvleavestabdelay    = 100;'#13#10'    resetdel'
   +'ay          = 25;'#13#10'    chiperasepolltimeout = 40;'#13#10'    chiperas'
@@ -6898,7 +6911,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  = 3;'#13#10'         read            = "0  0  1  1   0  0  0  0   0  0  0'
   +'  x   x  x  x  x",'#13#10'                           "x  x  x  x   x  x a1 '
   +'a0   o  o  o  o   o  o  o  o";'#13#10'       ;'#13#10#13#10'     memory "lo'
-  +'ck"'#13#10'         size            = 1;'#13#10'         write           = '
+  ,'ck"'#13#10'         size            = 1;'#13#10'         write           = '
   +'"1 0 1 0  1 1 0 0  1 1 1 x  x x x x",'#13#10'                           "x '
   +'x x x  x x x x  x x x x  x x i i";'#13#10'         read            = "0 1 0'
   +' 1  1 0 0 0  0 0 0 0  0 0 0 0",'#13#10'                           "0 0 0 0 '
@@ -6911,7 +6924,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'x x x x  x x x x  o o o o  o o o o";'#13#10'        min_write_delay = 9000;'
   +#13#10'        max_write_delay = 9000;'#13#10'       ;'#13#10#13#10'     mem'
   +'ory "hfuse"'#13#10'         size            = 1;'#13#10'         write     '
-  ,'      = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10'                      '
+  +'      = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10'                      '
   +'     "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10'         read      '
   +'      = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'                      '
   +'     "x x x x  x x x x  o o o o  o o o o";'#13#10'        min_write_delay ='
@@ -6962,7 +6975,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'       = "  1   0   1   0      0   0   0   0",'#13#10'                     '
   +'     "  x   x   x   x      x a10  a9  a8",'#13#10'                         '
   +' " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  '
-  +'o   o   o   o      o   o   o   o";'#13#10#13#10'        write           = "'
+  ,'o   o   o   o      o   o   o   o";'#13#10#13#10'        write           = "'
   +'  1   1   0   0      0   0   0   0",'#13#10'                          "  x '
   +'  x   x   x      x a10  a9  a8",'#13#10'                          " a7  a6 '
   +' a5  a4     a3  a2  a1  a0", '#13#10'                          "  i   i   i'
@@ -6975,7 +6988,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'   x   x      x   x   x   x";'#13#10#13#10#9'mode'#9#9'= 0x41;'#13#10#9'del'
   +'ay'#9#9'= 10;'#13#10#9'blocksize'#9'= 8;'#13#10#9'readsize'#9'= 256;'#13#10
   +'      ;'#13#10#13#10'    memory "flash"'#13#10'        paged           = ye'
-  ,'s;'#13#10'        size            = 32768;'#13#10'        page_size       ='
+  +'s;'#13#10'        size            = 32768;'#13#10'        page_size       ='
   +' 128;'#13#10'        num_pages       = 256;'#13#10'        min_write_delay '
   +'= 4500;'#13#10'        max_write_delay = 4500;'#13#10'        readback_p1  '
   +'   = 0x00;'#13#10'        readback_p2     = 0x00;'#13#10'        read_lo   '
@@ -7026,7 +7039,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10'        max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "'
   +'calibration"'#13#10'        size            = 1;'#13#10'        read       '
   +'     = "0 0 1 1  1 0 0 0    x x x x  x x x x",'#13#10'                     '
-  +'     "0 0 0 0  0 0 0 0    o o o o  o o o o";'#13#10'      ;'#13#10#13#10'  '
+  ,'     "0 0 0 0  0 0 0 0    o o o o  o o o o";'#13#10'      ;'#13#10#13#10'  '
   +'  memory "signature"'#13#10'        size            = 3;'#13#10'        rea'
   +'d            = "0  0  1  1   0  0  0  0   x  x  x  x   x  x  x  x",'#13#10
   +'                          "x  x  x  x   x  x a1 a0   o  o  o  o   o  o  o  '
@@ -7039,7 +7052,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'    chip_erase_delay = 9000;'#13#10'    pagel            = 0xD7;'#13
   +#10'    bs2              = 0xA0;'#13#10'    reset            = dedicated;'#13
   +#10'    pgm_enable       = "1 0 1 0  1 1 0 0    0 1 0 1  0 0 1 1",'#13#10'  '
-  ,'                     "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10' '
+  +'                     "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10' '
   +'   chip_erase       = "1 0 1 0  1 1 0 0    1 0 0 0  0 0 0 0",'#13#10'      '
   +'                 "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'    t'
   +'imeout'#9#9'= 200;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'
@@ -7090,7 +7103,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  o   o   o   o      o   o   o   o";'#13#10#13#10'        read_hi         ='
   +' "  0   0   1   0      1   0   0   0",'#13#10'                          "  '
   +'0 a14 a13 a12    a11 a10  a9  a8",'#13#10'                          " a7  a'
-  +'6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  o   o   '
+  ,'6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  o   o   '
   +'o   o      o   o   o   o";'#13#10#13#10'        loadpage_lo     = "  0   1 '
   +'  0   0      0   0   0   0",'#13#10'                          "  x   x   x '
   +'  x      x   x   x   x",'#13#10'                          "  x  a6  a5  a4 '
@@ -7103,7 +7116,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' 0   0",'#13#10'                          "  0 a14 a13 a12    a11 a10  a9  '
   +'a8",'#13#10'                          " a7   x   x   x      x   x   x   x",'
   +#13#10'                          "  x   x   x   x      x   x   x   x";'#13#10
-  ,#13#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= '
+  +#13#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= '
   +'256;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10#13#10'    memory "lf'
   +'use"'#13#10'        size            = 1;'#13#10'        write           = "'
   +'1 0 1 0  1 1 0 0  1 0 1 0  0 0 0 0",'#13#10'                          "x x '
@@ -7154,7 +7167,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#9#9'= 1;'#13#10'    pollmethod'#9#9'= 1;'#13#10#13#10'    pp_controlstack  '
   +'   ='#13#10'        0x0E, 0x1E, 0x0F, 0x1F, 0x2E, 0x3E, 0x2F, 0x3F,'#13#10
   +'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E, 0x7E, 0x6F, 0x7F,'#13#10'        0x66'
-  +', 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10'        0xBE, 0xFD, 0x00'
+  ,', 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10'        0xBE, 0xFD, 0x00'
   +', 0x01, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay    = 100;'#13#10
   +'    progmodedelay       = 0;'#13#10'    latchcycles         = 5;'#13#10'   '
   +' togglevtg           = 1;'#13#10'    poweroffdelay       = 15;'#13#10'    r'
@@ -7167,7 +7180,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10'    allowfullpagebitstream = no;'#13#10#13#10'    memory "eeprom"'#13#10
   +'        paged           = no; /* leave this "no" */'#13#10'        page_siz'
   +'e       = 8;  /* for parallel programming */'#13#10'        size           '
-  ,' = 2048;'#13#10'        min_write_delay = 9000;'#13#10'        max_write_de'
+  +' = 2048;'#13#10'        min_write_delay = 9000;'#13#10'        max_write_de'
   +'lay = 9000;'#13#10'        readback_p1     = 0x00;'#13#10'        readback_'
   +'p2     = 0x00;'#13#10'        read            = "  1   0   1   0      0   0'
   +'   0   0",'#13#10'                          "  x   x   x   x      x a10  a9'
@@ -7218,7 +7231,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'      ;'
   +#13#10#13#10'    memory "hfuse"'#13#10'        size            = 1;'#13#10' '
   +'       write           = "1 0 1 0  1 1 0 0  1 0 1 0  1 0 0 0",'#13#10'     '
-  +'                     "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10'   '
+  ,'                     "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10'   '
   +'     read            = "0 1 0 1  1 0 0 0  0 0 0 0  1 0 0 0",'#13#10'       '
   +'                   "x x x x  x x x x  o o o o  o o o o";'#13#10'        min'
   +'_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'      ;'
@@ -7231,7 +7244,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10#13#10'    memory "lock"'#13#10'        size            = 1;'#13#10'  '
   +'      read            = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 0 0",'#13#10'     '
   +'                     "x x x x  x x x x   x x o o  o o o o";'#13#10#13#10'  '
-  ,'      write           = "1 0 1 0  1 1 0 0   1 1 1 x  x x x x",'#13#10'     '
+  +'      write           = "1 0 1 0  1 1 0 0   1 1 1 x  x x x x",'#13#10'     '
   +'                     "x x x x  x x x x   1 1 i i  i i i i";'#13#10'        '
   +'min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'     '
   +' ;'#13#10#13#10'    memory "calibration"'#13#10'        size            = 1'
@@ -7282,7 +7295,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'                          "  x   x   x   x    a11 a10  a9  a8",'#13#10'    '
   +'                      " a7  a6  a5  a4     a3  a2  a1  a0", '#13#10'       '
   +'                   "  i   i   i   i      i   i   i   i";'#13#10#13#10#9'loa'
-  +'dpage_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  0   0'
+  ,'dpage_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  0   0'
   +'   0   0      0   0   0   0",'#13#10#9#9#9'  "  0   0   0   0      0  a2  a'
   +'1  a0",'#13#10#9#9#9'  "  i   i   i   i      i   i   i   i";'#13#10#13#10#9
   +'writepage'#9'= "  1   1   0   0      0   0   1   0",'#13#10#9#9#9'  "  0   '
@@ -7295,7 +7308,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'        min_write_delay = 4500;'#13#10'        max_write_delay = 4500'
   +';'#13#10'        readback_p1     = 0x00;'#13#10'        readback_p2     = 0'
   +'x00;'#13#10'        read_lo         = "  0   0   1   0      0   0   0   0",'
-  ,#13#10'                          "a15 a14 a13 a12    a11 a10  a9  a8",'#13#10
+  +#13#10'                          "a15 a14 a13 a12    a11 a10  a9  a8",'#13#10
   +'                          " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10'    '
   +'                      "  o   o   o   o      o   o   o   o";'#13#10#13#10'  '
   +'      read_hi         = "  0   0   1   0      1   0   0   0",'#13#10'      '
@@ -7346,7 +7359,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'   = 3;'#13#10'        read            = "0  0  1  1   0  0  0  0   x  x  x'
   +'  x   x  x  x  x",'#13#10'                          "x  x  x  x   x  x a1 a'
   +'0   o  o  o  o   o  o  o  o";'#13#10'      ;'#13#10'  ;'#13#10#13#10'#-----'
-  +'-------------------------------------------------------'#13#10'# AT90USB128'
+  ,'-------------------------------------------------------'#13#10'# AT90USB128'
   +'7'#13#10'#------------------------------------------------------------'#13
   +#10'# identical to AT90USB1286'#13#10#13#10'part'#13#10'    id              '
   +' = "usb1287";'#13#10'    desc             = "AT90USB1287";'#13#10'    signa'
@@ -7359,7 +7372,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'erase       = "1 0 1 0  1 1 0 0    1 0 0 0  0 0 0 0",'#13#10'              '
   +'         "x x x x  x x x x    x x x x  x x x x";'#13#10#13#10'    timeout'#9
   +#9'= 200;'#13#10'    stabdelay'#9#9'= 100;'#13#10'    cmdexedelay'#9#9'= 25;'
-  ,#13#10'    synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    p'
+  +#13#10'    synchloops'#9#9'= 32;'#13#10'    bytedelay'#9#9'= 0;'#13#10'    p'
   +'ollindex'#9#9'= 3;'#13#10'    pollvalue'#9#9'= 0x53;'#13#10'    predelay'#9
   +#9'= 1;'#13#10'    postdelay'#9#9'= 1;'#13#10'    pollmethod'#9#9'= 1;'#13#10
   +#13#10'    pp_controlstack     ='#13#10'        0x0E, 0x1E, 0x0F, 0x1F, 0x2E'
@@ -7410,7 +7423,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'o   o   o";'#13#10#13#10'        loadpage_lo     = "  0   1   0   0      0 '
   +'  0   0   0",'#13#10'                          "  x   x   x   x      x   x '
   +'  x   x",'#13#10'                          "  x  a6  a5  a4     a3  a2  a1 '
-  +' a0",'#13#10'                          "  i   i   i   i      i   i   i   i"'
+  ,' a0",'#13#10'                          "  i   i   i   i      i   i   i   i"'
   +';'#13#10#13#10'        loadpage_hi     = "  0   1   0   0      1   0   0   '
   +'0",'#13#10'                          "  x   x   x   x      x   x   x   x",'
   +#13#10'                          "  x  a6  a5  a4     a3  a2  a1  a0",'#13#10
@@ -7423,7 +7436,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'size'#9'= 256;'#13#10'      ;'#13#10#13#10'    memory "lfuse"'#13#10'      '
   +'  size            = 1;'#13#10'        write           = "1 0 1 0  1 1 0 0  '
   +'1 0 1 0  0 0 0 0",'#13#10'                          "x x x x  x x x x  i i '
-  ,'i i  i i i i";'#13#10#13#10'        read            = "0 1 0 1  0 0 0 0  0 '
+  +'i i  i i i i";'#13#10#13#10'        read            = "0 1 0 1  0 0 0 0  0 '
   +'0 0 0  0 0 0 0",'#13#10'                          "x x x x  x x x x  o o o '
   +'o  o o o o";'#13#10'        min_write_delay = 9000;'#13#10'        max_writ'
   +'e_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "hfuse"'#13#10'     '
@@ -7474,7 +7487,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'   = 0;'#13#10'    latchcycles         = 5;'#13#10'    togglevtg           '
   +'= 1;'#13#10'    poweroffdelay       = 15;'#13#10'    resetdelayms        = '
   +'1;'#13#10'    resetdelayus        = 0;'#13#10'    hvleavestabdelay    = 15;'
-  +#13#10'    chiperasepulsewidth = 0;'#13#10'    chiperasepolltimeout = 10;'#13
+  ,#13#10'    chiperasepulsewidth = 0;'#13#10'    chiperasepolltimeout = 10;'#13
   +#10'    programfusepulsewidth = 0;'#13#10'    programfusepolltimeout = 5;'#13
   +#10'    programlockpulsewidth = 0;'#13#10'    programlockpolltimeout = 5;'#13
   +#10#13#10'    memory "eeprom"'#13#10'        paged           = no; /* leave '
@@ -7487,7 +7500,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'a8",'#13#10'                          " a7  a6  a5  a4     a3  a2  a1  a0",'
   +#13#10'                          "  o   o   o   o      o   o   o   o";'#13#10
   +#13#10'        write           = "  1   1   0   0      0   0   0   0",'#13#10
-  ,'                          "  0   0   0   0    a11 a10  a9  a8",'#13#10'    '
+  +'                          "  0   0   0   0    a11 a10  a9  a8",'#13#10'    '
   +'                      " a7  a6  a5  a4     a3  a2  a1  a0",'#13#10'        '
   +'                  "  i   i   i   i      i   i   i   i";'#13#10#13#10#9'load'
   +'page_lo'#9'= "  1   1   0   0      0   0   0   1",'#13#10#9#9#9'  "  0   0 '
@@ -7538,7 +7551,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'te_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "efuse"'#13#10'    '
   +'    size            = 1;'#13#10'        write           = "1 0 1 0  1 1 0 0'
   +'  1 0 1 0  0 1 0 0",'#13#10'                          "x x x x  x x x x  i '
-  +'i i i  i i i i";'#13#10#13#10'        read            = "0 1 0 1  0 0 0 0  '
+  ,'i i i  i i i i";'#13#10#13#10'        read            = "0 1 0 1  0 0 0 0  '
   +'0 0 0 0  1 0 0 0",'#13#10'                          "x x x x  x x x x  o o '
   +'o o  o o o o";'#13#10'        min_write_delay = 9000;'#13#10'        max_wr'
   +'ite_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "lock"'#13#10'    '
@@ -7551,7 +7564,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'        size            = 1;'#13#10'        read            = "0 0 1 '
   +'1  1 0 0 0    0 0 0 x  x x x x",'#13#10'                          "0 0 0 0 '
   +' 0 0 0 0    o o o o  o o o o";'#13#10'      ;'#13#10'    memory "signature"'
-  ,#13#10'        size            = 3;'#13#10'        read            = "0  0  '
+  +#13#10'        size            = 3;'#13#10'        read            = "0  0  '
   +'1  1   0  0  0  0   0  0  0  x   x  x  x  x",'#13#10'                      '
   +'    "x  x  x  x   x  x a1 a0   o  o  o  o   o  o  o  o";'#13#10'      ;'#13
   +#10'  ;'#13#10#13#10'#------------------------------------------------------'
@@ -7602,7 +7615,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' 0   0   0   0    a11 a10  a9  a8",'#13#10'                          " a7  '
   +'a6  a5  a4     a3  a2   0   0",'#13#10#9#9#9'  "  x   x   x   x      x   x '
   +'  x   x";'#13#10#13#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 20;'#13#10
-  +#9'blocksize'#9'= 4;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10#13#10
+  ,#9'blocksize'#9'= 4;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10#13#10
   +'    memory "flash"'#13#10'        paged           = yes;'#13#10'        siz'
   +'e            = 8192;'#13#10'        page_size       = 128;'#13#10'        n'
   +'um_pages       = 64;'#13#10'        min_write_delay = 4500;'#13#10'        '
@@ -7615,7 +7628,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' 0   0   0",'#13#10'                          "a15 a14 a13 a12    a11 a10  '
   +'a9  a8",'#13#10'                          " a7  a6  a5  a4     a3  a2  a1  '
   +'a0",'#13#10'                          "  o   o   o   o      o   o   o   o";'
-  ,#13#10#13#10'        loadpage_lo     = "  0   1   0   0      0   0   0   0",'
+  +#13#10#13#10'        loadpage_lo     = "  0   1   0   0      0   0   0   0",'
   +#13#10'                          "  x   x   x   x      x   x   x   x",'#13#10
   +'                          "  x   x  a5  a4     a3  a2  a1  a0",'#13#10'    '
   +'                      "  i   i   i   i      i   i   i   i";'#13#10#13#10'  '
@@ -7666,7 +7679,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'      = 256;'#13#10'#    memory "eeprom"'#13#10'#        size            = '
   +'1024;'#13#10'#        num_pages       = 256;'#13#10'part'#13#10'    id     '
   +'          = "m32u2";'#13#10'    desc             = "ATmega32U2";'#13#10'   '
-  +' has_jtag         = no;'#13#10'    has_debugwire    = yes;'#13#10'    signa'
+  ,' has_jtag         = no;'#13#10'    has_debugwire    = yes;'#13#10'    signa'
   +'ture        = 0x1e 0x95 0x8a;'#13#10'    chip_erase_delay = 9000;'#13#10'  '
   +'  reset            = io;'#13#10'    pgm_enable       = "1 0 1 0  1 1 0 0   '
   +' 0 1 0 1  0 0 1 1",'#13#10'                       "x x x x  x x x x    x x '
@@ -7679,7 +7692,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'= 0x53;'#13#10'    predelay'#9#9'= 1;'#13#10'    postdelay'#9#9'= 1;'#13#10
   +'    pollmethod'#9#9'= 1;'#13#10'    pp_controlstack     ='#13#10'        0x'
   +'0E, 0x1E, 0x0F, 0x1F, 0x2E, 0x3E, 0x2F, 0x3F,'#13#10'        0x4E, 0x5E, 0x'
-  ,'4F, 0x5F, 0x6E, 0x7E, 0x6F, 0x7F,'#13#10'        0x66, 0x76, 0x67, 0x77, 0x'
+  +'4F, 0x5F, 0x6E, 0x7E, 0x6F, 0x7F,'#13#10'        0x66, 0x76, 0x67, 0x77, 0x'
   +'6A, 0x7A, 0x6B, 0x7B,'#13#10'        0xBE, 0xFD, 0x00, 0x01, 0x00, 0x00, 0x'
   +'00, 0x00;'#13#10'    hventerstabdelay    = 100;'#13#10'    progmodedelay   '
   +'    = 0;'#13#10'    latchcycles         = 5;'#13#10'    togglevtg          '
@@ -7730,7 +7743,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'",'#13#10'                          "  x   x  a5  a4     a3  a2  a1  a0",'
   +#13#10'                          "  i   i   i   i      i   i   i   i";'#13#10
   +#13#10'        writepage       = "  0   1   0   0      1   1   0   0",'#13#10
-  +'                          "a15 a14 a13 a12    a11 a10  a9  a8",'#13#10'    '
+  ,'                          "a15 a14 a13 a12    a11 a10  a9  a8",'#13#10'    '
   +'                      " a7  a6   x   x      x   x   x   x",'#13#10'        '
   +'                  "  x   x   x   x      x   x   x   x";'#13#10#13#10#9'mode'
   +#9#9'= 0x41;'#13#10#9'delay'#9#9'= 6;'#13#10#9'blocksize'#9'= 128;'#13#10#9
@@ -7743,7 +7756,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "hfuse"'#13#10' '
   +'       size            = 1;'#13#10'        write           = "1 0 1 0  1 1 '
   +'0 0  1 0 1 0  1 0 0 0",'#13#10'                          "x x x x  x x x x '
-  ,' i i i i  i i i i";'#13#10#13#10'        read            = "0 1 0 1  1 0 0 '
+  +' i i i i  i i i i";'#13#10#13#10'        read            = "0 1 0 1  1 0 0 '
   +'0  0 0 0 0  1 0 0 0",'#13#10'                          "x x x x  x x x x  o'
   +' o o o  o o o o";'#13#10'        min_write_delay = 9000;'#13#10'        max'
   +'_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "efuse"'#13#10
@@ -7794,7 +7807,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'ay    = 15;'#13#10'    chiperasepulsewidth = 0;'#13#10'    chiperasepolltim'
   +'eout = 10;'#13#10'    programfusepulsewidth = 0;'#13#10'    programfusepoll'
   +'timeout = 5;'#13#10'    programlockpulsewidth = 0;'#13#10'    programlockpo'
-  +'lltimeout = 5;'#13#10#13#10'    memory "eeprom"'#13#10'        paged       '
+  ,'lltimeout = 5;'#13#10#13#10'    memory "eeprom"'#13#10'        paged       '
   +'    = no; /* leave this "no" */'#13#10'        page_size       = 4;  /* for'
   +' parallel programming */'#13#10'        size            = 512;'#13#10'     '
   +'   num_pages       = 128;'#13#10'        min_write_delay = 9000;'#13#10'   '
@@ -7807,7 +7820,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  0   0   0   0",'#13#10'                          "  0   0   0   0    a11 '
   +'a10  a9  a8",'#13#10'                          " a7  a6  a5  a4     a3  a2 '
   +' a1  a0",'#13#10'                          "  i   i   i   i      i   i   i '
-  ,'  i";'#13#10#13#10#9'loadpage_lo'#9'= "  1   1   0   0      0   0   0   1",'
+  +'  i";'#13#10#13#10#9'loadpage_lo'#9'= "  1   1   0   0      0   0   0   1",'
   +#13#10#9#9#9'  "  0   0   0   0      0   0   0   0",'#13#10#9#9#9'  "  0   0'
   +'   0   0      0   0  a1  a0",'#13#10#9#9#9'  "  i   i   i   i      i   i   '
   +'i   i";'#13#10#13#10#9'writepage'#9'= "  1   1   0   0      0   0   1   0",'
@@ -7858,7 +7871,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'       "x x x x  x x x x  i i i i  i i i i";'#13#10#13#10'        read     '
   +'       = "0 1 0 1  0 0 0 0  0 0 0 0  1 0 0 0",'#13#10'                     '
   +'     "x x x x  x x x x  o o o o  o o o o";'#13#10'        min_write_delay ='
-  +' 9000;'#13#10'        max_write_delay = 9000;'#13#10'      ;'#13#10#13#10' '
+  ,' 9000;'#13#10'        max_write_delay = 9000;'#13#10'      ;'#13#10#13#10' '
   +'   memory "lock"'#13#10'        size            = 1;'#13#10'        read   '
   +'         = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 0 0",'#13#10'                  '
   +'        "x x x x  x x x x   x x o o  o o o o";'#13#10#13#10'        write  '
@@ -7871,7 +7884,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'    memory "signature"'#13#10'        size            = 3;'#13#10'   '
   +'     read            = "0  0  1  1   0  0  0  0   0  0  0  x   x  x  x  x",'
   +#13#10'                          "x  x  x  x   x  x a1 a0   o  o  o  o   o  '
-  ,'o  o  o";'#13#10'      ;'#13#10'  ;'#13#10#13#10'#-------------------------'
+  +'o  o  o";'#13#10'      ;'#13#10'  ;'#13#10#13#10'#-------------------------'
   +'-----------------------------------'#13#10'# ATmega8U2'#13#10'#------------'
   +'------------------------------------------------'#13#10'# Changes against A'
   +'Tmega16U2 (beside IDs)'#13#10'#    memory "flash"'#13#10'#        size     '
@@ -7922,7 +7935,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' x";'#13#10#13#10#9'mode'#9#9'= 0x41;'#13#10#9'delay'#9#9'= 20;'#13#10#9'bl'
   +'ocksize'#9'= 4;'#13#10#9'readsize'#9'= 256;'#13#10'      ;'#13#10#13#10'   '
   +' memory "flash"'#13#10'        paged           = yes;'#13#10'        size  '
-  +'          = 8192;'#13#10'        page_size       = 64;'#13#10'        num_p'
+  ,'          = 8192;'#13#10'        page_size       = 64;'#13#10'        num_p'
   +'ages       = 128;'#13#10'        min_write_delay = 4500;'#13#10'        max'
   +'_write_delay = 4500;'#13#10'        readback_p1     = 0x00;'#13#10'        '
   +'readback_p2     = 0x00;'#13#10'        read_lo         = "  0   0   1   0  '
@@ -7935,7 +7948,7 @@ LazarusResources.Add('avrdude','CONF',[
   +','#13#10'                          "  o   o   o   o      o   o   o   o";'#13
   +#10#13#10'        loadpage_lo     = "  0   1   0   0      0   0   0   0",'#13
   +#10'                          "  x   x   x   x      x   x   x   x",'#13#10' '
-  ,'                         "  x   x  a5  a4     a3  a2  a1  a0",'#13#10'     '
+  +'                         "  x   x  a5  a4     a3  a2  a1  a0",'#13#10'     '
   +'                     "  i   i   i   i      i   i   i   i";'#13#10#13#10'   '
   +'     loadpage_hi     = "  0   1   0   0      1   0   0   0",'#13#10'       '
   +'                   "  x   x   x   x      x   x   x   x",'#13#10'           '
@@ -7986,7 +7999,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10'    avr910_devcode   = 0x74;'#13#10'    pagel            = 0xd7;'#13#10
   +'    bs2              = 0xa0;'#13#10'    chip_erase_delay = 9000;'#13#10'   '
   +' pgm_enable       = "1 0 1 0  1 1 0 0    0 1 0 1  0 0 1 1",'#13#10'        '
-  +'               "0 0 0 0  0 0 0 0    0 0 0 0  0 0 0 0";'#13#10#13#10'    chi'
+  ,'               "0 0 0 0  0 0 0 0    0 0 0 0  0 0 0 0";'#13#10#13#10'    chi'
   +'p_erase       = "1 0 1 0  1 1 0 0    1 0 0 0  0 0 0 0",'#13#10'            '
   +'           "0 0 0 0  0 0 0 0    0 0 0 0  0 0 0 0";'#13#10#13#10'    timeout'
   +'             = 200;'#13#10'    stabdelay           = 100;'#13#10'    cmdexe'
@@ -7999,7 +8012,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'      0x66, 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B, 0x7B,'#13#10'        0xBE, '
   +'0xFD, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00;'#13#10'    hventerstabdelay    = '
   +'100;'#13#10'    progmodedelay       = 0;'#13#10'    latchcycles         = 5'
-  ,';'#13#10'    togglevtg           = 1;'#13#10'    poweroffdelay       = 15;'
+  +';'#13#10'    togglevtg           = 1;'#13#10'    poweroffdelay       = 15;'
   +#13#10'    resetdelayms        = 1;'#13#10'    resetdelayus        = 0;'#13
   +#10'    hvleavestabdelay    = 15;'#13#10'    chiperasepulsewidth = 0;'#13#10
   +'    chiperasepolltimeout = 10;'#13#10'    programfusepulsewidth = 0;'#13#10
@@ -8050,7 +8063,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' a6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  i   i '
   +'  i   i      i   i   i   i";'#13#10#13#10'        writepage       = "  0   '
   +'1   0   0      1   1   0   0",'#13#10'                          "  0 a14 a1'
-  +'3 a12    a11 a10  a9  a8",'#13#10'                          " a7  a6  a5  a'
+  ,'3 a12    a11 a10  a9  a8",'#13#10'                          " a7  a6  a5  a'
   +'4     a3  a2  a1  a0",'#13#10'                          "  x   x   x   x   '
   +'   x   x   x   x";'#13#10#13#10'        mode            = 0x41;'#13#10'    '
   +'    delay           = 10;'#13#10'        blocksize       = 128;'#13#10'    '
@@ -8063,7 +8076,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'     max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "lfuse"'
   +#13#10'        size            = 1;'#13#10'        read            = "0 1 0 '
   +'1  0 0 0 0   0 0 0 0  0 0 0 0",'#13#10'                          "0 0 0 0  '
-  ,'0 0 0 0   o o o o  o o o o";'#13#10#13#10'        write           = "1 0 1 '
+  +'0 0 0 0   o o o o  o o o o";'#13#10#13#10'        write           = "1 0 1 '
   +'0  1 1 0 0   1 0 1 0  0 0 0 0",'#13#10'                          "0 0 0 0  '
   +'0 0 0 0   i i i i  i i i i";'#13#10'        min_write_delay = 9000;'#13#10
   +'        max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "hfu'
@@ -8114,7 +8127,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'eout = 10;'#13#10'    programfusepulsewidth = 0;'#13#10'    programfusepoll'
   +'timeout = 5;'#13#10'    programlockpulsewidth = 0;'#13#10'    programlockpo'
   +'lltimeout = 5;'#13#10#13#10'    idr                 = 0x31;'#13#10'    spmc'
-  +'r               = 0x57;'#13#10'    allowfullpagebitstream = no;'#13#10#13#10
+  ,'r               = 0x57;'#13#10'    allowfullpagebitstream = no;'#13#10#13#10
   +'    memory "eeprom"'#13#10'        paged           = no; /* leave this "no"'
   +' */'#13#10'        page_size       = 8;  /* for parallel programming */'#13
   +#10'        size            = 2048;'#13#10'        min_write_delay = 9000;'
@@ -8127,7 +8140,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'0   0      0   0   0   0",'#13#10'                          "  0   0   0   '
   +'0      0 a10  a9  a8",'#13#10'                          " a7  a6  a5  a4   '
   +'  a3  a2  a1  a0",'#13#10'                          "  i   i   i   i      i'
-  ,'   i   i   i";'#13#10#13#10'        loadpage_lo     = "  1   1   0   0     '
+  +'   i   i   i";'#13#10#13#10'        loadpage_lo     = "  1   1   0   0     '
   +' 0   0   0   1",'#13#10'                          "  0   0   0   0      0  '
   +' 0   0   0",'#13#10'                          "  0   0   0   0      0  a2  '
   +'a1  a0",'#13#10'                          "  i   i   i   i      i   i   i  '
@@ -8178,7 +8191,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "hfuse"'#13
   +#10'        size            = 1;'#13#10'        read            = "0 1 0 1  '
   +'1 0 0 0   0 0 0 0  1 0 0 0",'#13#10'                          "0 0 0 0  0 0'
-  +' 0 0   o o o o  o o o o";'#13#10#13#10'        write           = "1 0 1 0  '
+  ,' 0 0   o o o o  o o o o";'#13#10#13#10'        write           = "1 0 1 0  '
   +'1 1 0 0   1 0 1 0  1 0 0 0",'#13#10'                          "0 0 0 0  0 0'
   +' 0 0   i i i i  i i i i";'#13#10'        min_write_delay = 9000;'#13#10'   '
   +'     max_write_delay = 9000;'#13#10'      ;'#13#10#13#10'    memory "efuse"'
@@ -8191,7 +8204,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'nature"'#13#10'        size            = 3;'#13#10'        read            '
   +'= "0  0  1  1   0  0  0  0   0  0  0  0   0  0  0  0",'#13#10'             '
   +'             "0  0  0  0   0  0 a1 a0   o  o  o  o   o  o  o  o";'#13#10'  '
-  ,'    ;'#13#10#13#10'    memory "calibration"'#13#10'        size            '
+  +'    ;'#13#10#13#10'    memory "calibration"'#13#10'        size            '
   +'= 1;'#13#10#13#10'        read            = "0 0 1 1  1 0 0 0   0 0 0 0  0 '
   +'0 0 0",'#13#10'                          "0 0 0 0  0 0 0 0   o o o o  o o o'
   +' o";'#13#10'        ;'#13#10'  ;'#13#10#13#10'#----------------------------'
@@ -8242,7 +8255,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'",'#13#10'                          "  i   i   i   i      i   i   i   i";'
   +#13#10#13#10'        writepage       = "  1   1   0   0      0   0   1   0",'
   +#13#10'                          "  0   0   0   0      0   0  a9  a8",'#13#10
-  +'                          " a7  a6  a5  a4     a3  a2   0   0",'#13#10'    '
+  ,'                          " a7  a6  a5  a4     a3  a2   0   0",'#13#10'    '
   +'                      "  x   x   x   x      x   x   x   x";'#13#10#13#10'  '
   +'      mode            = 0x41;'#13#10'        delay           = 10;'#13#10' '
   +'       blocksize       = 4;'#13#10'        readsize        = 256;'#13#10'  '
@@ -8255,7 +8268,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'"  0 a14 a13 a12    a11 a10  a9  a8",'#13#10'                          " a7'
   +'  a6  a5  a4     a3  a2  a1  a0",'#13#10'                          "  o   o'
   +'   o   o      o   o   o   o";'#13#10#13#10'        read_hi         = "  0  '
-  ,' 0   1   0      1   0   0   0",'#13#10'                          "  0 a14 a'
+  +' 0   1   0      1   0   0   0",'#13#10'                          "  0 a14 a'
   +'13 a12    a11 a10  a9  a8",'#13#10'                          " a7  a6  a5  '
   +'a4     a3  a2  a1  a0",'#13#10'                          "  o   o   o   o  '
   +'    o   o   o   o";'#13#10#13#10'        loadpage_lo     = "  0   1   0   0'
@@ -8306,7 +8319,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'  ;'#13#10#13#10'#---------------------------------------------------'
   +'---------'#13#10'# ATmega6450'#13#10'#-------------------------------------'
   +'-----------------------'#13#10#13#10'part'#13#10'    id               = "m6'
-  +'450";'#13#10'    desc             = "ATMEGA6450";'#13#10'    signature     '
+  ,'450";'#13#10'    desc             = "ATMEGA6450";'#13#10'    signature     '
   +'   = 0x1E 0x96 0x06;'#13#10'    has_jtag         = yes;'#13#10'#   stk500_d'
   +'evcode   = 0x??; # No STK500v1 support?'#13#10'#   avr910_devcode   = 0x??;'
   +' # Try the ATmega16 one'#13#10'    avr910_devcode   = 0x74;'#13#10'    page'
@@ -8319,7 +8332,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'    = 100;'#13#10'    cmdexedelay         = 25;'#13#10'    synchloops      '
   +'    = 32;'#13#10'    bytedelay           = 0;'#13#10'    pollindex         '
   +'  = 3;'#13#10'    pollvalue           = 0x53;'#13#10'    predelay          '
-  ,'  = 1;'#13#10'    postdelay           = 1;'#13#10'    pollmethod          ='
+  +'  = 1;'#13#10'    postdelay           = 1;'#13#10'    pollmethod          ='
   +' 1;'#13#10#13#10'    pp_controlstack     ='#13#10'        0x0E, 0x1E, 0x0F,'
   +' 0x1F, 0x2E, 0x3E, 0x2F, 0x3F,'#13#10'        0x4E, 0x5E, 0x4F, 0x5F, 0x6E,'
   +' 0x7E, 0x6F, 0x7F,'#13#10'        0x66, 0x76, 0x67, 0x77, 0x6A, 0x7A, 0x6B,'
@@ -8370,7 +8383,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'  o   o";'#13#10#13#10'        loadpage_lo     = "  0   1   0   0      0   '
   +'0   0   0",'#13#10'                          "  0   0   0   0      0   0   '
   +'0   0",'#13#10'                          "  a7 a6  a5  a4     a3  a2  a1  a'
-  +'0",'#13#10'                          "  i   i   i   i      i   i   i   i";'
+  ,'0",'#13#10'                          "  i   i   i   i      i   i   i   i";'
   +#13#10#13#10'        loadpage_hi     = "  0   1   0   0      1   0   0   0",'
   +#13#10'                          "  0   0   0   0      0   0   0   0",'#13#10
   +'                          "  a7 a6  a5  a4     a3  a2  a1  a0",'#13#10'    '
@@ -8383,7 +8396,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' blocksize       = 128;'#13#10'        readsize        = 256;'#13#10'      '
   +';'#13#10#13#10'    memory "lock"'#13#10'        size            = 1;'#13#10
   +'        read            = "0 1 0 1  1 0 0 0   0 0 0 0  0 0 0 0",'#13#10'   '
-  ,'                       "x x x x  x x x x   x x o o  o o o o";'#13#10#13#10
+  +'                       "x x x x  x x x x   x x o o  o o o o";'#13#10#13#10
   +'        write           = "1 0 1 0  1 1 0 0   1 1 1 0  0 0 0 0",'#13#10'   '
   +'                       "0 0 0 0  0 0 0 0   1 1 i i  i i i i";'#13#10'      '
   +'  min_write_delay = 9000;'#13#10'        max_write_delay = 9000;'#13#10'   '
@@ -8434,7 +8447,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#9#9'= 0x200;'#13#10'        offset'#9#9'= 0x8e0200;'#13#10'        page_siz'
   +'e'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10
   +'    memory "usersig"'#13#10'        size'#9#9'= 0x200;'#13#10'        offse'
-  +'t'#9#9'= 0x8e0400;'#13#10'        page_size'#9'= 0x100;'#13#10'        read'
+  ,'t'#9#9'= 0x8e0400;'#13#10'        page_size'#9'= 0x100;'#13#10'        read'
   +'size'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "signature"'#13#10'  '
   +'      size'#9#9'= 3;'#13#10'        offset'#9#9'= 0x1000090;'#13#10'    ;'
   +#13#10#13#10'    memory "fuse0"'#13#10'        size'#9#9'= 1;'#13#10'       '
@@ -8447,7 +8460,7 @@ LazarusResources.Add('avrdude','CONF',[
   +' offset'#9#9'= 0x8f0025;'#13#10'    ;'#13#10#13#10'    memory "lock"'#13#10
   +'        size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0027;'#13#10'    ;'
   +#13#10';'#13#10#13#10'#-----------------------------------------------------'
-  ,'-------'#13#10'# ATXMEGA128A1'#13#10'#-------------------------------------'
+  +'-------'#13#10'# ATXMEGA128A1'#13#10'#-------------------------------------'
   +'-----------------------'#13#10#13#10'part'#13#10'    id'#9#9'= "x128a1";'#13
   +#10'    desc'#9'= "ATXMEGA128A1";'#13#10'    signature'#9'= 0x1e 0x97 0x4c;'
   +#13#10'    has_jtag'#9'= yes;'#13#10'    has_pdi'#9'= yes;'#13#10'    nvm_ba'
@@ -8498,7 +8511,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'ize'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'#13#10#13
   +#10'    memory "flash"'#13#10'        size'#9#9'= 0x00022000;'#13#10'       '
   +' offset'#9#9'= 0x0800000;'#13#10'        page_size'#9'= 0x100;'#13#10'     '
-  +'   readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "prodsig"'#13
+  ,'   readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "prodsig"'#13
   +#10'        size'#9#9'= 0x200;'#13#10'        offset'#9#9'= 0x8e0200;'#13#10
   +'        page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'  '
   +'  ;'#13#10#13#10'    memory "usersig"'#13#10'        size'#9#9'= 0x200;'#13
@@ -8511,7 +8524,7 @@ LazarusResources.Add('avrdude','CONF',[
   +';'#13#10'    ;'#13#10#13#10'    memory "fuse2"'#13#10'        size'#9#9'= 1'
   +';'#13#10'        offset'#9#9'= 0x8f0022;'#13#10'    ;'#13#10#13#10'    memo'
   +'ry "fuse4"'#13#10'        size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0'
-  ,'024;'#13#10'    ;'#13#10#13#10'    memory "fuse5"'#13#10'        size'#9#9
+  +'024;'#13#10'    ;'#13#10#13#10'    memory "fuse5"'#13#10'        size'#9#9
   +'= 1;'#13#10'        offset'#9#9'= 0x8f0025;'#13#10'    ;'#13#10#13#10'    m'
   +'emory "lock"'#13#10'        size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8'
   +'f0027;'#13#10'    ;'#13#10';'#13#10#13#10'#--------------------------------'
@@ -8562,7 +8575,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10'    memory "apptable"'#13#10'        size'#9#9'= 0x00002000;'#13#10'    '
   +'    offset'#9#9'= 0x0083e000;'#13#10'        page_size'#9'= 0x100;'#13#10' '
   +'       readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "boot"'#13
-  +#10'        size'#9#9'= 0x00002000;'#13#10'        offset'#9#9'= 0x00840000;'
+  ,#10'        size'#9#9'= 0x00002000;'#13#10'        offset'#9#9'= 0x00840000;'
   +#13#10'        page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13
   +#10'    ;'#13#10#13#10'    memory "flash"'#13#10'        size'#9#9'= 0x00042'
   +'000;'#13#10'        offset'#9#9'= 0x0800000;'#13#10'        page_size'#9'= '
@@ -8575,7 +8588,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'    memory "signature"'#13#10'        size'#9#9'= 3;'#13#10'        offset'
   +#9#9'= 0x1000090;'#13#10'    ;'#13#10#13#10'    memory "fuse0"'#13#10'      '
   +'  size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0020;'#13#10'    ;'#13#10
-  ,#13#10'    memory "fuse1"'#13#10'        size'#9#9'= 1;'#13#10'        offse'
+  +#13#10'    memory "fuse1"'#13#10'        size'#9#9'= 1;'#13#10'        offse'
   +'t'#9#9'= 0x8f0021;'#13#10'    ;'#13#10#13#10'    memory "fuse2"'#13#10'    '
   +'    size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0022;'#13#10'    ;'#13
   +#10#13#10'    memory "fuse4"'#13#10'        size'#9#9'= 1;'#13#10'        of'
@@ -8626,7 +8639,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'= 0x08c0000;'#13#10'        page_size'#9'= 0x20;'#13#10'        readsize'#9
   +'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "application"'#13#10'        '
   +'size'#9#9'= 0x00020000;'#13#10'        offset'#9#9'= 0x0800000;'#13#10'    '
-  +'    page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'
+  ,'    page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'
   +#13#10#13#10'    memory "apptable"'#13#10'        size'#9#9'= 0x00002000;'#13
   +#10'        offset'#9#9'= 0x0081e000;'#13#10'        page_size'#9'= 0x100;'
   +#13#10'        readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "bo'
@@ -8639,7 +8652,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'fset'#9#9'= 0x8e0200;'#13#10'        page_size'#9'= 0x100;'#13#10'        r'
   +'eadsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "usersig"'#13#10' '
   +'       size'#9#9'= 0x200;'#13#10'        offset'#9#9'= 0x8e0400;'#13#10'   '
-  ,'     page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'
+  +'     page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'
   +#13#10#13#10'    memory "signature"'#13#10'        size'#9#9'= 3;'#13#10'   '
   +'     offset'#9#9'= 0x1000090;'#13#10'    ;'#13#10#13#10'    memory "fuse0"'
   +#13#10'        size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0020;'#13#10
@@ -8690,7 +8703,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'-----'#13#10#13#10'part'#13#10'    id'#9#9'= "x256a3";'#13#10'    desc'#9'='
   +' "ATXMEGA256A3";'#13#10'    signature'#9'= 0x1e 0x98 0x42;'#13#10'    has_j'
   +'tag'#9'= yes;'#13#10'    has_pdi'#9'= yes;'#13#10'    nvm_base'#9'= 0x01c0;'
-  +#13#10#13#10'    memory "eeprom"'#13#10'        size'#9#9'= 0x1000;'#13#10' '
+  ,#13#10#13#10'    memory "eeprom"'#13#10'        size'#9#9'= 0x1000;'#13#10' '
   +'       offset'#9#9'= 0x08c0000;'#13#10'        page_size'#9'= 0x20;'#13#10
   +'        readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "applicat'
   +'ion"'#13#10'        size'#9#9'= 0x00040000;'#13#10'        offset'#9#9'= 0x'
@@ -8703,7 +8716,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'      readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "flash"'#13
   +#10'        size'#9#9'= 0x00042000;'#13#10'        offset'#9#9'= 0x0800000;'
   +#13#10'        page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13
-  ,#10'    ;'#13#10#13#10'    memory "prodsig"'#13#10'        size'#9#9'= 0x200'
+  +#10'    ;'#13#10#13#10'    memory "prodsig"'#13#10'        size'#9#9'= 0x200'
   +';'#13#10'        offset'#9#9'= 0x8e0200;'#13#10'        page_size'#9'= 0x10'
   +'0;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory'
   +' "usersig"'#13#10'        size'#9#9'= 0x200;'#13#10'        offset'#9#9'= 0'
@@ -8754,7 +8767,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#9'= 0x8f0025;'#13#10'    ;'#13#10#13#10'    memory "lock"'#13#10'        si'
   +'ze'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0027;'#13#10'    ;'#13#10';'
   +#13#10#13#10'#------------------------------------------------------------'
-  +#13#10'# ATXMEGA16A4'#13#10'#-----------------------------------------------'
+  ,#13#10'# ATXMEGA16A4'#13#10'#-----------------------------------------------'
   +'-------------'#13#10#13#10'part'#13#10'    id'#9#9'= "x16a4";'#13#10'    de'
   +'sc'#9'= "ATXMEGA16A4";'#13#10'    signature'#9'= 0x1e 0x94 0x41;'#13#10'   '
   +' has_jtag'#9'= yes;'#13#10'    has_pdi'#9'= yes;'#13#10'    nvm_base'#9'= 0'
@@ -8767,7 +8780,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'e'#9#9'= 0x00001000;'#13#10'        offset'#9#9'= 0x00803000;'#13#10'      '
   +'  page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'#13
   +#10#13#10'    memory "boot"'#13#10'        size'#9#9'= 0x00001000;'#13#10'  '
-  ,'      offset'#9#9'= 0x00804000;'#13#10'        page_size'#9'= 0x100;'#13#10
+  +'      offset'#9#9'= 0x00804000;'#13#10'        page_size'#9'= 0x100;'#13#10
   +'        readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "flash"'
   +#13#10'        size'#9#9'= 0x00005000;'#13#10'        offset'#9#9'= 0x080000'
   +'0;'#13#10'        page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'
@@ -8818,7 +8831,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#10'    memory "fuse2"'#13#10'        size'#9#9'= 1;'#13#10'        offset'#9
   +#9'= 0x8f0022;'#13#10'    ;'#13#10#13#10'    memory "fuse4"'#13#10'        s'
   +'ize'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0024;'#13#10'    ;'#13#10#13
-  +#10'    memory "fuse5"'#13#10'        size'#9#9'= 1;'#13#10'        offset'#9
+  ,#10'    memory "fuse5"'#13#10'        size'#9#9'= 1;'#13#10'        offset'#9
   +#9'= 0x8f0025;'#13#10'    ;'#13#10#13#10'    memory "lock"'#13#10'        si'
   +'ze'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0027;'#13#10'    ;'#13#10';'
   +#13#10#13#10'#------------------------------------------------------------'
@@ -8831,7 +8844,7 @@ LazarusResources.Add('avrdude','CONF',[
   +#13#10'        readsize'#9'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "ap'
   +'plication"'#13#10'        size'#9#9'= 0x00010000;'#13#10'        offset'#9#9
   +'= 0x0800000;'#13#10'        page_size'#9'= 0x100;'#13#10'        readsize'#9
-  ,'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "apptable"'#13#10'        siz'
+  +'= 0x100;'#13#10'    ;'#13#10#13#10'    memory "apptable"'#13#10'        siz'
   +'e'#9#9'= 0x00001000;'#13#10'        offset'#9#9'= 0x0080f000;'#13#10'      '
   +'  page_size'#9'= 0x100;'#13#10'        readsize'#9'= 0x100;'#13#10'    ;'#13
   +#10#13#10'    memory "boot"'#13#10'        size'#9#9'= 0x00001000;'#13#10'  '
@@ -8882,7 +8895,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'      size'#9#9'= 3;'#13#10'        offset'#9#9'= 0x1000090;'#13#10'    ;'
   +#13#10#13#10'    memory "fuse0"'#13#10'        size'#9#9'= 1;'#13#10'       '
   +' offset'#9#9'= 0x8f0020;'#13#10'    ;'#13#10#13#10'    memory "fuse1"'#13#10
-  +'        size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0021;'#13#10'    ;'
+  ,'        size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0021;'#13#10'    ;'
   +#13#10#13#10'    memory "fuse2"'#13#10'        size'#9#9'= 1;'#13#10'       '
   +' offset'#9#9'= 0x8f0022;'#13#10'    ;'#13#10#13#10'    memory "fuse4"'#13#10
   +'        size'#9#9'= 1;'#13#10'        offset'#9#9'= 0x8f0024;'#13#10'    ;'
@@ -8895,7 +8908,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'";'#13#10'    desc'#9'= "32UC3A0512";'#13#10'    signature'#9'= 0xED 0xC0 0'
   +'x3F;'#13#10'    has_jtag'#9'= yes;'#13#10'    is_avr32    = yes;'#13#10#13
   +#10'    memory "flash"'#13#10'        paged           = yes;'#13#10'        '
-  ,'page_size'#9#9'= 512;               # bytes'#13#10'        readsize'#9#9'= '
+  +'page_size'#9#9'= 512;               # bytes'#13#10'        readsize'#9#9'= '
   +'512;'#9#9#9#9' # bytes'#13#10'        num_pages       = 1024;              '
   +'# could be set dynamicly'#13#10'        size'#9#9#9'= 0x00080000;'#9#9' # c'
   +'ould be set dynamicly'#13#10'        offset'#9#9#9'= 0x80000000;'#13#10'   '
@@ -8946,7 +8959,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'t'#9#9'= 0x3f00;'#13#10'        page_size'#9'= 16;'#13#10'    ;'#13#10';'#13
   +#10#13#10#13#10'#-----------------------------------------------------------'
   +'-'#13#10'# ATtiny10'#13#10'#-----------------------------------------------'
-  +'-------------'#13#10#13#10'part'#13#10'    id'#9#9'= "t10";'#13#10'    desc'
+  ,'-------------'#13#10#13#10'part'#13#10'    id'#9#9'= "t10";'#13#10'    desc'
   +#9'= "ATtiny10";'#13#10'    signature'#9'= 0x1e 0x90 0x03;'#13#10'    has_tp'
   +'i'#9'= yes;'#13#10#13#10'    memory "flash"'#13#10'        size'#9#9'= 1024'
   +';'#13#10'        offset'#9#9'= 0x4000;'#13#10'        page_size'#9'= 16;'#13
@@ -8959,7 +8972,7 @@ LazarusResources.Add('avrdude','CONF',[
   +'fset'#9#9'= 0x3f80;'#13#10'        page_size'#9'= 16;'#13#10'    ;'#13#10#13
   +#10'    memory "lockbits"'#13#10'        size'#9#9'= 1;'#13#10'        offse'
   +'t'#9#9'= 0x3f00;'#13#10'        page_size'#9'= 16;'#13#10'    ;'#13#10';'#13
-  ,#10#13#10#13#10
+  +#10#13#10#13#10
 ]);
 LazarusResources.Add('avrdude','EXE',[
   'MZ'#144#0#3#0#0#0#4#0#0#0#255#255#0#0#184#0#0#0#0#0#0#0'@'#0#0#0#0#0#0#0#0#0
@@ -18548,4 +18561,1189 @@ LazarusResources.Add('libusb0_x64','DLL',[
   ,#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+]);
+LazarusResources.Add('bin2hex','EXE',[
+  'MZ'#128#0#1#0#0#0#4#0#0#0#255#255#0#0#184#0#0#0#0#0#0#0'@'#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#128#0#0#0#14#31#186#14#0
+  +#180#9#205'!'#184#1'L'#205'!this is a Windows NT character-mode executable'
+  +#13#10'$'#0'PE'#0#0'L'#1#3#0#165'j'#197'B'#0#0#0#0#0#0#0#0#224#0#131#1#11#1#2
+  +#18#0'`'#0#0#0#16#0#0#0#144#0#0#224#243#0#0#0#160#0#0#0#0#1#0#0#0'@'#0#0#16#0
+  +#0#0#2#0#0#1#0#11#0#0#0#0#0#4#0#0#0#0#0#0#0#0#16#1#0#0#16#0#0#0#0#0#0#3#0#0#0
+  +#0#0#16#0#0#0#1#0#0' '#0#0#0#16#0#0#0#0#0#0#16#0#0#0#0#0#0#0#0#0#0#0#0#0#1#0
+  +#224#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0'UPX0'#0#0#0#0#0#144#0#0#0#16#0#0#0#0#0#0#0#2#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#128#0#0#224'UPX1'#0#0#0#0#0'`'#0#0#0#160#0#0#0'V'#0#0#0#2#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0'@'#0#0#224'UPX2'#0#0#0#0#0#16#0#0#0#0#1#0#0#2#0#0#0'X'#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0'@'#0#0#192'3.08'#0'UPX!'#13#9#2#9#195'Yhe'#248'^3'#172#141
+  +#212#0#0#196'S'#0#0#0#170#0#0'&'#0#0#170#31'QI'#243#204#235#253#144#0'U'#137
+  +#229#222#252'/'#221'h'#204#14#232#7#185'SQVW'#129#236#160'PR'#185#20#253#239
+  +'n'#239#6#141#189'P'#255#0#187#3#10'1'#210#190#16#16'@'#0#137'U'#212#191','
+  +#203#178#2#200#192#196#216#204#243#165'9'#216#223#253#247#223'}'#5'?'#6'h'#4
+  +#176'@I'#8','#139#133'H8'#131#196#4#186#29'?'#251'ww'#18#139'@'#4#21#10#236
+  +#137#198#133#192'u&'#27#139'p'#4'V'#155#251#216#221'h '#28'h'#24#186'4'#11
+  +#236#184#1'g3'#12#147#177'g'#183#233#5#6#187'%'#186'D>'#8#189#249'A'#154#199
+  +'[X'#8'ShG'#235#191#186'o'#190#183#127#247'#'#1'"'#12#28#139'U'#232#193#226#2
+  +#149#220#139#149'%'#3#239#255#221#214#8#11#224'5o;]'#228'}c'#141'E'#200'Phr-'
+  +#173#219#253#223#18#185'kR'#139']'#232#137'M'#204'9'#13#204'wCZ'#159#237#254
+  +#155'LH'#137'E'#228'9'#195#15#143#176'!'#137#217'H'#193#225#2#223'l_'#246#1
+  +#209#186'lh'#141'S'#1'Y'#232#129#199#5#188#185#236'#'#252'k'#22'N'#137#211
+  +#235#189#7#235#181#186'u*'#217'/O'#183'~*'#228#192'P'#139'E'#224#129'6'#183
+  +#197#222#16'|y'#18#192'|t'#212#203'3a'#239#247#2#8#186'x9$'#170#196#251#6', '
+  +#187#216'3'#0't'#194#15#194#23#9#9#28'P'#4'Rh{'#139#255#134#253'G'#8#139'H'#8
+  +'Qh'#147#22#16']'#192'S'#139#15'V8'#15#19#171#205#23#12#133#210'_'#182#176
+  +#253't'#21#139'M'#196'Q'#31#200'd'#202'0'#12#131'}'#190#237#220#27'+'#15#132
+  +#166'~6'#193#232'@M'#200'%'#255#246'{'#255#237#13#129#225#5#141'X'#4#1#203#15
+  +'/'#6#196'V'#239'{6'#202#233'B'#133'P'#233#252#230#3'kw'#179#250#16#15#14','
+  +#138'D.'#7#246#135#146#245#176#255'('#216#254#192'1'#248'w'#249#15'%'#246'F'
+  +#12#16#15#133'u'#1#187' 5'#255#239#133'C'#186'8K'#160#137#241#29#204#136'E'
+  +#236#132#192'v'#219#214#254#251'o'#229#212#193#235#8'1'#201#129#227'Y'#136
+  +#193#137']'#208#198#217'*'#185#176#217#212#212#209#252'!'#219' d'#208'.'#212
+  +#176#182#178#7'1'#192'( *'#223#130#181#217#16#199'*['#236'9'#193'}'#127')'
+  +#176#187'8'#8'D)'#160'`,A'#1#195'h'#171#16'JUl<'#177#195#181#219'B'#212'u'#1
+  +#194'$'#141#3#218#135'#d'#179'.'#216#26#1#7'g'#3#228'a'#246#196#193#233#8#16
+  +'u'#196'fK'#4#198#0#177'G'#140#196#146#139#16'b1'#172#196#5'F'#155#133#14'4'
+  +#173'''d'#202'~'#235#20'h'#12#220#8#137#240'&'#233#145'w'#6#16#252#137#248'h'
+  +#25#177#142#4#14#129#255#23'q'#141'e'#240'_^Y[]'#195'h'#8#196'R'#189#235#255
+  +#5#169#136#194#193#250#4#131#226#15#138#162#192#154#136'%'#16#192#182#251#29
+  +#187#5'$'#15#138#138#128#18#162#17#17'0'#228#25#236#128'}'#205#18#184#30'ZAh'
+  +'$c'#7'r`'#7'h'#127#12#162#201#8',y '#4#178#200#239#224#216#142#1#18#13#5'|'
+  +#3'8Open'#255#255#255#255' Watcom C/C++32 Run-Time system.'#255#255#183#255
+  +' Portions!opyright (c) Sybas'#223#255#191#253'e, Inc#1988-2002.'#195#135'D$'
+  +#4#177#201#194#255#6#187#139#8#194#4#181'9'#224's'#26')'#224#247#216'V='#253
+  +#247'w'#240#21#0#188#173#198'X;'#6'^v'#6'$'#248#195'X'#184#208#225#238#223
+  +#203#251#4#169#19#28'PS7'#12#187#252#179#247'o+'#252#28#28#129#235'^'#21'-'#4
+  +#127#240'[XNw'#240#219#177'6P'#141'$'#8'+'#4'$'#148#197#255#224'S'#177#183
+  +#127#247'R'#131#236#4#17#20#137#227#139'T$'#16#137#23#184#254#185#249#137#133
+  +#196#205#22#236'Z['#195'_Ri)'#246#238'U2'#137#195#137#214'y'#159'1'#163'_'
+  +#162#251#127#237#137#12'$'#133#246't'#10';'#21'D'#165'u'#132#22#138#3'<'#248
+  +#191#219#250'rsQ<a'#173'Y$'#128#201#130#138'c'#1'C'#132#228't'#26#238#225#255
+  +#25#139#28'csR<+'#15#131'v'#194'C'#25#246#224#255#6#25#230#133#255'u'#15#129
+  +'='#236#187'@'#2'D'#183'G'#247#219#3'4@'#137#202#137#208#133']'#19'p'#14#235
+  +'g'#223#253#237#169'w'#5#21#1#235#179'<wu'#8#2#235#170#184#9#252#23'[Z'#224
+  +#141#199'%'#235#211'w'#233#237#159'k'#149#127'r'#246#219#13#168'<nr'#164#17
+  +'i'#150'<tu'#146'C'#249#239'net6'#11#138'w'#13#131'<$'#0't'#26#210'`'#157'a{'
+  +#8#175'<b'#169's8'#30'!'#18#25'3t'#135#245#185#3#19#15#191#247'cn'#217#9#158
+  +#12#138#6#12#1#189#16#142#156#253#236#136#6#15'&'#128#228#254#16'&'#141#128
+  +'_0|'#31'8'#141#146#5#144'='#196#137#207#139'L'#218'o'#252#11'q'#128'a'#12
+  ,#252#139'i'#12#244#9#221#136#208#137#8#255'o+'#236#198#24#28'5'#135#139#174
+  +#192#246#195#2't'#5#184#2#134#237'ms'#11#9'@'#184#128#204#2#151'R'#163#251
+  +#133#194#247#20'RPV*L'#24#174'A'#16#131#248#255#224#23#237#231'n'#145'a'#199
+  +'A'#4#139'A'#8#9#235#236#247' '#183#16'@'#12#137'x'#16#22'@'#24' '#237#243
+  +#237'<@'#8'a'#128't'#14#187#137#200'['#13'e'#215'vS'#26#220#8#6#28#12'r'#194
+  +#210#219'Bk$tl'#137'&'#1#15#149#248#230'k'#240'}'#131#192'!4'#20#133#147#17
+  +#203#220#239#220#186#128#233#230#9#218#12'@'#235#234'/'#16#199#132#201'gKL1'
+  +#192#6'>8'#246#11#15'='#2#209#137#223#137#226'"'#8'\k0t'#209'L'#25#7#232#231
+  +#195'/'#220#250#219'_6'#204#137#194#19't'#19'P1'#194'W0'#138#17'/F'#217'5/'#8
+  +#22#9#156#17'('#26#15#189#137#141#227#201'S1'#219'K'#156#30#183'.'#253#241'_'
+  +#159'R'#137#193','#12#188#7#161#20'~'#183#187'3X'#20#186#24#8#139#2'OI;H'#4
+  +'t1'#140#255']'#220'C'#235#241'R9'#209'u'#30#246'B'#12#3't'#12#200#199'g'#233
+  +'X'#139#17'lh'#16#200'Zq'#239'ot'#5#136'3'#193'W'#139#24#137#26#139#21'N'#207
+  +#134#241#191#163#4#137#16#235#217#184#4'x01'#192#201#204'`#'#192#223#199#221
+  +#207#214#30#144#194#139's'#16#207'c'#4#216#18#23#250'}'#185#252#252't$'#255
+  +#12'P'#176#11'9'#182#229#0'@j'#24'X'#20'|'#138#200'w'#214#189#1#245#240#248
+  +#249#195'8'#8'd'#144'^'#176'L'#239#191#24'SH]f'#20#3#16#190#0'n'#227#195#198
+  +'9'#208'-'#138#135#168#3'h'#175#8#254#191'}'#205#246#194#194'I'#144#230#139
+  +#10'9'#217'uq'#247#209#129#195#255#254#186'o'#155#223#0'!'#203#129#227#128'u'
+  +'Z'#157#4#139'J'#4#27'Ui'#150'eJ>'#8#8'9F'#179#185')"'#213#27#12#29'9'#255#31
+  +#217#141#169#194#16'!t'#140'[Y)'#192#195'8'#203'u'#31',l'#255#210#128#251#140
+  +#242'8'#239'u'#22#128#255#8#233't'#16#233#242'tKF'#16#23#7#218#25#192'e}'#129
+  +#255'[+'#195#144#138#8'@'#138'*B8'#233'i'#8#201'tf'#251#205#244#187#196'u'
+  +#238#192#132'?'#186#191#8':'#10'uV'#23#210'}'#247#191'N:j'#1'uM'#8#237'tED:J'
+  +#2'uA'#20'9'#165'{y'#243#3'u80'#139'H'#4#4'u,)$'#151#238#145#230#5'u#'#27#6
+  +'u'#23#20#15#7'u'#173'p['#182#14#177#8#8#26'u'#168#140'x'#228#200'qx'#127'p_'
+  +'v'#141'vW'#163'-'#146#200#10'A'#137#11#143#218#174#244#15#249#138'X'#16#128
+  +#203#13#134#255#136#10#22#22'*'#204#19#150#164#255#26#195#240#133#199#178#0
+  +#255#175#20#185'`'#29'5'#208#176#187#197#190#144#4#137'D'#225#224'='#137#217
+  +'c'#217#176#138#4#181#30#220#20#219'2'#9#228#21#194'R'#223#13#156' '#132'La/'
+  +'.'#205'x'#163't'#207'1m'#139'B'#16#150#176#192#165#173#8#247'x'#174't_'#177
+  +#13#163#161#191'-'#218#246'4u^'#137#205'1'#246'J'#1#168#176#213#245#189#15
+  +#137#218'AM'#188'wu'#27#198#210#237#11'4/'#29#192#13'$'#249#136#4#136#196#255
+  +#29#227#6#237#4#136'5'#9'u'#9#220'/'#172#193#248'K'#205' '#12#14#206')'#238
+  +#139'C'#16#189#237#255#5#129#240#206'!0'#188#235#152#136#226#128#226'>'#217
+  +#143#192#151'S'#214#128#206#2'Z'#136's'#13#235#139#159'C'#187#16#131'mO'#20
+  +'$'#131'+B'#225'`'#173#188#165#246'A'#143#246#23#235#246#221#243'!'#15#175
+  +#218#133#219#10#8#1#218#186'6'#14'o'#179#12#178#138'U'#12'V @5'#220#184#217
+  +#17'L'#137'\$'#142'U'#4#184'T'#195#13#222'0Y'#150#202'v'#2'`'#139'|'#129#141
+  +#173'oq'#209#139'u'#209#140#216#142#192'l'#200#8#130';'#241#255#2#242#165#138
+  +#200#128#225#3#242#164'_'#7'Q,RV'#221'V'#234'4'#23'WAt'#130'}'#21#238#174'T'
+  +#234#211')R'#224#26')'#215#137#21'V7'#183'u'#31#137#21#139'^'#137'tG'#225#11
+  +'l'#177#250#20#15#130#146'S,@lE/l'#255#157#4#29#138'M'#13#137'E'#186#193'R'
+  +#13#129#251#220#12#255#7#228'v'#5'0'#219#128#231#254#169')E'#16#132#187#127
+  +'6W1\r'#128'M'#12' '#16#139'4$30'#240#139#198'o'#17#247#246#242'a'#225#203'j'
+  +'<'#195'|'#138'q'#12'4 '#21#185#214'`'#173#136#8'*'#192#156#15#140#176#192'a'
+  +')'#235'H'#232'g'#233#239#197#210'7)'#6#246'E'#13#4#237'd '#21#225'u_'#195'2'
+  +#204#209#151#25#28#8'#'#134#24#233#10#223#220#170#226#194')'#193#1#163#17#137
+  +#239#235'b'#166#137'&'#152#16#8#198'+p'#187#196#194#137#215#8#177#252#215';'
+  +#251'tJ'#218#222'Z'#187'A'#4'N'#178'q'#6#141'p'#1#5#0#10'l3'#218'd '#196#208
+  +#13'g%{ '#249'"8'#26'u+Z'#192'n'#23#146#154#181#248#254#169#235#165#16#203
+  +#240#225'g'#231#183#136#2#14'@B'#129#148'@'#219#153'm'#218#21#209':'#16'p'#3
+  +#129'g'#129#145#254#243#11#20#202#150'N'''#240'u'#245#171#184#165#160#195#201
+  +#13#8#204#13#252'L'#20#172#12'Z'#7#3'aQN'#22'*'#205#192'@'#134#206#218#163
+  +#233't@'#157#139#219'?>'#215'w'#178'4'#22'f'#12#206'`6'#246'H'#145'X'#128#167
+  +'tmV_W'#234'xY'#4#28#17'>'#17#187'r'#247#248'sM'#155#218'3'#172'@'#10#18#11
+  +#236#9#198'8'#22'8'#238#214#8't'#21#199'#4L'#173'-'#219#146#173#26#13#8#133
+  +'N7'#210'%'#184#28#216#226#240'M'#190#211#129#167'X'#176#11#169'{'#235'm'#201
+  +#189'<a'#195#16#240#187#128'=08'#216#149':'#252'~'#27#131'=@'#188#8'!'#186'|'
+  +'.v'#203'~'#205#4'!'#18#235#15#17'B5'#204'64'#179#205'8'#5#244'Ub'#22'|X'#145
+  +#9#219'N'#194#21#208'O'#161#165'B'#12'R'#130#178#8'=x'#1#247#23'D|'#161'HZM'
+  +#3'$'#252'c'#199#222#223#198')'#196#137#225#139#29#16#164'8l'#28#137#252#149
+  +#14#141#129'o'#131#141#19'<'#141'E'#236#192#191#31#241#22#28#12#140#137#236
+  +']K_'#223#218'!'#177'`'#214'M'#217#138#25'@'#132#189#163#240#11'U'#3'B'#235
+  ,#244'j'#143#13'PR'#161'Pd'#235'.'#209'PW'#222#8'R>'#134#159#240#15'_'#151'@O'
+  +'Q'#236#140'{<{'#22#135#142'\'#29#3'/'#170#18#220#11'#'#224#158#148'g'#5#238
+  +'-'#191#161#145#241'!'#184#252#228#240'T"'#0#31#238#192'('#176#15#142#220#237
+  +'v'#239#195#222#163#171#137#21'}'#154';,'#4#133#250'w'#28#249#189#241#163#162
+  +#188#22'`'#198#133#244#150#195#162#168'zY'#218'p'#19#165#16'J'#255'f'#163#170
+  +#239#179#25#198#4'hQ'#12#161#129#226#24'Y'#211#253#216#163#172#23#193#250#8
+  +#136#216#17#0#176')'#211#238#141#220'<i'#128#136#21#169#14#163#180'9'#23#254
+  +'Z'#188#24#239#10#193#224#8'X'#9#208#239#239#217#238#187#8#2'/'#184#188'u'
+  +#238#185'2'#186'@'#193'>'#190#231#254#236#137#13'p'#22'<'#140#199#5'|'#10#22
+  +'%'#232','#225#190#236#160'=,'#138#24#163'4.'#199'"'#246'F&'#26')79'#130#185
+  +#184#14#141#14'l'#163#219'.'#12'(<'#141#27#253'B'#229'x'#1'@8'#223#145#128'8'
+  +#154#192#237#251#237#9#138'P'#12#128#250'"u'#242#13#213#29#210#132'z'#13#246
+  +#182#181#206#6#190#163'l'#132#226#14#155#237#242#157#216'f|f'#139'g8f'#131#28
+  +#200#129'th'#31'<?'#209#221#182'j'#136'6'#238',H'#2#8'f'#182#174'5j'#153'b0a'
+  +#13#17'X'#177'o'#236'w=u'#237#18#201')'#196#10#149'i'#216#158#190#172'?'#178
+  +' x'#17'>'#136#209#169#10#223#201#195'j'#228#17#190#237'hH'#195#23#191#4'V,'
+  +#189'L'#196#135#240#198#27#186#9#134#137'=t'''#137#26#24#203#204'-'#128'@'#2
+  +#131'C'#161'a?'#1'{1'#167'%\'#175'tu)+'#211'8w'#236#239'X'#173#216'U'#17#137
+  +'5'#18#139'='#162#136'C'#148'N'#237#23'A'#31#135'('#145'?'#254#186#30#13';'
+  +#235#198'W1'#220'1'#192'w:=f#'#207'?<'#29'Hu4vB'#204'j'#161#214'Y'#242'u'#165
+  +'a'#146#251#19#188#186#136'-'#3'WE,0'#164#191#248#6#12#184'!'#204'A8'#16'x'
+  +#13#139#15'p'#15#172#22'#0.'#21#29'k'#219#10#5#25'&N'#189'Q'#185#21#171#15'F'
+  +#206#133#208#186#15#227#176#130'}'#131'v'#227'd<'#19'x'#139#219#129'o4'#24
+  +#202#127#218#139#17'r'#144'@'#218#26#255#243'Y/[q'#8'l'#141'@eF'#21#12'"'#192
+  +'v'#225#131#249#1'0'#133#201#2#146#6#214#254#18#31'i'#138'f)'#228#207#139'n'
+  +#12#136#8'%'#208#168#221'"*'#229'0#`'#193#23'G'#162#154#31#138'N'#237#193#159
+  +'E'#251#223'*'#136#205#128#229#250#136#232#136'n'#13'8'#142'F'#13#185#13'4'
+  +#190#195#208'&'#196#167#236'k'#179#24#183#221#173'lO'#13'&'#227#136#7#203#4
+  +#26#136'^'#209'K'#17#129#13'u'#162' t'#5'h-'#218#143#8#139'^'#12#9#235'k'#189
+  +#7#9#23'a'#16#171#208#239#18#171'RB'#232#13#15#146'C'#4#17#248#204'Du'#195'i'
+  +#219#205#218#234#245#171'Z'#152#204#4#13#27#9#18'2'#217#13#14#13#217#3#139
+  +#129#221'<'#8'Za7'#190'mbjA|'#249#248'Z'#127#3#211' '#195#209#132#129#19'/6'
+  +#29'P'#128'Ml'#162#11#210#24'R'#255#24'QF'#14#19#193'^'#14#143'P'#244#182'0p'
+  +' '#184#5#28'$0'#30'}gT'#20'%|T'#1'E'#19'#4'#175'$'#152#28#142#16'o'#205';31'
+  +#24#184#254#249'9l'#206#22'_'#20#167#220#7#196'$'#140#237#183'%3'#141#29#20
+  +#131#231#7#141'('#12'g|'#239']wT'#188'V'#24#14#16#9#248#187'P'#19#236#153';'
+  +#7',$'#186#199'R'#4#138'd1'#224'%'#26#10'\'#128#15#148#144#163#133#28#189#138
+  +'d'#23#227' '#2#209'B'#169'g'#22#17#180#141#17#206#214'a'#183#196#252#22#20
+  +#199'H'#207#220'['#215'x'#9'q'#247#208'!M'#7#246#26#21#18'[u'#27'!'#12#6#20
+  +#164#5#141'''p'#219'.'#11'!'#4'B'#174#10#187'm'#136#133#22's'#16'S*'#12'P'
+  +#194#231'i'#216#148' P'#28' 4'#133#202']'#161'['#232#190#202',5 '#237#28'*U?'
+  +#144#229#229#173'\''S'#139'lU'#139'DP1'#30#149#224#250#159#204'='#142'V'#235
+  +#216':l'#6'UL'#147#191'&'#137#198#134'B'#1#146#255#2#169'A'#198#214#224#251
+  +#128#202#3'P'#16#148#9#128'+'#224'u'#245#219#138'O!'#12'@'#246#195#222'{'#161
+  +'B;'#214#182#15#2'O?V'#156#6'F'#152'`'#227#11'1@'#237#189#198'C'#190#15'F'
+  +#167#25'F'#189#4#14#3#152#13'{S'#2't'#241#184#5#14#138#182#174'`?SW\FI'#8'u'
+  +#1'l'#134'e'#251#30#187#144#1'r'#181#16#2'+'#187#132#136#149#128#129#27#240
+  +'SVO;B'#4#127#14#19#139#142'5'#129#255#26#139'I'#8')'#217'9'#200'}-+'#138'Zl'
+  +'m'#255#151'~2'#139'z'#4#128#227#239#1#198#136#12')'#140'2'#137'?'#214#28'E'
+  +#16#29#144'R'#128'`'#12#239#189#162#241't'#177#139'R'#247#4#137#134'$'#157'P'
+  +'@'#127'n'#214#240#192#13'}'#225#138'a'#198#196#6'te'#29#16'u@'#201#22#161
+  +#191#189#1'u'#3'+q'#4'@@A'#19'j-'#196#1'i'#235#226'e:d!'#195'Wl'#185#155'n'#8
+  +'0'#132#220'0'#16#127'9'#196#173#222#200#154'm'#219'u'#223#187'}'#219'`'#221
+  +#238'da'#235#207'^sG'#24#235'J]'#171#141#141#175'Qk'#247#11#195#202#157#176
+  +#238#24#193#26'|:'#22'jt'#153#246'k'#201#142'T'#26#188'm'#237'jv&M'#205#221
+  +'}'#245#2'u'#161#252#239#174#136'Q'#12#177#170#239'>'#204'b;'#184#171#27#26
+  +'Y'#240#139'y'#4'6'#236#200'a\'#185')'#250'^A'#174#133#176#178#197#143#9#20
+  +' R'#227#246'@'#13#165#167#229#219'U'#232'b~I'#240#137#185' '#136#5#244'R'
+  +#252'FY'#7'u'#226#136#217'P'#136'J'#13#156#16'b lO'#186#20#137#22#12'BF+'#15
+  +':'#218#219#23#162#4'H'#239#138'['#12'E'#3#136'Y'#190#167'!n'#212#189#200#21
+  +#24'$'#24'vapR^Z'#31'RKC'#28#217'`'#31#24#22#161#155#246#193#155#193#16#186
+  +'='#246#234':'#243',H'#12#195#15'3'#139'5G'#23#223#128'Ob'#185#228#185#214
+  +#249#148#12#245'#'#245#15#131'u'#27#12#3'ud'#184#19#244#189'('#187'iX'#12#29
+  +#25#191'['#154#140#248#3#187#26#227'8'#129'y'#31#198#182'cuN'#4#30#137'q'#180
+  ,'5'#8#6#218'I'#4'!'#247'*'#139' '#139#231#190#21't'#210#6#129#231#3#166#208
+  +'X6'#246#179#191#207#3#235#181#131#193#26'xr'#139#184':_@s'#17#167'oZ'#209
+  +#141'H '#235#144'i'#15#18#179#132#28'U'#223#138'%%z'#182#176#161#186#16#228
+  +#248#252#136#10#202#4'bn'#225#21'~'#8'?'#240#217#222#13#144'l'#3#165'E'#208
+  +#158'D'#227#133#179#18#166#179'Kw'#3#137'Y'#221'o'#163'IqC'#8#206#12#20#6#220
+  +#17#158#20#239#137#29#167'Y&'#170#216'k%:'#171#187'x'#226#191#129'VO'#177#132
+  +'"s'#174#252#226#7#185'8'#184'D'#216'A'#235#157#214#139#29'G'#127#30'\z'#28
+  +#156'/C*'#188#9'o'#18#196#191#246#250#221'56'#22#2#245#4#1#208#190#171#1#192
+  +'D'#215'"V'#202#155#131#168'"'#187'#VjG'#186'Yx@u'#6#5#22#15#176#149#185#19
+  +'`A'#198#238#143#21#186#147#222'f'#141'9'#240'r'#239'=2'#247#250#224'-'#208
+  +'s'#226#146#222'_'#183#18#162#180#137'I'#240'R'#255#209#255'd'#22'b'#208'C'
+  +#246#139#210'~'#181#198#133#143#193#14#7#139#3#20'f'#16'1'#237'L'#185#234'm'
+  +#137#253#189#136#9#139#28'$'#201#163'v'#140#186#27#138#27#254'tH'#209#240#248
+  +'X''t'#246#128#253'Z'#187'"|'#1#199#141#26#220#150#166#16#14#209#139#201'_'
+  +#10#209'L'#219'%u3Hx'#148#135'p'#240'W:!!'#22'nu'#13#138#169#6#29'[k'#251'3%'
+  +'LH'#129''''#183#241'\'#212'9['#240#9'p.E'#194'U'#135#196#205'%t'#215#232'V'
+  +#150#172#242#190'9'#216'O%'#214'\'#227#255'u'#204#137#243#255'S'#4#235#197'G'
+  +#18'i'#28'\m'#168#148';1'#219'^'#20#211#4'@'#153#141#237#205#9'7es9'#4'S'#200
+  +#213#230#182#231#178#8'C'#18#1'%nW_R'#225#157#237'L'#186#19'uV'#148#253#225
+  +#139#189#31'Vw'''#163#161''''#210#219#15#142'T^g'#162#219' '#1#223','#1#17#11
+  +'E('#196#183'_'#238'fos1gr'#207'v'#205#6'i'#15#130#251'an'#249#222#150#15#134
+  +#230#0'jn'#236#14#238#219'#[,5 '#220'ss %p'#153'y'#218','#198#185#1'Q'#16'z'
+  +#25'Y'#182'?*,'#235#131'v'#31'Vu'#164'u'#236'%'#198#30'xt'#211'EweN'#16' -'
+  +#246#246#246#157'#'#220#21#248#31'[s'#10#4'Xt'#174'jl'#179#141#12#139'cC`w5/'
+  +'e'#251#252#157'"'#188'E'#248'w'#6#235#232'fEf'#190#185#145'='#0#222#14'G'#15
+  +#132#247'E'#242'-'#228','#156#10#25#248#182#176#194','#20#129#22'0r'#178#3
+  +#200#8#137#227#17'&'#12#181#12#134'p'#232#236#143#241'o'#226'#O'#215#138'R'
+  +#16'<'#136'W'#16#136#214#199'G'#12#181#221#22#248#22#128#230#19'w'#20'8*'#156
+  +'l'#213#2#174#14'%'#132#228#202#246'm'#23#157#134' ck'#210#253#233'0'#1#202
+  +#26#253'K'#156#255#138'H'#1#15#182#241#138#190#239#199' u'#228#137'W'#12']'
+  +#252'7'#184'-'#141'P'#184#249'Nu<'#128'O'#16#8#13#16'/'#254#246#29#164#128
+  +#250'hs7'#4'Ir'#22#15#135'`1'#137#237#214#234'x'#1'6'#138#5#2'4fpav'#187#17
+  +''''#127#16'S@'#136#6#235#136'@'#251#237#13#243'Fu'#197#132#189'vB8lr'#221'w'
+  +#23'4'#235'j+'#190'lu'#22#138'_'#176'@'#216#136#8#22#221#183'X6'#29'wu'#191
+  +#138#179#206'O6'#220#131#185#186#19'Lu'#171'>'#168#200'l'#230#218#201'Z'#207
+  +#16#12'['#15'Dn'#179#14#25#3#144#31#211#137#211'Ozk'#220#178#255#19#145#216
+  +#243#246#134'|'#3'A'#209#130#212#244#235#233#246'Bv'#7#254'#zH'#210#204#198
+  +#11#223'O'#6#162'o'#180'F'#225#193'6'#194't'#21#138'Y'#252#219'/'#213'k'#149
+  +''''#139':'#131#199#20':'#142'G'#252#139'w'#248#22#23#150#12#155#243#131'et5'
+  +#183#173#22';'#225#127'F'#151#7#128'+j'#244#183#248'['#5'2'#131#198#4#140#216
+  +'X'#142#192#139'v'#252#235'RK'#243#189#230#26#131#195#15#26's'#193#213'51'
+  +#144'.9'#12'h'#200#214'^'#218'.h'#138'Qn'#194#185#172'EO'#6'}'#186#173#222
+  +#209#161'Wu'#21'F&'#1#255'.'#221'K'#176#192'@'#170't'#132#136#207#170#6'J'
+  +#192#168#30#138'y'#198#246#236#179'U'#151#1't'#10'O'#136'D'#16#133#11'F'#168
+  +'b'#226#159#255#17#237#217#21'YL'#28#161#196'f&'#137'F'#254'e'#173#129't['
+  +#129#178#11'r'#8'!'#171#239#31#12'"tt#H'''#198#253#2'$'#133'Y'#129'-'#250'%'
+  +#3'uwKl'#29'X'#245'G'#127#232'!'#16#156#144#135#191#16'*'#1#235#211'N'#15#235
+  +#199#220#144#28' 6'#178#162'C'#223#22'\'#219'L''c'#7#26#19#180'~'#15#128'|a{'
+  +',rQ>&'#198#6#227#248#31#214'(1d'#12#146#192#142#251#244'D'#139#214#137#130#2
+  +#237#138'7'#24#163#217'vG'#168'9Y5'#212#161#194#251'VDD]9'#197't'#29#179'D'
+  +#132#147#206#17#5#163#224'D'#6'5'#24#152'AU@'#6#155#170'v'#132#190#218#198'i'
+  +'.L'#253#163#129'`z'#20'U'#134#6#186'/|'#224'n'#205'N'#216#255'U:$`'#212#30
+  +#235#198#176#182'-k'#31#177'I'#199#194#195#133#210#24#144'_'#6#159']'#22#156
+  +#129#182#193#183'&'#184#4')0'#171#219'oN'#217#193#139'V'#252#138'h'#31#197#16
+  +#13#12#8#223#182#197' '#140#26':'#195'^W'#215#220'V'#186#222#139#234';'#137
+  +#205'31'#149'0'#236'BRK'#204'f)'#223#130'|'#241#163#223#187' '#177#240#187'j'
+  +#162#137'{AY'#31'N'#224#7#147#232'n'#225#193#250#3'%'#176#210#8#4'2'#149';2'
+  +#218#219#6'A'#241']u'#225#255'1'#144#191#149'p'#197#198'-4'#162'.'#2'D'#136
+  +'o'#142'^'#15#148#194#253#158#129#214#197#210'('#146'@J'#226#24#241#254#233
+  +#25#237#188#10'Ft'#18'p>'#139'7'#131#198#141'eY^7'#142'FvQ'#219#233#24#203
+  +#134#165'v'#251#207#144#23#137','#13'1n0'#198'='#11#8'w~'#4#0#25'g'#196#150
+  +#216'4'#214'P'#31'@K'#243#253#201#31#186#139#23#131#194#15#23'r'#170'm'#188
+  +#181#209#137#199'Z'#3'!<<'#137#17' '#184#183'5'#160#12#11#12#191#217#15#219
+  +#154#235'J'#221#19#133#7#177'l0'#23#186#212#183'['#9'0;'#3'(u C'#242#16'J'#24
+  ,#201#189#149#243'u'#9'F'#138#134#155#210#189';'#6#23#14'c'#255#2'&l'#161#202
+  +#255'W'#4#131#218#144#142#11#139#192'/'#22#204#173#227#174#169'X '#230'\`'
+  +#137#217#8#17'U'#11'%'#211#227#232#138#149#28'L'#244'E'#255#143#245#196'oO`'
+  +#235#228#246'C'#224'w"~g'#3#165's'#155's-'#17'n]'#223#26#16#168'/'#255#198'P'
+  +#2#185#128'<$-u'#4#247'\'#138'c'#16#165#154#204'V$'#21'K'#209'X'#7#219#151#23
+  +#10#235'7'#8#142'AI'#248#138's'#28#198#182#173'fn2'#133'a'#8'K'#9#4'@'#165
+  +#219'8'#217'*fP'#3#1#6'T'#229#144#167'R'#239':lk'''#248#0#150'US'#187#240#180
+  +#135'YF'#182'+'#8#245'-'#236#215#196#182#187'I'#200'S'#131#249'.a'#200#21#184
+  +#210#185'5'#152'\'#25#138#176'pq'#189#29#3'('#199#138#14#138#186'F'#168#16
+  +#130#14#190'-'#248'k!^'#10#1#193'zfFNZX'#10'^'#6'G3'#193#10'g>'#147'M['#199
+  +#132#157#250#237'['#163#237'uf'#14'e'#227#4'Eu\G9c'#229#129'mTF;'#206#254#169
+  +#5#179'-d'#144#1#252#25#6#129#133#189'28'#149#254'tg'#130''''#25'h'#221#146
+  +#168'''I'#204'9.[R`3E'#202#16'8'#204#149'}f\"'#227'SAY#`'#23'>tSW'#215'&6'
+  +#232'W'#26'1'#213'tJI'#245#197#194#255';'#29'h'#138'E'#255'M<.t1,0'#199'%d'
+  +#182#31#170#235'Eyj|h'#247't'#17#137'o'#195#132#237#7#235#218#209'Q0'#235#154
+  +' '#142#236#10#135'f{'#26#150#197#253'(U'#230#24#236'J'#170#26#141#136#228'n'
+  +'U'#186#18#217'P.'#244#189#140#165#198'W'#16'nS@'#23'O'#187#163#186'`'#16#209
+  +#16#157#139'J'#252#27'ddy'#236#139#22'('#131#197'(M'#180#132#225#152'\RJ'#18
+  +'B'#246'@'#23#186'T2'#240#27'L'#157't'#2'?'#29'(OQ'#234'h'#8#253#223#18#8#232
+  +'f'#244#16'w'#173#237#137'\'#190#20#127#217#8't'#142#168#222'$h$'#252#141'T'
+  +#235#164'/'#20#220'J_'#210#146#185#208#5'@'#250#0#3'1'#12#27'u'#196'K'#255#7
+  +#247#217#247#219#131#217'C'#237'~9-'#138',-5n;'#1#197#144'G+'#16#4'k'#178'4'
+  +#178#144#8#11#169'+'#181#190'p`0R'#17'0'#142#194#139'r'#193'y'#226#182#170#24
+  +#2'H'#4#20'(a72'#178'NFVC3'#184'+'#158'HD{'#148#133'<'#224#210'!#'#181#162
+  +''''#164#155#193#216#21'k-jw'#147'D'#132#173'#'#206#14#6#177#215#173#180'0'
+  +#190'#'#30#156#208#161#28#179'9'#199#15#143'<'#234'd'#169#193'.:'#238#219#128
+  +#220#132#7'6a'#1#142'E'#202'1'#155#195#202#17#204#9#255':'#24#142#171'j'#213
+  +#171#127'%'#248#193#248#31#151'Z)v['#174#23#237#251'#Z<X'#247#254'o'#132'!'
+  +#24#193#249#31#1#195#17#209#235#177'x'#187#140#11'k'#135'DZY'#175#216']X'#164
+  +#246'+'#11#24#190#29#145'.'#213'J#hx'#203#4'='#10#191'k'#160'|'#143#188',#3'
+  +#20'+'#146#251'6'#20#29#199#2'0'#137#17'+'#174'B'#195'N'#191#16'*;'#148#139
+  +#212#132'S5'#24#254'k'#155#25'd'#2'%'#9'&'#197#11'k'#155'{'#13#175'Z'#240'a'
+  +#178#205'@'#194#201#252#253'#'#0#28#28'6'#169#208'"?'#2#206'@'#223#20#131'L'
+  +#187'-j'#15#175#215'E'#1#133#185#162#17'iDg#|'#18#204#148#179'9'#248'|'#209
+  +#171'u'#147'S'#194#135'3'#167't-'#163'e'#253#144's'#193'v*}'#15'YX'#8#241#12
+  +'F'#184#8#137#247#131#242'-*u2>O'#140#134'8'#184'8G'#248#133#163#209#164#183
+  +'!'#143#222#172#204'XIG'#170'@'#255#166'o'#3#31#27' '#192#142'8'#176'|'#0#194
+  +'l&'#150'^'#253'^'#147'&'#7#175#9'gb'#179'$AS3'#145'-'#154#143#252#8'AOn'#24
+  +#178#237#153'='#177']'#16#129#24'-'#203'['#148'V\'#24#142'CC'#209'%'#236'{'
+  +#128#148#235#187'9f:'#240'7'#23'"'#239#203'0|9'#127#4#131#232'0'#195#245'y'
+  +#182'Wr'#18'afW'#195'r/'#9'N'#252#127'R'#137'O'#8#192'fY{HJu'#8'<l'#164#154
+  +':'#137#209#224#17#207#241#19#246#214'^0'#31#24#140#141'Z'#1#159'e'#209#168
+  +#193#136'L'#161#143'i,zkj'#185#128'>^'#236#241#5'<'#162'DS'#176#16#176#128
+  +#144#143#141#201#155#232'FD'#131#251#208#219#15#133#137'L'#19#165' '#186#166
+  +#140#207#18#205#2#177#202#208#187'lma'#211#0#4#194#249#10'`'#138'#'#12#6'h'
+  +#255#194#191#168'@u'''#128'J'#13'&'#2#198#0#13#139'*E1'#190#149'Z\,*@'#131'x'
+  +#8'9'#240'u'#11#183#179'O'#241'8'#247'u+&'#136'u:G'#191#149'r'#219#139'j%:+k'
+  +#8#133#195'u'#5';'#226'5H'#246'j'#20'u/*'#15#164#2'^@'#146'y'#213#146'mlK'
+  +#154'H'#12'c'#220'#'#11#129'f'#15'5"/J'#147#21#179'R'#240#208#13'ZA'#132#248
+  +#0'>x'#221'Z'#177#21#15#140'2'#194#239#227'P'#232#182'%'#28'('#18#4'|'#17#150
+  +#224#12'`'#6'E<'#172#129'R'#20#250#207#11#193#141#183#18#2#153'b'#197#143#3
+  +#179#7'p7'#138'u'#24#18'T'#15'3'''#3'h'#207'Z\'#2'-L'#232']'#191#212#143#17
+  +#169#136#231#128#231#239#175#12#136'y'#13#168#10'o'#254'B'#229#180#139'y'#8
+  +#139'_t'#170#139'q'#19#131'}w'#129#23't'#161'O'#157#137#243#137#250'J'#172
+  +#232#7#228'k'#143#128#22#1#215')'#214'u'#132#13#195#6#208'0'#6'X$'#12#25#158
+  +#130#183'6'#226'#'#204' '#189'+a'#196#195'E'#206'&'#177' oV'#248#194#31#130
+  +#131'z'#20#209#15#138'b'#13#11#128#21#188'"'#252'Q'#199'B'#20#134#233#222'p'
+  +#16'\'#195'T'#255#222#247'J'#138']'#168'V'#188#179#128#225#248#188#186#205#4
+  +#217#149#130#223#22#136'j'#13#141'J'#24#156'7'#1#0#200'q2'#194#11'B'#2#170'v'
+  +#155#174'e'#178#211#29'@'#235#168#8#0#16#8'+kh'#159#180#8','#175#226#183'B'
+  +#13'Q'#13#205'|,;'#5#248#191#171#1'l'#169'w$v'#228'QSR'#139#21'P44'#209#31
+  +#174#28#130'S'#248#196#162#28'F'#192#216#30#145'fY'#19'('#252'c_,'#19'$'#190
+  +#234'W,'#131#250'mu'#6#192'X'#246'E'#141#205' '#31' '#147'QmU'''#224'B'#240
+  +'%m'#212#11#188'g'#11#1'uj"<\F'#22'Z'#133#185'a8'#182#13#215#10#29#255'+3'#13
+  ,#1' '#26#127'l'#201'M'#205#237'|^'#228#180#185'WQK'#157#228#28#26'hF'#172'kG'
+  +#252#16'3'#180#233#133'q'#30#14']'#233#235#234'9]'#176#188'}'#4'N'#137'rF'
+  +#246'|'#12'@'#193#255#236#198#145'nC'#235#151#27'2'#156#205#235#140#10'xPB'
+  +#186#164#255#143#223#172'6!'#206'q8`J'#163#141#214#11#182#26'ICc]'#26#169#189
+  +#224#29'`'#255#253#23'O,'#152'N:'#29#6'\'#29#185' '#160#208'&j'#192#243#10
+  +#184#128'i'#162#205#167#6'['#236#230#251'Fq'#26#192#27#16'}%'#0'$'#25#190#21
+  +#173#254#4'u;'#139#216'v4'#137'Y'#4#237#22'&;'#171'\,'#12'q'#193'~J#['#129'3'
+  +'P'#228#144#200#155#152'>'#152#232#139#1#136#130'X'#235#226't'#212#147'#m)!k'
+  +#139#17'1\'#161'6'#228#204#176'<'#13'a'#9#250#176#194'v'#223'u'#133'IB'#18
+  +#138'y'#12'I'#179#246'A}'#128#207' '#136#12#23#255#141#131't'#12'QL"'#26'SMF'
+  +#7#12#25'G'#184#230#19'B8'#14#213'R'#16#187'%`'#131't#'#31#195'D;3@.'#226#7
+  +#240#4#154'P0'#133#178'}t'#168#134'b.'#228#216#248#217'+'#241's'#239#8'['#188
+  +'.'#145']'#162'M'#3#27#165#151'4\'#236'#zK'#191'o'#246#5'%Q'#130#223'F'#21#20
+  +'l'#13'T'#180#184#240#17#160#143'59'#241'wKB'#1#200#1#13#220#23'XvC'#184#228
+  +#147#147#183#29#139'c'#130#137#203#231']'#28#162#232#22'_p'#255'X'#137'59'
+  +#209's'#18#139#29#236#15#31#20'9'#216'v'#15#130#217#222#5#163#11'W'#28#150
+  +#139'I'#4#192#191#225'n[t'#12'W'#251#17#1#202'9'#242'w'#168#181'c'#201#10#190
+  +#18'jw'#149#132#160'O'#154#238'T'#21'@'#12#15#135'{'#153#3';k.'#202'A'#16#24
+  +'b'#247#158'#sF'#22'K'#13#181'0l'#243#28'H'#23'1Iu'#233#157'/'#208#2#6#6#31
+  +'B'#7#195#30#15#133'b'#161#7'Q'#7#255#31#6#245#191'k'#250#136#198#190#158#191
+  +',t'#4#137#241#136#242'9'#198'v'#26#128'8F'#233#22#176#198#11#226'8'#250'7'
+  +#208'n}'#255#254#136#250#131#192#6'=$r'#230#129#249#7't'#177'A'#2#5#148#234#0
+  +#251'l#'#23'p/'#182'w'#7']ON'#142#214#190#228'BN'#190#188'P'#158#218'w'#223
+  +#127#6#153#188#188#20':q'#1's'#5'M'#199#145'P'#237'aZ'#235#241'W'#223#216'E'
+  +#151#232'h$'#185#185' 4'#29'l'#196#13#193'!'#249#209#161'|'#199#251#253#220
+  +#143#164'6|'#163'X'#198#14#31#163','#4#128#199#14#128'P'#159#167'$('#132#199
+  +#228'>'#136#147#136#175#197'9'#222'a'#11'x"'#25#225']'#219#247#139#22#248#165
+  +'7'#20'$)'#242'@'#153#1':V'#252#205'E'#175#177#4#128#226#252#1#208'?'#212'X'
+  +#244#133'\$'#252#137#211#152#194#136#27'U'#226#21'.'#7#25#139#136#13'La'#239
+  +'''Q8B'#139'A'#152#137#255'9'#4#237'GH'#196#215#174#8#141'<'#26's'#247'w-'
+  +#218#141'_8'#15'PC'#247#0'@'#199#4#135#155#237'aQ'#225#235#176'O>'#12'$sm+('
+  +#241#138'"'#128#252'Q='#246#7#224#182#217#248#9't'#248#132#228#192#183'0'#192
+  +#14'"tz'#163#254#215'>|'#209#128':"u:t'#18'B'#132#219'v#'#232#176#176'<'#176
+  +#1'0'#227'#'#235'e'#23'q'#171#229')u z'#145#0#208'l'#237#187'l,,'#187#138#2
+  +'G&'#17'oBj'#183#179#173'yq'#157'b)'#20't'#213#10#246#238'm'#3#255#207#14'\u'
+  +#19'O'#29#128'z'#1'Y['#215'n'#227#9#138#135'B'#18't'#152#159'0'#136#145'['
+  +#194'm?'#210#235#212#22#1#131#207'B'#22#221#237#219#180#25'B'#132'7M8'#218'r'
+  +'t'#236#18#6#207#150'h''AR@'#255#11#136#1'1h'#193'Eby'#248#163#26#219'h[}'#10
+  +#137#193#235#28')'#195#193#149#12#175'_'#206'\'#169#26'A'#3#216'4w'#245#168
+  +#132#241'Z'#195#15#25' '#24#180'^-''_'#16'K'#19#143#11#230#133#131#227'B'#203
+  +'2'#26' '#238#217'P'#157#226'.'#214'x'#193#226#8#229#4'$^lX v'#16'K2'#13#161
+  +#140#27#196'k'#193#0'|'#10#4#224#195't'#185#11#245#163#144#10#14'_C'#151#11
+  +#196#227#161'W'#247#0#252#18#13'skV5'#195#127#218'L'#188#230#199'Yo'#9#161#6
+  +'v,'#168#29'P'#155'Q'#13#239#141#4#141'h'#21'$'#216#10#178'2 '#213#130'0:'
+  +#255#216'_G^'#216'u,'#235#214#19'9'#200's'#23#141#20#133#28#7'6~B'#1#218')'#2
+  +#0#155'd'#207#245#222#22'r'#242#137'_'#166'&E'#215'NI '#17#239#135#22'+'#188
+  +'a'#141'S'#149#13':'#133#161#21#175'uv'#14'IAd'#183#183#11#191'AoA9'#218'rVr'
+  +#209#248#251'@'#137#240#172')b$'#220#204'/;'#29'n'#231'{#'#189'''1'#211#149
+  +'0s%'#206#221'0'#253':t'#31'*'#28#240'B'#6'D'#160'{v'#236#177#235#181#195'U|'
+  +';'#235#202#20#30#131#205'f'#143'rW'#172#150#208#209#232#177'YIW'#137'4'#145
+  +#146#137#8'6!'#143'R'#251'6 '#1#177#210''''#254'o'#178'W&,'#31#139#27'>'#183
+  +#142'('#214#159#10#131#212's"c'#199#224'W'#30'Rjt'#166';|so'#191#218#217#31
+  +#161'v'#152#176'xv'#10'('#2'u'#227#236'mlo$'#244#235#217#4#245#231#187'o'#27
+  +#236#132'a'#213'_Fj'#1'm'#140#198#23'M'#160#2#148#27#197#155'9x'#155'\A'#137
+  +#6'N'#231'>T'#238#230'X'#224#21'XB'#161'T'#5':'#131'E(2'#226#19#163#14','#214
+  +#218#138#144'a'#15'5'#144':'#139'p'#216'n'#161'x'#137#186#154#158#248#226#11
+  +'y'#5'!'#5'-'#188'G'#178#246#8#187#172#27'g'#158#184'l'#178#22#244'2'#20#171
+  +#15#203#254#28#197#22'3'#12#215#235#218'*'#137'S'#7'r'#19#223#239#163#217#194
+  +#221'4'#132'K'#131'='#156#162't'#216#138#18'o='#155#178's'#29#141#196#143#21
+  +'.'#198#139','#3'UF'#194#161#188#11#20#232#27'K'#247'|'#229#26#196'7'#9'p^1'
+  +#12']'#194#208#27#25#2']x'#150#14#228'-'#191#163'L'#188'SN'#194#193'h'#147'A'
+  +#8'8'#134#199'8'#209#14#7#28#130'['#137#21#241'!'#13';#'#207#128'=`'#159#196
+  +#198#3#207#3#212#195#213'RP'#204#172'gT'#255#235#6'WVIDEO'#240#8#195'P'#173
+  +#26#15#176#206#197' 4'#14#139'x'#17#175#166'='#26'0'#128#223'Ir'#21#184#8#2
+  ,#141#18#17'_'#163#167'[S'#239'*'#148#3#24#251'"[!P'#16#238'Z}m'#161#155'gj'
+  +#255'%'#1#1#17#142#129#232'*'#214'X'#216#241#140#21'L'#246#15#11'6'#17#13#240
+  +'f'#199'D~'#254'ep#'#129'8a'#16'm'#159#246#24't`'#142#13#199'N)'#201'I78'#204
+  +'6'#254#242#174#247#209'I'#7'c'#200#152#240'0'#216#14#13'XbM'#199'uC'#8#130
+  +'-'#30'o|o'#139'cl'#141'X8'#219#141'E'#193'D'#140#232'{R'#22',Y'#225'H'#192
+  +#132#127't~'#133#136#247#147'"'#7']l'#14'Rn'#21#249#232'~)h'#127#29'Pe'#130
+  +'A'#3'{-'#176#210#225'"E'#227'-a_'#157#223#138#24#9'o4'#20'K'#22#8'Q'#132#198
+  +#248#141'p]'#24#248#6'g'#26#136#24#132#23#213#28#213'6'#136#6'#'#192#22'M'
+  +#253#163#248#18'QI'#138#146#200'='#4#136'Q'#1#216#186#253#208'|'#234'!'#128
+  +#251'0'#172'F@p'#202'E_'#139';'#163'xu'#245'q'#12#189#251'S'#27'"o'#207#129
+  +#236#27#139#172'$'#24#6#232#224#214#189#138'%m'#198#24'M'#2'm'#4#223#15'm'
+  +#162#225']@'#129#196#30'k['#168#198#5#218'5K'#240#30#1'^='#225#8'b'#28#162']'
+  +#232'G'#27'0'#246#136'4$\='#144#17#154'c'#221'V1'#138#2'!'#141#10'@'#3#5#191
+  +';nFH'#186'v'#182#151#224#139#25'C'#252#186']'#128#216#179#167#13'Y'#12#14'~'
+  +#132'$'#28#9#141#250'nP'#141'T'#196'QV5'#235'@'#191#186'+?'#178'u'#196'0'#9
+  +#134'P'#208#136'<$'#187'`'#0#8#133#181'N'#9'G'#136'[<V'#167'E0'#201#136'B'
+  +#247'E'#0#206#190#21#20'5tl'#186#241#150#157'I'#206#158#25'd'#168#1#183#17
+  +#164#6#153'd'#144#17#172'!'#168#153'd'#144'I1'#160'A'#158'tC'#6#156't'#1'Q'
+  +#183'd'#144'IN'#180'a'#196#144'I'#6#153'q'#184#129'I'#6#153'd'#192#145#188'~'
+  +#6'd'#144#161#200#4'H'#186#177#25'l'#146#193','#152#193#17#148'd'#146'A&'#209
+  +#144#225'h'#17#194#25#140'qP'#176#31#4#202'0'#237#136',$'#252#162#158#5#179
+  +'b'#159'u'#183#190'7'#215#201#254#135#219#139#173#245#247#197'd$'#133#165#193
+  +'X;'#155#1#6#184#31#25#185#27#248#14'rd'#211#193#250#31#247#249#129#14#186'0'
+  +'A'#198#178#30#31#8#192#209'R'#179#6#4'p'#195'F"'#224#224'/'#148#131#254'H'
+  +#15#142'z'#215#14'0'#29#159#144#13#15#134#241#0#220#147'n'#130#31#151#26'='
+  +#145#227#134#203#191'E!'#2#182'_'#244#217#210#163#143#178#0'>'#225'+'#187'B'
+  +#245#249'y'#150#21'='#148#133#240#219'>c'#23#246#186#251#181'!'#253#26#213'='
+  +#182#131'}'#247'Avd='#142#22'wg'#186#133#179#18'w'#25#236#129#244'2'#186#23
+  +#181';'#186'H'#14#24'M'#248'B'#28#131'yp_'#186'p'#181#13#31#242#140#253'3'
+  +#230'='#29'vy'#191#186#224#178'''9'#228'a'#9'2'#179#216')'#180'M2'#201'!u'
+  +#194'w'#248'a'#141#129'^'#138'S'#137#233#186#18#5#187'Vj'#134'6'#229#28#16'A'
+  +#23'ur'#129'!'#239#30'`N|'#182#139'5'#208'?'#3'fP'#12#8'@S'#24'M'#211'4'#221
+  +#189#3#196#226#206#169#216#153'r'#13'3?'#175#239#5#223'j'#19'x'#139'tE'#246
+  +'C'#4#6#214'B'#245'+B'#25#3#5#238'?'#137#246'V'#13#183#15#135'W'#160'.'#128
+  +#133#236'R7'#234' ['#230#186#130#180'lb,'#188#6'_G#d<'#178#13#252#23#214#5
+  +#202'tW'#135#182#28'$'#196'|'#175']'#209'P'#19#136'5'#229#151'v4'#216#202#1
+  +'|'#23#7#166#2#22#248'U'#231#131#251'~'#9#191'!'#209'q'#206#0#195#31#11#246
+  +'F'#247'W'#23#130'!'#9#186#138#151#143#186#139#6#251'H'#240#243#136#186#131
+  +#129#186#134'xCA'#186#132#9'+'#252'C&'#133#139'F(f'#139#8':'#15#205'7'#236
+  +#191'f'#129#249#217#250'u'#10#186#136#27#16#241#142#240'C'#186'!'#11#143#138
+  +#8#128#249#219#160#17'l'#1']m'#182'0'#10'[{'#220'b'#16#222#186#141'{'#232#208
+  +'K,'#220'v'#1#191'@'#1#207'<0'#31'>'#160#0#145#248'F '#168#169#221#224'7'#216
+  +'Kf'#31#13#139'~$f'#198#129#231#31#31#197#255#20#1#201#211#239#131#231#1''''
+  +#17#180#131#142#226#183'acV'#223't'#158#235#172#244'u'#182'h'#209#133#182','
+  +#222#196#18#156#130'X'#28'k'#206#161#3#179#208#19#129#192#204'7+'#145'e3'#155
+  +#27#178#8#2#169#136#130'`'#150#3#160#132#191#155#132#231#240'C{'#174#27'A'
+  +#131#249#12'~'#181'\u'#219'~qff'#152' '#149#0#127'i'#150#17#132#214#160#11'^'
+  +'?P{'#2#212#180#8'HT!c!\'#187'7d'#139#9'T'#153#16'&'#132'E'#156#162'd'#223
+  +#159#149#179#142#191','#139'@Tm'#15#12#199#172#185#214#232#31#250':?1'#21#141
+  +#144'Q'#132#255'o'#186'G'#244#169' '#18'j'#28#144#4'$'#171#216#128'1'#177'p'
+  +#253#3#234#155#193#189'['#176#13#170'a'#28#174#215'sK'#197#171#214#22#5'C'
+  +#191#221#3#246#169#174#1#24#193' '#15'r'#16#242#3#182#27#162#217#4's'#7'  K'
+  +#193#22'rn'#221''''#6'J'#22'!'#7'L'#140#4'o'#6#143'gA'#7#188#4'm'#207#185'd'
+  +#190#219#13#192#129'/@H'#136#156'$k'#228'd'#175'T'#134#6#248#195#204#12'xo|'
+  +#252'X'#138':'#137#148'$1'#132#209'3'#139#132#10'm'#196#255#157#203#6#138'(E'
+  +#128#253'%t'#31#141#5#131'='#251'A'#234#137#22#255#215'&'#128#232#181'\'#181
+  +#235#205'|'#212'q'#251#182'o'#177'UVH'#139#6#141'R'#128#131#132#6'5hC4'#251
+  +'I<X0+'#0#159#15'E'#137#6'ZM .A'#3'R]'#14#184'<W'#245#221#219'u'#245't'#151
+  +#246#195' tJY'#247#183'Bu'#22#139#22't'#225#142'B'#252#139'R'#248'j'#214'Um'
+  +#197'&X'#128'm'#21'e'#189#13#154#171#254'I'#15#252#23#221#0#188#161#22#254'F'
+  +'R'#139'.'#6'.'#139'U'#168#159#183#129#20'N'#16'tP'#26#139#30'Mv'#172'i*'#30
+  +'SNf&#@6vC'#208'm'#14#151#14#139'Q=fS'#9'k'#165#27#131#4#128#21#144#229#237
+  +'}O'#25#131#158#6#142'@P'#190#4'6'#217'N'#21#140#130#4'"<'#176'V'#127#20#141
+  +#140#157#155#231'd'#18'<'#132#132#224'M'#252#13#192#253'"'#15#142#194#243'_R'
+  ,#189#16']'#195'l'#15'p'#1#216'I'#145'n!'#247't'#1#208#15#222#200#17'|U8'#194
+  +#151'L)'#193#138'T'#227'L'#246'CF}'#131'RQ'#192'^ u'#24#142#194#193#17#252'L'
+  +#0'~'#17#186'Q'#214#205#132#27#191#221#255'!'#235#232'S'#137#225#229'~'#24
+  +#238#184'F'#187#246#138#17#25'MhJ'#250#5#3'y'#186'K'#25#127#232'9l0'#208#27
+  +'5'#148'l'#177']#suM'#217#210'm'#27'{fa'#31'''p''Fv'#133#238#241'&'#138'U0'
+  +#168'J'#246#5#235#225#150#238#219#254#228#137#249#140#198#232#216#140'Ut5go'
+  +#229'BtQSt'#212'J'#220';'#203'2!\K\i'#27#25#146#165'x'#24'xx'#30#245#149')'
+  +#27'|'#176'|'#167#8'n'#137#131#185'^6'#253#13#158'+'#10')'#3#28#9#17#228'/?'
+  +#244#174#250#210'a'#218#198'C'#22'wJ'#156#199'C'#183'/'#253#8#193'8*t'#31#138
+  +#145#250'0r*'#4'9w'#184#180'+'#250'%kK'#4#10'W'#131#234#147#209'@'#245'2Z'
+  +#169#147'}6'#137'S'#136'R'#241'Fd|<@'#162#232'I'#197#191#11'8.uS'#174#138'hy'
+  +'N'#182#173#215#253'L1<7'#22'Q&d'#8#8'Sn'#165'6'#254'k'#30#247#223#128#205'm'
+  +'{'#155#10#235#178'Y'#196#230#192'^'#8#29'@'#18'='#218#242#246'Ns'#27#4'Is`F'
+  +#227'1'#183#197#193'N'#195'z'#235#218'${'#191#136#127#139#248#250'ls'#20'=u'
+  +#227#138's'#30#128#206'_'#196#175#153#194#7'''w'#22#14#21#139'x'#205#252#138
+  +'S'#31#128#202#1#8#23#13'l'#139'h'#174#183#130#128#13'k*'#219#155'/'#226#28
+  +'n'#161'u'#155#138'K0'#201#246#139'87'#3#136'K*'#134#128#11#147#220#158#129
+  +'['#14#9#30#128'@'#195#199#138'&'#127'f'#199'B'#30#7'\'#226#246'B'#24#239'-t'
+  +#12#4'#uVJ'#30#247#219#230'.'#20#235#237#6#248#247#17'+u'#20#138'jxn'#239'J4'
+  +#246#17#7#227#253#136'ZA'#235#206#1#253#191#209#24'j'#19#138'z'#30#246#199#4
+  +'u'#209#136#249#203#182#171#238#173#23#182#173'u'#6'"'#22#171#1#152#2#3#19
+  +#238'h'#168#10'|['#194#236'o'#142#23#224'F'#129'L('#30'B'#14#5'@@'#9#161#248
+  +'9'#248'u'#241#7#191#139#166'.'#170'^N'#222'e'#193#149#222'Z'#162'P'#186#174
+  +'*"'#139'1fK%G'#163#226'f'#139'N'#242#240',A["'#2#204'f'#227#242#4#176'AJ'
+  +#223#127#7#238#253'B'#183')'#131'9'#244#29'9'#243#127#25'+8'#209#173'9'#176
+  +#17','#224#220#28'~'#207#10'('#208#172'm0'#207'O'#133#139'A>'#213'<D'#137'S'
+  +#140#140#190#239'/'#252'i'#204#224#255#23'`'#202'H'#173#20#137#238#141#12'('
+  +#1#234'I'#138'Z'#255'J'#255'%'#250'_'#147'Y'#1'9'#242'u'#243#141#20'('#242#7
+  +'H'#198#2'0J'#235#245'A}q'#169#3#22#198'EX'#4'pp'#216#145'N'#144'o'#193#30'?'
+  +#177'@4'#127'('#140#243#131'~'#8#144#138'/E'#136#199'F'#8#4'.?'#230#218'Zwnf'
+  +#18#189#252#138'!'#137#203'n'#169#191#0#204#8#138'Q'#1'A'#132'#'#248'/'#8#190
+  +#189'U'#131#198#1'.&'#139'n'#8'A'#160#191'i['#211'"'#240'ft'#2#139'<$k'#215
+  +#10#197#191#223#25'p'#12#128#194'0'#136#17'@!9'#232'|'#222'f'#163'aj'#255'x'
+  +#160#148'a'#212#184'mA/&N'#255'I'''#142#223#254#182#12#1#204'1'#128#254'9uT"'
+  +'0'#235#230#247#218#198'm{'#3#238#198#0'-D'#27'L"'#141'K'#13#3#31#221#162'l'
+  +#133'9'#214#127'A'#145't'#248'L'#239'n'#187#143#128#252'6'#24'.A'#136'!'#148
+  +';5'#182'n'#129';q'#8#254#30#247'R'#14#219#158#172#24#254#136#243#254#3#25#13
+  +'Q'#182#133#219#255#252#217#138'['#23#136#28#162'Y'#30'?'#20#217#198#22'4'
+  +#170#141'^'#255#195#238#135#224#218#194#138'e'#136#12'+5'#144#27'7'#142#16
+  +#159#246'@'#138'u0'#232#22'Ro'#4'le*)'#139'H '#238#237#237#255#255'$)'#202
+  +#139'p()'#218#139'x,)'#242#139'h0)'#250#22'4)'#234#21'L'#136#246#11'T~'#5#1
+  +#211#137' '#135#14'w"!'#127#159#130'^'#7#163'{'#131#199#1'('#137#205',<+'#23
+  +#131#223'z'#5#147#199#27'^;C('#127'C'#221#10'n!'#230'ICt'#18#162#173#162#189
+  +'}'#138#22#255#213#139#20'HF'#137#4#247#237#137#183#197'{('#229#196#215'v'
+  +#199#18'"Y'#12'{_'#14#193#217'n'#24#140#29#199#239#208#30#7'&4'#178'l['#219
+  +'z440'#2',('#244#194'K'#203'$ '#239#21#137#253'EbuiO|'#13'm'#136#31#131#229
+  +'%'#16'{'#16#31#10#197#235#139'Z'#248'd'#148#214'V'#21'|'#27#183#24#31'*d'#15
+  +#5#1#8'Pn'#207#229#185#222#3'E'#9#4'C?'#185#5#29#143#181'QO'#4#226'F'#21#136
+  +'[ M('#14#152#1#245'O//ow!ot'#146#4'ut'#141'xt'#136'Xt'#131#156'3'#3'|V'#133
+  +#202#133#163'['#0#136#5#221'(['#135#16#20#170#3'^'#211#208#0#152#224'=a,|\'
+  +#192'g3'#4'1'#182'V p'#180's'#246#13#236#198#4':-H'#152'5['#193#172#4#29'>'
+  +#138#218#215#170#237'G'#161'NE'#31#30'?d>'#4#223#203#4#139'K'#252#20'L'#127
+  +#137#8#17'%.'#209#236#166'I'#252'<'#216#163#13','#227#4'<'#129#225#236'  '
+  +#159#217#182#167'i'#19'XCL'#132#224's'#179'41'#20#212#130'M'#231#10#196#163
+  +#30'AJ'#15#131']'#170#216#191#201#27#26#141'N='#240#176#194#235#216#247#217
+  +'D'#138'~'#202#233#189'f'#154':;+^'#199#11#131#26#164#173'"'#7' '#172'v'#190
+  +#130#169#6#31't'#4#198'F'#163#166#228'7'#3#241#210#1#31'v'#31#137'\6R'#3'"'
+  +#194#166'b'#30''''#19#3#2'Tfs'#224#26#140#14#4#143'd*6'#18#252#2#171#240#194
+  +#139'^'#27#16#173#10'hM'#238#7#193#246#182#27'l)'#208#10'$X"G'#135#132'''^'
+  +#12#172'<'#191'sI'#172#169#185'/f'#15#130'''C'#137#223#0#234#193'Eg'#238#23
+  +#15#254#243#129#181'@}'#160#157'<L'#12#220#140#218#244#192'\'#225#25#21'iMw!'
+  +#165#219#185#19'u@'#181'+'#255#236'F'#217#216'l'#150'PV'#7'0O'#225'as'''#182
+  +#160's'#144#0'{'#158#189#145#27#221#141'~au'#17'3'#128'q'#162#2'3'#156#143
+  +#191#13#31'f'#30#249'6'#4#211' '#216'h'#130'9'#141#146'L'#187'?'#10'b'#245
+  ,#153#208#205'K'#156'p'#131'#A'#242'W'#5#153#198'G'#191'R|'#172'\'#18#128'~'
+  +#21'P'#234#173'g,'#132#12#230'f'#187#175#187' c'#183#176#241'o'#198#7#230'N'
+  +#191#193'f9'#1#179'0'#180#20'$'#142'f'#231'O'#13#162#1#29'f'#146#245#197's'
+  +#147#176'uUS'#188'd+I'#9'K'#135'V1'#195'{Z'#190#131#139#6#229#133#133'v'#140
+  +#208#252#161#155'$'#132'Vn'#200#7#200','#195#11#186',uu'#157#252#243#156#241
+  +#193'm&?R'#142#14'=t7rT'#235#157#242#28#135#228#136#16'.'#1#133#0#226't'#30
+  +'R'#158'6H'#150#12'<'#7#162#2#24#15'B'#12'~hgvV'#226#237#145#237#228#162#253
+  +'xh'#144'Xs'#14#24#150#237' '#151'S'#11#255'v'#139#140'b'#16#252'l'#179'a'#2
+  +'8'#187#2'FP'#172'v'#18#6#241#220'\'#130'8'#232#253'GT3'#8#28#209#251#170#192
+  +#16'2'#14#196'M'#12#155'S'#134'CZ'#170'A6'#29'HA9M'#133'1ni'#203#254'4'#197
+  +'<VQ,d'#236#144#141'B'#28#174'l'#167#239'%HK,'#16#173#153'%'#156#12#159#142
+  +#236#26#133#138'R'#7#6'`'#171'('#153#21'2'#1#195#8'i6'#24#131#250'gLXj'#13'N'
+  +'_'#217'''Q'#141'A'#242#221#136'\'#150#193#252'6'#1#250'9'#236#248#30#142'Q'
+  +#161'i'#11#241',}'#205#241's'#127';'#143'2'#179#30#16#190#138#9'$'#24#24#4#12
+  +#132#2'e'#138'<!'#225#134#137'`'#215'n]'#252'fL'#13#11'SA'#189'a'#188'9'#160
+  +#210#233#250#251'3'#131'=t'#18'd6'#19#31#18#137#16#178#13'$(K+p'#6'['#24#127
+  +#9#136'G'#1#255#207'{f'#197'I@'#1#7#169#248#26#8#25#147#196#15#251#216#0';`@'
+  +'H'#255#168#1#202#136#206#187'V'#190#15#192#199#3#128'e'#236'B_'#247#128#11#2
+  +#168#179#25#195#23#128#182'B'#147#147#1#235'$'#7#4#181#173#13#9#175'r'#24#18
+  +#4#251'l2'#178'E'#21'@:'#192#235#241'B71F'#3'OQ<'#224'p'#131#234#237#198#183
+  +#225#255#248' s'#11'"v'#29#8#16't'''#136'7'#136#133'_3'#234'r'#247'vfk'#181
+  +#183#6'@u'#240'7'#254'GY'#239'}'#9'x9'#195#222#128#10#2#14'u'#192#162#128'}'
+  +#7#2#30'#T'#157#144'jQ'#0#12#2#130'D]'#240#255'j'#174#148#129#130#208'B'#2'O'
+  +'q'#223'fQ-Z'#182#8#139#21'L'#190#209'.n'#136'@J'#129#250#252'ut+h'#212'+'
+  +#192#161'O'#163'dQ['#212#203#188'V10R'#205'"'#190#184#248#25#139#202'C+pK'
+  +#197#20#209#213'l'#203#22#170#199'^'''#176#168#202#149#235#166#14#0','#5#196
+  +'''x'#203#221#11#218#158''''#193#227#227#232'U'#152#137#132'F'#246#158'-'#163
+  +'"w'#15#205'f'#179#22#206#197#194#191'oC'#205#10'y,'#17#208#185#17#144#181
+  +#247'Pr'#161#162#168'Q'#5','#4#130'R'#189'A'#140'2'#127'jvs*;B'#3#177#143#157
+  +'s:'#141#28#155'39'#22'n'#213#234'=hl'#161'F'#168'9'#20#3'-'#226'E'#208#17'-'
+  +#3#143'z$'#234#15#159#195#213#1#216'@'#163#139#197'^'#193#235#190#175'!1.'
+  +#232#131'$'#12#143#250#8#13#139'E'#196#223#255#15#173#29#161#134#223#173#24#4
+  +#217'TP'#127'M'#4#143#186#6#139#130#221'V%)'#216#20#248#24#19#247' '#14#132
+  +'c'#15#185'A'#132#232'p'#183#249#174'4'#5'''K'#127'-%X'#156#176#21#188#21#26
+  +#16#168#128#15#204#184#168#211#0'0'#200'aFR'#240'D'#169'^'#207#6#233#146#225
+  +#17'oK%'#29'w'#15'C'#163#233'yy'#7#12#130'Q'#166#236'a'#5#18#21'ZCZ`a'#204#10
+  +#20#143'7Z'#200#165#191'X'#28'"'#15#160#255#214'1'#198#15#168#164#199'KXP'
+  +#212'wS'#141'h'#11#131'1'#8'~'#169#229#232#253#16's'#5#189#17#224#11#17#151
+  +#20'0'#228'}$$;-tH'#193#166#148'vMc5'#21#174'B'#212'BO'#3'V+'#14#28#203#172
+  +'/h'#220#161'n'#127#20'>'#148#27#235#202'sN'#15#169#15')xg'#213#161#7#161#13
+  +'F^?'#5'g'#31#235#189'1'#219#9#137#253#235#173#139'+'#248'X'#169'q'#155'_9'
+  +#254'r'#28'8#@|!`\J0'#177'_C'#223';50wy'#8#222'd'#137#15#6#134#231#216#235
+  +#240#133'j'#12'k'#16#244#9#232'x'#173#250#31#193#28#8#8'D'#8#217#141#31'#'
+  +#181'k'#5'H'#159#179'2j|x@LX'#191#229#178'Xz'#9#232#157#18#212#23#128':'#1#25
+  +'F'#232#18#13#31#227#199#6'G'#236#192'HD'#172'i'#26#242#172#168#129#131#135
+  +'t'#25#131#2#205'A['#169'&'#6'N'#5#215#252#133'X'#248'Qk'#252#219#141#229#199
+  +'Q9'#195's'#2#171':no'#221'PRj'#207#29#196#194'S'#218#214#192']'#195#151#174
+  +'c'#6#139'E'#244#6#217#164#170'A'#176'd'#192#177#168#135'`r '#184'#'#247#246
+  +#215#255#23#128#240#127't?)'#219#1#192#17#210#209#219'L '#131#210'k'#186#255
+  +'}'#199'$'#214#0#224#143's'#28#7' pr'#29#129#234#26'p'#160'A'#237#247'%'#3#9
+  +#218#139#149#22#170#221'nQ'#127#9#216#8')'#192#3#17#7#182#141#219#27#219#3
+  +#247#227#195#146#247#225#220'X'#9#1'('#4#171#198#4#202#223#183#3#4#6#233#162
+  +'1)'#30'I@'#140#134'd'#165#10#140#223#130#176'2'#136'd'#129#168#225'I'#170
+  +#207#213#137#223#185#140#4'3'#154#153#127'['#235#19#170#183'"'#228#171#179
+  +#137'D'#187'H'#16#151'N_[t"G'#216#145#11'8j'#2''''#231#16'Q'#17'L'#210#137
+  +#166'$K'#161'6'#212'f'#19'a'#20#20'U'#173#0'#'#20#221#153'G{'#199'tH'#16'],'
+  +#8'S'#248'G6'#161#138#210#224#172#235'|I'#16#179#231'3'#130#235#207';a'#201
+  +'(n'#254't'#10#213'N2'#128#135'"'#250#8'o'#213#138'8'#187'R'#219'r'#235'`'
+  +#242#132#192'R[L'#190'l'#13#130#181#31#31#156#29#12#140#205#182#150#215#1'I'
+  +#142#233'&'#11#194'E'#243#239#195#152#0'0'#4#162#130#222'`'#171#216#167#26
+  +#224#133'*t'#12'AU4'#22#0'{'#16#169#192#130'h'#248#178#139#18#220#230#223#20
+  +'n)Vo'#132#148#16#163#137'x.'#23'm<t*'#5#24#133#20'{VOm'#172#9#15#241'A'#241
+  +#244#218'1'#237'dg'#244#11#21'J'#197#191#192'r`'#137#215#128#227#248#157#4'/'
+  +#244#237't?'#187#21'wJ'#139'O'#183'G'#12'9x'#247#23#250#203'vG'#141'wu'#16'9'
+  ,#211'wE'#137#18'O'#24'A)'#131#182#253#214'y'#5#131#250#16'rF'#229#24#10#212
+  +#170'Plj'#17'=X'#4#160'FQ'#138#151#238#137'Q'#8#3#11'@'#183'L'#213#138'U'#152
+  +#4#136#226#182'Eh'#197'KM('#223#235#178'@'#133#226#1#185#209#232'U'#130#191
+  +'-'#187#168'='#20#235#224#255'O'#28#167'+s'#238'R6'#139'H8A;'#213#243#189#9
+  +'/'#191#187'iHV'#226'/'#181')'#1'?a'#139#17#128#226#254#30#130'+'#212'.'#212
+  +#222#11'tW'#139'i'#180#5#255#216'j'#193'z'#212#138'H'#4'vd'#158#160#193#223#2
+  +':'#1#215#139#25'9'#207'=)*'#162#210#151'"'#23#26';N'#12'(om'#219'5'#146#138
+  +'V'#24#236'~'#8#6'9'#249's'#217#216'Z'#251#8';^'#16'v'#23#4#7#20#195#202#223
+  +'m'#169#153#187','#250'Z;C3K'#183#182'Q'#188#12'R'#168'B'#2#8#255'Nbk'#151
+  +#237#28#235#156's(r'#149'E'#200'Fw'#171#194#187#224'_'#1#247#243#217#15's'''
+  +#15'.'#226#182'P)'#16#219#10'va'#139#28'M5'#170#139#160#238'h'#7#20'}w'#161
+  +'ft'#8#187#1#208'Ku'#232#159's'#187#174'!@E'#184#130'L'#27']'#10'A'#25#236
+  +#201'%6'#235#221#15'&'#199'v'#138#184#141'C '#9#167#24#230#209#141':'#210#129
+  +#175#235#152'c'#235#182#183'p8'#188'$'#28#137'AJP'#6#233#199'n\'#24'[r'#213
+  +#20#212#9'+,8'#197#127#225#13#234#3't'#9'h@'#193#202#8'Iu'#243'Q'#173#208#14
+  +#194#134#6#163'Y'#150#23#253#173#229#150#14'I'#28's'#5#3#136'P'#2#195#144#137
+  +#22#188#139#0'6g'#168#31'tm'#149#185'm'#159'm'#4'3'#244't:")'#16#137'P'#181
+  +'o'#24'Z'#3#23#190#24'8P '#7#131'jK'#211#17#20#24#28','#29'7'#139'm['#4#240#2
+  +#16'('''#13'2'#216#179'1j'#21'Mt'#13#7#5#8'I'#11')'#128#142#208'#!'#159#31'_'
+  +'<'#224#138#166#6'Z'#221#128'PIU'#193#161''''#151'9n'#12'o'#236'|<'#242'P'
+  +#169#128'='#137#28'='#137#241#193#2'!Cl'#130#166'`'#198#24#140'\'#129#161' b'
+  +#141'b7'#198#21#195'f.'#150#169#232#19'X"'#216#26#201#19#175#12#191'=GWd*'
+  +#241#204#180'}'#177'5'#232#244'-'#162#188#232#255'6'#132#233'F'#208'DO0l'#132
+  +#246#185#216'[{W'#150#243'A'#138'3'#6#12'u'#234#137'4f'#4#175#250')'#232'u'#5
+  +'w'#206'H'#196#191'"nl'#163#136#199'9'#23'k'#20'jUU'#29#25'j'#172#237'Zd'#204
+  +'V1'#246']Z'#26'm'#197#151#238#174#28#17'CL@'#136'S'#255#9#245'U'#171#219'\('
+  +#12'F'#9#230#188#193'6)'#183#26#243#14'CK'#15#25#205#220'V'#157'\pva'#178#130
+  +#243#176#10'p<'#169#21'+'#139#209'0'#24#22'k'#237'"?'#23'q\'#205#242'h'#176#1
+  +#175#193#15#1#172#211'#L'#246'BV'#230'!'#29#5'{I*'#152'&'#23#19#127'*0'#20
+  +#227#198#4'@@'#235'HXK'#196#246')'#128'Z'#207#142#144#130#13#9#214#217#248'_'
+  +#192#133#4#194'H'#230#22#131'x'#4#182#209#151'nN'#16'fH'#10'f='#17#191#9#5'm'
+  +#219#209#173#242'u'#11'cv'#251#10#18#26'h_U'#132#245'q?R'#21#201#192#22'3'
+  +#166#24'P'#200#176#164#190#145'm'#20#8'T.'#25#8'"'#217#192#176#193#169'h'#243
+  +#202#3#251'$~'#181#1'h'#227'hD'#226#133#202#163'7$?'#7#246#235#201'"'#2'@hK-'
+  +#131#150#189'QN'#223#155#205#232#220'Aa'#140#161#255#15'.'#17#178#234#217#213
+  +#219#226#191#11'w'#16']'#141#7#255#4'u'#24#213#205#197'>'#248#0#150#136'X'
+  +#131#144#5#0#156#165'N^'#175#205#155#149'g'#159'+L'#3'X'#9#137'T'#31#127#13
+  +'&3${N'#9#227#136#7'+'#188#213'B~8D'#208'X!G'#22#178'O/\'#17'"Fr\'#159''''#17
+  +#152#248'b'#188'9'#194'tR'#193'b'#195#4'C'#160#140#207#226#214#8#14']Dw'#1'p'
+  +#3#241'&Q'#131#218'$Om'#21'x'#216#237#15'eLN'#131#220#129#129#156#189#4#3'u'
+  +#31'('#7#181#193'ExX'#18#235#210#221#14'Q'#249#150#13#172'RN1J'#5#222'V'#219
+  +#220'x'#9#12#4#157#7'5'#191',:'#225#203#248#127'R'#128'='#192'x'#188#229#163
+  +#190'0'#10#160#9#13#238'N('#209#2'F'#218'^'#162#230#198#5#138#149'-'#251#24#1
+  +' ?'#164#155#29'V'#22#8'"hF'#0#247'[ &'#223'q5"'#235#222#131#222#216#132#10
+  +'?+'#233#253'L'#246#18'*?'#184#2#211#195'B%'#243'=8'#19#196#5#140#187#244#198
+  +#162'H'#240#186')-'#0#196#142#206'b<5{'#211']'#3#12#155#26'O '#211'E|'#161'i'
+  +#247#151'Y'#12#127'T'#199#5#204#130'0t'#16#251#25'W'#20'ay'#31#131#251#26#193
+  +#212'*'#24#16#127#131#249#2'u'#12#186#159#7'['#170#130#208#6#206')'#198#10'A'
+  +'_'#179';<+cl'#30#8#172#4'I>j'#192'Z'#9'm'#159'|'#207#230#18#29#236#144'lul'
+  +#164#3'#'#4#210#3'qa'#188#225#177#8#15#131#141'Q'#255#13#250#11'wS'#219#131
+  +#187#17'+'#149#20''''#21'?'#192#1#217#132#231'+'#202#21#16#16#170'k'#5'+'#180
+  +#6#11#174#157#144#245#147#238#16#25#174#140'd<'#235#238'}'#128'$'#252#235#251
+  +#235#186'V'#158#186#8#250#167#234'$\'#141'4'#249#141'~X'#141#178'/'#213'Kt;'
+  +#161#165#165#131#200#224#186#240'*'#238#150#160'r'#182'P'#135#137#21#192'@'
+  +#138'U'#249#167#196#219#127'/'#230'h'#216#128']'#130#160#26'rvI'#3'<'#14#7
+  +#187'6'#214'B^'#191#186';g'#16'v'#160'f'#141'<8<dP'#206'QC'#15'X'#225#202#213
+  +#167#226'F'#180#2'P'#220#131'Z@'#141'&'#233#25#162#230#247#170#21#214#136#133
+  +'X'#216'S''5'#176#227#255'('#253#237#2'u'#129#133'0'#210'L'#1#136'N'#223#170
+  +#28#213#141'\'#185'o'#210#247'3'#137#136#134#234#242#3#138#130#136#136#1#173
+  +'A'#18#192#22#187'DF'#138#214'I'#247#196#162#150#160#145#244#223#180#168'aU'
+  +#15'~'#142'h'#160'.'#135#10'u'#163#9#195'X'#201#254#174#172#143#195#247#216
+  +#198#2'-B'#14#239#176#17'q'#24#222#163#2#223#130#254#22#145#15',a<'#25'v'#13
+  +#241#4'A'#136'h'#16'{'#234#2#235#247'#'#195#158'LO'#247#173#3#194#205#162'0'
+  +#219#141't'#160#28'D_'#247#13#218#137'l'#3#138';'#19'r'#9'B'#208#170#145#151
+  ,#222#230'v'#173#19#139#26#160#155#178#12#136'^'#200#191'['#128#255'M'#209#180
+  +#205'G'#138'F'#255'N'#136'GF'#130#217#186#201'H'#182'Lo'#138#243#149#150'-'
+  +#222#4#191#210#162#246#205#209#154#195#191#218#198#3'-'#196#0#225'%'#219#194
+  +'C'#19'/?i'#248#228#183#145'$A'#136'Y'#255'@'#224'B8E'#8'O?E'#205#18'rg'#236
+  +#14'b'#196#174#133#191#23's'#23#31#25#130#31#172#178#1#202#138'Z'#1#17#193'-'
+  +#254#5'E'#136#223#128#207'>z'#1'4B'#12'Vx'#235#219'L'#145#18'xm'#203' '''#255
+  +#130#2#188#14#255'S'#231#4#234#181#144']'#23'?'#10'\'#208'-0'#161'+'#29#212
+  +#27'=z'#201#194'sPDB'#239'\5E'#216'QH'#237'R'#141'J '#156'l'#239'K6,'#199'B'
+  +#244'0'#6#228#236'[W'#237#156#240'2'#188#212#5#252#213'$'#232#229#131#232','
+  +#224#137#2#9#20#221#131#138#251'~G'#163'v'#244#5'['#137#21#186#170'z'#235#169
+  +#145'"B1o'#159#238#185#141#192#18#215#208#200#9#8'h'#188#193#194#241'b'#254
+  +#16#230#242'*'#177#235#130#224#155','#163#236'j'#184#12'h'#131#139'l'#149#8
+  +'S'#223#182#174#232'\'#195#24#211')4F'#232#208#254#221#168#146'w'#196'P'#248
+  +'8r'#188#139#6#181#235#142#10'h'#236#134#0#20#12#1#221#168#181#159#237'z'#24
+  +#184#20'G'#141'Az'#13'D'#178#8#196'O'#202'p%'#29'{`'#223's|Dil'#223#208#219
+  +#175'"'#175#139#8'F'#11'$'#248#232'oQ['#243'"'#10#192'<;'#2'r'#25#182#163'S\'
+  +'W'#212#190#164'T$'#254#22#179'n'#173#209#5'|0'#24's'#6#195#138#214'.E#'#228
+  +#240#21#182#142'Y'#17#176#136#255#144#8#4#135#136#20#235#227'I'#208'"'#182#8
+  +#254'B'#152#14#197'W'#197'L'#17#5#178'8T|'#23#19'PV'#19'F'#217#161#174#134#3
+  +#137#18#140'x'#213'D'#12'V'#128#248#219#165#200#16'/'#242#6#137#29'R'#157'#'
+  +#254'C'#193#133#208'J'#179#1#128'|'#12#6'z'#8#154#131'^'#14#234#12'C7'#128'^'
+  +'=T'#12#7#220#143#225#25#183#133#222#239#136#152'D'#235#233']'#243#140#129
+  +#253't'#137#152#178#183'`'#4#252'u'#132'a'#184'G'#230#203#223#182#178#1'1'
+  +#144#20'='#159#0'~'#242#184#224'!FF'#154#182#176#252#189'x'#31'^_'#247#164#3
+  +#183'-'#143#163#213#225#20']6'#226#202'"'#188#210#27#21#29#146#189#246'*'#5
+  +'+)'#168#144'x%'#150#13#16'"'#134#15',Uwj'#222#218#7#189'%#'#254#140','#194
+  +'Fj'#29'4kY'#163#175#5'e,'#226#228#24#4#15'F'#12#0'~'#28#138#0#179'H\Y'#148#6
+  +#163#128'('#254#192#160#195#175#24#139'5'#140#199#183#1#225':V'#144#5'i'#200
+  +#176#216#128'~'#137#180'r.w''N-\Y#^k'#180#6'm'#21#139'$'#137' '#213#189'0'
+  +#198#24#187#13#193#131#217#236'A'#20' '#1'"'#205#3#159#8#8'PS'#253':5'#239#21
+  +#158#205'fr'#235#176#1'W'#153#223#239'0'#218#235#162'gP'#163#20#161#148'!'
+  +#142#149#136#230'H=a\'#170#229' '#232#248'@'#228'p'#255#26#17#226#237' '#232
+  +#23#14#12#30#189'?'#243#21#190'%'#224#255#30#12#162'='#163#2'r'#221#134'(l^'
+  +#194#222'Z,7a'#246'''np'#26#127#136'f:,'#15#206'w'#14'Q'#128#177#160#16#7#31
+  +#19#147#138#153'W'#229#203'+V:3'#181'c'#212#216'4'#198#7#220#168#15'0.'#204
+  +'l,`RS'#8#146#212'k'#232#18#228#225'RB'#245#3#255'o'#12#160'@'#29#254#195'f'
+  +#169#3'8HP u'#18#228#172#130#1#177'u!d'#200'|C'#23'A'#255'RRT$'#16'RP'#174
+  +#217#172#253'('#235#217's'#29'W=M'#194#149'Z&'#175#6#15#201#193#128#128#15
+  +#239'o'#236#193#195'$j'#175'2'#215#131#17#255#186#225#141'C'#6#216#15#131#174
+  +'j'#141#218#212#130#221'W'#252#148#139#18'e]'#134#30#219#22'p'#172'd)'#208
+  +#240'E'#9#11#209'Q_'#1#239#148#195#193#153#226#195'F'#11#242'BC'#8#169' '#131
+  +#11#160#6#207#168#207#177'E|'#200'f;'#248'uc'#12#22#252#127#4'L'#12'9'#254'w'
+  +'m'#139#6#1#240#214'&'#128#198#246'e'#139'V'#14#211'_'#149''''#234#176#245'F'
+  +#12';M'#174'^'#226#252'`'#8#183#4#224#208#8'&Fu!6'#30#1#8'+'#139'U4'#218'}'
+  +#140#182#162'zy)'#200#1#203#211'nf'#128#9'h'#133#246#19'chB'#191#23#192#18'L'
+  +#185#139#251#169'>'#9'4'#139'v'#8#198#134#235#144#19#190'n'#215'\C'#195'2r'
+  +#150#200#3'm'#137#145'cK'#215#176#6#4#8#13'X'#8#172#227#206#181'X'#20#253#233
+  +#26#1#195#10#26'M'#7#246'0'#151#12#10#185#1'f)('#24#232#136#194#214'K'#173'&'
+  +'%nD'#129' '#132#137#11#22#208#136#3#135#3#6#242#233#131'L'#9#223#23#12'$f9'
+  +#218#15'!'#25#177#160#4#238#255'F'#24#236#151''''#195#8#158#178#201#195#210
+  +#235#220#175'E'#162#166#30#174#29#211#176#162#176'k'#18'7y'#225'f'#29'1F'#241
+  +#11'rn,'#202#28'A~1'#146#133#199#14'1'#192#24#240#145'Q'#191#16#184'T\t'#192
+  +#3#237's'#188#202#159#249#148'9'#238#255#3#13't'#230'0:'#137#206#138#6'8'#208
+  +'t'#18'<'#186#5#232#219#177'F'#10#7'F'#11'u'#234')'#246#23#197'n'#169#224#245
+  +')'#206'i'#243'=t,'#184#16#181'x'#12#152'o'#20'4'#8#187#251#17#24'v<'#141'u'
+  +#1'@'#199#137#241'B='#14#164#153#246'4*'#181#169'PK'#129'D'#14#188'd"G,'#182
+  +#28'4MDW'#185#238#3#149#153#249':l('#248'U'#19#222'1B'#169#241'?pY'#184'`'#2
+  +#130#195'i'#194'v'#172'~d'#31#160'0'#11#193#154#11'q4u'#22'x'#17'4w\'#5#194
+  +#190#240#10'['#26#236#216'!'#147')'#243#139#13'l'#141#182#250#23#193#31#128
+  +'['#133#5'xG'#136#23#154'1'#235#213'3'#172#138#189#7#249#161'-'#26#7#16#191
+  +#15#17#139#29#163#23#199#0';'#4#135#152#164']'#185#137#0#193#138#20#158#147
+  +#139#150'z'#213'R'#233'I'#173#255#30#148#20#180#164'p'#239#170'M<'#136#15'Z%'
+  +'d'#3#151'h'#184'N'#166'Yu'#14'V'#143#17'/'#128#174#168#231'6'#217#180'0m'
+  +#196'?'#155#254#232'}'#146'.'#218'/T7'#202'!'#240#9#208#22#128#169#133#205'n'
+  ,#25'/'#155#31'3O'#14#21'f,'#137'%'#14#7#205'x'#5'='#5'mI[rJ'#138#127's|'#15
+  +'T '#198'('#159'.'#27#190#128'+A'#18'uP'#139'p'#8'-'#133'"'#213'U%6*;+'#156
+  +#10#185#189#6#11'6%'#135#11#17'T'#198#20'o'#161#160#8'l='#9#140'N'#168#9#135
+  +#170#243'7'#5'~cT<'#163'.'#235#207#255#147#131#12'D'#222#131'7'#238#167#163
+  +'fr'#220#11'G'#10#210'u'#16#189#142#158'nF'#0#12#3'J'#223#196'f+'#131#195'?'
+  +#255']'#208#10'x'#4#6#193#15#216'm'#176'%'#233#21'3W9'#241#10#216#144#186#194
+  +'s<'#12'E'#228#134#150#205#184#172#128#15#197'A'#12#23'd'#202#202#137'A~mS'#6
+  +#21#168#137#180#14#31#176#20#209#163#221#184#234'wz7'#186'l'#184#236't'#134
+  +#198#230#141'I'#128'8Y'#131#182#136'=.G7A0'#16#140#132#127#143#149':j'#161
+  +''''#5#212#13#31'k'#255#11#223#10#30'@K'#136'P'#29#245'@'#138#10'B'#136'H'
+  +#255'K'#164#22'`&8'#25#7#222'SD'#2#192'C.'#172#237'D'#237'G'#29#232#204#213
+  +#212#20#175#253#163#26#140#2''''#7#186'E'#166#11'P'#197#232#136#175#26#8#150
+  +'K'#244#133#158'B'#205#196'U'#217#130#190'S:q'#162'rE#'#216'2'#128#251#215
+  +#147#223#129#249'E'#163#25#132#206#128'0'#201#141'<'#157#163'g'#162'}o'#136
+  +'c'#147']M'#149'n'#7#166'v'#173#140#193'$;'#240'F'#240'Z'#181'y'#248#3#137'U'
+  +#177'.'#212'P'#194#4'>'#25#129#183'f"x'#219'r'#17'W'#197#8#154#10#31#178#181
+  +#201#186'd'#21#175'u'#2#247'P'#183#231#129#217'g'#20'<$'#132'Zpf'#219#142'ht'
+  +#165#149'X'#13'j'#144#176#191'C'#208']'#196#23#208#187#10#9#139#222'.'#193
+  +#254'|'#19#4'$'#127#14#255'U'#244' [9C'#208#184#13'j'#252'd'#135#157#201'['
+  +#138'B'#1'<x'#147#167'c'#31#219''''#2'#<Xt'#244#8';'#143')'#232#151#138#246
+  +'v'#5#198'D'#152'D'#15#175#203#1#241'<'#139'}'#151#208#6'B'#29#226#21#10#184
+  +#14#172#139#152'{i'#222'Y'#217#21#192'N@'#178#247#28#185#203'g'#25#25#145'd'
+  +#194#13#127'?'#134'P'#31'hLtl'#31#151'`X'#12#205#18#182'<0-'#130#8#253'r'#14
+  +'<9w'#10#147'3z'#17#196'ZQ'#9'9'#27't'#255#183'9<ar'#4'<iv'#26'<j'#7'r'#157
+  +'<'#237#136#193#254'sr'#23'<zw'#19'-W'#238#136#208'QJ'#136#142#8#184'%-'#239
+  +#5#141#128#127#242#138'~A'#199#190#15#240#186'='#7'L'#228'{|F3b'#227#180#204
+  +#232#127't'#155'A'#15'^)'#232#4#190#142';'#136#186'G'#135')'#218#197#137#238
+  +#254'('#132'@'#212' '#141's'#1#208'}&'#150'!'#2#15'_'#220'7'#20'i'#206'^}'
+  +#228#135'<K'#195#16'n'#143#176#166'a'#20'I'#3'\'#27#198#3#5#15#190#10#191'PM'
+  +'E'#224#133#225#228#22'B'#207'8cS'#236#25#8#23'3'#131'r9$Zv'#130'c'#195#13'W'
+  +#240#11#217#217'~'#235#166'J'#207#166#232#238'xl'#155#133#2#255'Nd'#198#250
+  +'%'#138'5'#17#162#232#187#250'2'#170#13#3#133'.'#195'i'#217#209'Gm1'#13'L'
+  +#234'K|'#12#243#248#14#193'Uc'#14#144#2'{'#16#178'mw'#24#25#176#236'X8~'#12
+  +#16'?u'#135'FH'#191#12#244'z<'#171'A4'#5#175#13'hP'#0#190#173#151'U}1'#9'%'
+  +#133#136'R'#224#250'1q4=!'#6#236#168'ud'#172#27#248'@'#192#21'F'#151#239#138
+  +'J'#240'&'#197#223#233#132#201'u'#194#235#197#216#215#27#162'H'#156#217#221
+  +#18#131'h'#248'['#167'Hl'#2#252#18#244#233#173#137'c'#244#5'x'#208'4'#16#161
+  +'*04'#20#29#4'('#13#160#131#173'*'#5'O'#11'y'#236'j'#185#150#250#198#246'~'#5
+  +#141'hf'#200'q'#247#221#141']L'#12#139#182#8#198':'#141'O5'#191'at'#213#209
+  +'f'#216#238'aSc'#2'n!r_'#155#149'W'#154'P]'#10'9'#208#5#132#186'l,'#255'|'
+  +#153#248#23#185'q'#6'P'#212#233'''x'#239'B2f''_,d'#222#16#197#215#10#30#139
+  +#12';N'#1','#10#141#176#166#235#138#127#142'Q'#131'h'#8't'#235#163'_0'#15'|'
+  +#241#236#213#154#139#22#150#205'N'''#12#2#11#208#137#249#194#24'*'#128'38'
+  +#210'm'#149#195#10#1'9'#195' '#225#160#26#134#209#159'X'#130'%6'#128'f'#210
+  +#203#215#189#228'^'#20#133#2'%'#180'LAGA+'#8'N-'#4',T'#161'nsY'#4#236'g'#241
+  +'-J'''#27#154'\C='#213#162'w0'#150#7#7#193#139'-D'#135#218'c'#167#236#180#193
+  +#254#2#179'~A'#141#250'd'#181'9'#247'}'#14')'#24#220#28'l'#185'GL'#13'|'#245
+  +#217#160#207#28#184#233#162#8'B'#138'Yp'#7#28'4s'#28'E'#164'T'#240'cl)y'#251
+  +'3)'#240#193#248#2#1#145#130#144'B'#127#219'3'#6#15'm'#11#254#128#9#14'w'#7
+  +'{'#0#180'?'#149#0#19'u'#236'{'#162''''#5#127#129','#206#227#12']w'#182';'
+  +#140'>'#240'K'#9#198'5'#187'9'#5'8'#168#201'&M'#13'7+va/:'#138#22')Q'#232''''
+  +#207#173'"A#mU'#4#29#253#128#226#12#129#188'x'#210'R'#201#150':'#240#0#4'S'
+  +#251#157#172#249#185#31'`'#129#220#11#139#235#221#162#7#30#150'vl'#8#178#4#29
+  +#24'bvn'#7#174'L'#208#221'{'#197'a$'#5#165#15'?AzD.k'#27#25#235#30'W'#21'z'
+  +#136'm'#221#4#173#18#221#212#5#219'v2'#198't('#187#173#162'I'#20'/'#205'MmQ'
+  +#196'6'#20'MF'#154'GH'#20'_'#209#138#212#20'f'#20'm'#227#189#177#11#190'3='
+  +#186#243':'#224#11'6'#201'1'#192#213#192'6'#223'"'#209#150'@'#223'\'#193#26
+  +'o '#8#156#159#222#218#130'6'#137#199'z'#200'$#'#200#16#200#209#128#182#168
+  +#150#144','#222#2#208'4X'#147'^'#2#216#9#202'n'#165#248#4'J'#141'W'#27#159#4
+  +'.'#150'r'#147#0#222#28#192#192#128#193'Z'#15#16' 4'#199#6'X'#168#30#163'I'
+  +#251#12'|'#174#6#181#216#1#247'83'#240#22#129#128#192#145#8#130'L'#176'T'#22
+  +'('#156#192#174'.*'#171'h'#204#29#146'M'#148'.'#30#170#132#130#192#135'1'#237
+  +#235#177#154#221#226#129' p'#131'<6'#183'%'#175'`'#1'D'#134#18#140#169#210'L'
+  +#2#171#198'0'#129'@N'#224'X'#208#131#172#170#240'H'#216#8#185#16#155#132#129
+  ,#150'5+'#16#207#1#248' Y'#143#24'@'#7#215'@['#224#15#158#2#8#149#6#5#192'el'
+  +#1#160'2'#11'%z'#2#180'] '#246#162#139#200#168#240#133#140'L'#181#16#136#209
+  +#229'!z'#161'|'#215'E+'#247'+'#192'f"'#188#235#192#184#8#232#247'!'#9#165#204
+  +#219#163'@'#137'0'#139'hm'#3#232'pv'#220'gh'#224' '#189#12#135#235#184#127
+  +#127#12'\'#171'c0'#3#27#133#12'Hj'#28#155#185#20#28'%'#168#4#174#26#243#129#5
+  +'x'#5#251#141'U'#27#14#25#144#7#198#137#199#4#21#191#17#2#198'f'#235'U5'#12
+  +#199'D.p'#22#129'.]T'#233#31'~O'#155#153'd@d'#129#194#31'x'#213#209#2' f'#216
+  +#27#198'`d;'#31'"'#132'_'#11#1'f'#26'l'#132'C$'#204'$:n'#240#149#234#192#213
+  +#3#133#182'&vU,`'#170#12'x'#29'P'#144#136','#208#158'X'#29#192'i'#22#12#31'V'
+  +#215'@'#235#247'(/A'#249'Y]Y'#193#198#145#211#127#27#161'd'#213'd'#0'+'#143
+  +#195#254#6#219'o'#208'(s*'#1#202#7'vU'#200#141'r'#255#141'x'#237#255#223'*'
+  +#249#6#142#194#253'NO'#209#233'f'#243#165#17#201'FG'#6#219#130'S'#235#164#7
+  +#252'g'#155'U'#223#29'C'#208#12#129'H'#27#14#18#209#155'9'#26#25'X'#255#245
+  +#229#210'\az'#232' '#155#221'0'#155#132#196#3'F'#255#221' '#155#226'?'#5#237
+  +#170'_e'#191#170#186'0'#144'f'#183#185'Q'#8'@'#144'h'#191#5#13'l.A'#185#13'1'
+  +#161'p'#7'?'#132#140#6';XJ=u'#183#24'R'#141'r'#16#3'u'#153#144#168#254#5#222
+  +#136'%'#28#30'+'#192'P'#219#227#217'<'#253'W'#171#223#155#196'0'#246'<'#3#239
+  +#195'L'#136#194#136#198#163#247#251#185'>'#160#188#211#136#21'6'#136'50D'#176
+  +#226#139#3'Ro+'#245'w'#197'&j)E'#138#146#242#128#226#1#13#234#24#21#232't'#20
+  +#182#0#180'WlA'#14#250':'#208'9'#4#150#133#175#8'C'#22'x'#15'Y'#4#197#177#200
+  +#147#207#182#224'T'#4#4'F'#218#21#216'0'#246#179'Xw'#216'4'#4'*'#252#29#226#8
+  +#17'`P'#10#3#206#140#160's'#128#28'vR'#154' '#11'E'#177#134#142'f'#192#12'@'
+  +#144'6j'#129#31#239#246#197'R'#12'<H'#194'V'#244'%'#246#234#8#136#16#211#10
+  +#198#255'a'#255'o'#175#138#24#138':8'#251'uAX'#31'1'#201#138#8#138#153#213#1
+  +#183'#'#227#1#12#136#217#178#138#182'@e'#168'jF@'#5#233#217#145'j'#168#131
+  +#216#145#136#202'xo'#6'p'#141#196#19'F,'#136#248')'#187#23#158#128#193#179'S'
+  +#3'f;'#24'w'#194'@\'#208#26#175'@'#17#202#30#239#171#250#195'*'#206#137#215
+  +'f'#129'='#186#5'b-'#128'O^'#207'l'#144#164'LA8|'#162#20'w=j<'#18'J1'#246'5'
+  +#2'='#172#133#180#232#213't[|'#16#164':'#224#133'p/U"U'#176#190'&h`'#7#241
+  +#245'W\B'#234'W'#220#22#235#238't@'#172#172#5'h}'#159'+k(Xr'#223#202'I'#2#177
+  +'.'#201'1'#192#133#250#21']'#172#172'Vv'#128'!'#143'`j'#29#18'{'#9'.'#173'Dj'
+  +'Iu'#11#5#168'pH]R['#195#27'm'#218'frX'#16'xt'#21#246'6'#206#18#28'6k'#17#20
+  +#185#134#139'ZR'#7'Q='#19#145' '#12#197'\F'#208#218#218'@'#254'vg9M'#170#245
+  +#224'G'#213#208'W'#243#8'f)'#213#133'M'#7'2'#194':;'#149'wD'#24'5'#7'l'#146#8
+  +#14#140#150#20'}'#244#23#131#197#2#1#211#155#215#209#217'n'#175#227''''#10
+  +#235#162#254#12#176'F#'#14#2'S'#220#16'(X'#199#194#250'}T'#239'n'#127#135#5
+  +#21''''#9#204'H'#195#235#222#241'z#'#248'f=a'#0'r'#242'z'#0'wD'#223#244'D'#2
+  +'_fP'#155#218#232#217#238#222#249#253#187#244#255#217#192#217#224#222#217#155
+  +#223#224#176#2#158#253#176#3#24',$f'#135#24'K'#136#186#142'fX'#223#215#16#28
+  +'Is"'#10#13'C'#196'Fw'#199#138'R'#1'='#1'aP,'#4'S'#18#28#193#15'B'#27#227#15
+  +'='#16#211'h'#255'%'#232'FF'#158#221#160'@'#5'd'#161'`|'#136'FFFF\'#24'P'#8
+  +'FFFF'#12'8x'#132'FFFFX'#0'$'#128'FFFFtp<HGFFFL0@'#244#160#249#28'y>l'#161#28
+  +#240#160'h'#161#200'sd'#228'(T'#248#160#252#145#145#145#231'4'#161#4#20#16
+  +#153#145#145#145',D '#140','#16#1#133#0#27#255#127' '#168#1#1#1#0#10'BIN2HEX'
+  +' V'#219#151#255#255'er 1.1 HABT05'#10#0'rbErro'#21'c'#246'.'#10#254'annot o'
+  +#196'inpu'#10#14#144#219#255'file : %s&wto'#249#183'C'#214'$''-d'#2's'#0'%X'
+  +#0'-o'#155#181#177'me3IHbO$'#0'c?'#219#158''''#23'O9VHDL'#25's{'#219#255'`'
+  +#23'Load Addr'#17's-/l'#187'{'#31'04X:'#4#130'xec6e!'#185#239#19#182#30':020'
+  +#0'2I6'#210'm'#238#2#143#24's'#22'43'#11#157#249#255','#0'1FF'#10#0#10'Done.'
+  +#10'U'#239#14'!'#246'sageO)['#181'ary_'#192'\{{'#158#8'me]'#17#22#14#181#187
+  +#255'm{'#233' SEGMENT}'#12'o OT'#239#223'Z'#172#15#11'I)ECUTE}'#10#180's'#191
+  +#204'm.p'#252'ZROM.'#11#7#252#155'5'#23#15'"'#234'}Data['#161'a+~Xl'#8'e'#10
+  +#13' 7'#0#22'{'#174#182'I '#146'nknaC2'#218' '#141#227'2 '#137#223#183#200#14
+  +#20'a1:.,'#216#11'v'#194' e`d'#19':'#0'l/4'#195'N'#242#246#239'gh '#250'm'
+  +#173#209'no'#6'y taalC'#14'-l'#13#255#9#219'structu'#151#13#244'U'#190#253
+  +#133'/'#8'R32.'#221'L'#0'GetA'#23'iveWp'#230#248#23'Odow'#0'The_-i'#237'xo'
+  +#172#128#226'x'#223#0'^us'#182'['#227#238#149'Nacka6rfew'#219#237'7'#215'b'
+  +#174'.ng po'#5't'#10#167'cM'#132#25#222'ep>'#187'Pul'#152#2#172#131'Qd'#17'r'
+  +'m'#0#172'}*'#5#12'raXR'#11'_'#161'0'''#154#31'bazvZ'#149'mToR'#204'5'#0#236
+  +#182#181#250#28'v'#169'ueP@6'#132'0'#148' K-'#5#216'a'#143'L#"{'#19'v'#227'i'
+  +'d'#143')'#237'l'#133#182#177#198'fC'#223'.d^K'#216'a'#240#0' @?'#15#180#165
+  +#193#26'c'#24'l'''#22'b'#233']'#169'm'#19#0'6X_writ'#27#174'ik_iA}'#11'v#gM'
+  +#186'%}`rwasq^auoY'#176#214'f='#215'l'#186#182' '#217';al'#246'wrX2'#10'1YjW'
+  +'>'#210' '#235#220'n'#184#30'rA'#136'='#140#192'F8'#30'pKBB'#190'hgram'#130
+  ,'.'#134#149'}'#1'D'#0'E'#210'a'#216#130#193'd'#10'o@n'#199#235'V'#178#174#191
+  +'YEAwel'#195'ew'#203#220#212'5 AX='#15'C6$'#203' BC'#31'D'#133#228'r '#10'SI'
+  +'!/'#236#144#15'BP?SP'#158#176'CvI'#31'FL'#15'CS '#182'%dBS?D'#31'C6dCE'#15
+  +'F?G'#13#142'0$S'#177'du+'#19'Lt'#219' ([:'#158')'#153#199#210'6'#176#134'eR'
+  +#0'<'#13'Fx1n'#159#12'-sup'#8'rt'#206#205'``'#6'#'#207'~'#27#254#214'L'#188
+  +'$'#6#243#7#194'_FILE_'#30#28#216#13'yFO'#11'=+'#26#148#248#13'8NORMA'#216
+  +#254#255#205#253#214#6#21'ATIONBu12345678o'#191#193#246'9abcVfKijklmQpqr'#251
+  +#199#226'o'#156'uvwxyz'#175#2#4#8#16' @'#128#8'N'#201'sX'#0#3#1#10#12'9'#153
+  +#228'B8'#12'Xdd'#0#25'H'#12#152' '#155#1'd'#136#12#1#0'.,a'#1'7YCDa'#144#145
+  +'6LS'#144'O!Z'#236#10'K'#216#0#183#2#29'@I'#157')'#2#236#0#153#223#18#3#15'"'
+  +'@'#0#16#200'`'#219#207#27#18'P#'#11'`'#3#128#200' C2'#144#160#128'r'#178'I3'
+  +'p'#176#206#8#1'{P'#200#4#128#134'L'#127#154'ld-?'#24#9#255#255'o'#223#10#11
+  +#6#4#5#0#2#3#6#14#5'$'#6#8#1#30#27#18#21#21#3#21'$'#21#12'3'#217#246#151#21#6
+  +#6#21#255#6#255#10#255#0#21#255#6#242#16#12#21#29#7#255#1#21#255#220#128#253
+  +#5#7#6#9'"'#19'0'#28'EK'#29#1'#'#12#245#183#237#216#11#4'B&'#21'x'#9#5'&'#17
+  +#17#21#31#31'7'#223'`'#147#148#19#5#3'V'#5'"'#3#1'='#178#139'-'#5'sP'#6'%"'
+  +#255#3#219'Z'#200#190'f'#255#9#9#3#0#22#18#9#134#249#7#246#154#1#12#0#29#19
+  +#29#29#21#255'CB'#194#222#5#203'3'#224#13'H'#211#216'i@'#3#20#219#1#3'&'#138
+  +#0' '#227#217'd'#239#189'ay['#7'S'#15#147#159#171'h$'#7':'#1#228#176#23#178#5
+  +#15#7'?'#1#176#220#217#1#148#0#31#149#7#211't'#191#193'>'#255#129'@'#11#1'+'
+  +#127'U'#0#255#191#252#165#185'?3'#170'*$I'#146'$'#255#31#28#199'q'#28#219#11
+  +#238#151#153#25't'#209'E'#23'"y;'#177#19#25'I'#242#255','#221#18#17#0#255#15
+  +#142#227'8'#14'^Cy'#13#204#191#251#127#129#236#195'0'#12#186#232#162#11',d!'
+  +#11'G'#10#163'p='#10#137#190#131#239#254#157#216#9'^B{'#9'R'#9#176#220#211#8
+  +#22#8#132#16'B'#8#169#251#237'?"|'#240#193#7#135#0#7#7'uP'#7'j'#7#8'v'#239
+  +#142#29#148'@'#3#127#18#12' '#188#23'@'#5#160'-'#247#249#253'n'#10'0F'#11#208
+  +'o'#5'@iPv'#17#231#230'7r'#2#160#144'.'#5' H'#31#160'K'#5#9#197#205#192'p'#20
+  +'Pf'#177' '#200'BT'#12#255'/'#155#139'`'#240#144#1'CloseHandl'#236#191'Q'#152
+  +'e'#166'teEventA'#13#255']'#163'8F'#163#12'ExitProceR'#241#247#203'ssFlush'
+  +#24'Buf'#18#221#237#173#189#17'+7nvi!nm=S'#1'r['#196'tr<s7'#233'}'#246'-'#182
+  +'CP'#7#6'Info'#10'omm'#200#133#189#214'sL$['#16'W'#187#207#190'=nso`Mode'#15
+  +'urrXTh'#149#197'6'#21'IId'#19'p'#232'g'#127#177#22#152'Typ7Last'#143#237'b/'
+  +#164#13'Nul'#210'Nam'#16#144'){z'#19'W'#14#193'>'#155#22'%OEM'#198#5#179#238
+  +#205#130'k'#15'zd('#3'T'#136'b'#13'K'#171#208#205#5'5'#11#181#206'br'#220'~'
+  +#235'Z.AMNtiByt'#152'oW0'#215#189'TrCha'#144'R'#202#231#240'f'#15'Q'#19'A'#18
+  +#138'n'#182'M'#178#3'SC'#219'la3'#156#16#134#132'S'#26'S'#6'Va"C'#216#187'ab'
+  +#179#24'W,'#152#161#248'aP'#216'Q'#194'R1'#246#183#13'Unh'#12'dT'#174#176#152
+  +#27'/*'#25'V'#146#153#160#223'htualA'#253#13#214#182#147'='#20#12'Qu''y'#13
+  +#253#230#146'P'#24#7#18#20#156#188'`'#131#181#6#214'A'#14#163'@'#191#211'l'
+  +#167'm'#232'3Up'#255#229#9'-'#195'A'#8'PEL'#1#5#0#165'j'#197'B'#196#255'a'#5
+  +#228#0#131#1#11#1#2#18#0#136']s3'#27#157#22#7'`'#23#16'!'#160#231#175#224'=@'
+  +#11#241#1#0#11#6'"'#217#178#4'<'#12#20#22#236'+x(b '#10#6'ag9[/'#160#150#0'U'
+  +' '#212#29#208'/'#6#180#217#11#246#249'AUTO'#10#134#144#235#135#133#168#176
+  +#11#178'`.g'#211#23#242#189'`'#163#251#139#140'@'#176#238#242'o'#8#192'DGROU'
+  +'P'#204#15#16#176'S'#252#28#175'l'#146'''.b'#238#13#8#0'o%'#17#207#7#245''''
+  +#131#157'='#10#243#2#31#208#7#162#240#229'7eOB'#27#148#161#193#210#0#0#0#0#0
+  +#0#0#0'H'#0#255#0#0#0#0#0#0#0'`'#190#21#160'@'#0#141#190#235'o'#255#255'W'
+  +#131#205#255#235#16#144#144#144#144#144#144#138#6'F'#136#7'G'#1#219'u'#7#139
+  +#30#131#238#252#17#219'r'#237#184#1#0#0#0#1#219'u'#7#139#30#131#238#252#17
+  +#219#17#192#1#219's'#239'u'#9#139#30#131#238#252#17#219's'#228'1'#201#131#232
+  +#3'r'#13#193#224#8#138#6'F'#131#240#255'tt'#137#197#1#219'u'#7#139#30#131#238
+  +#252#17#219#17#201#1#219'u'#7#139#30#131#238#252#17#219#17#201'u A'#1#219'u'
+  +#7#139#30#131#238#252#17#219#17#201#1#219's'#239'u'#9#139#30#131#238#252#17
+  +#219's'#228#131#193#2#129#253#0#243#255#255#131#209#1#141#20'/'#131#253#252
+  +'v'#15#138#2'B'#136#7'GIu'#247#233'c'#255#255#255#144#139#2#131#194#4#137#7
+  +#131#199#4#131#233#4'w'#241#1#207#233'L'#255#255#255'^'#137#247#185#14#3#0#0
+  +#138#7'G,'#232'<'#1'w'#247#128'?'#0'u'#242#139#7#138'_'#4'f'#193#232#8#193
+  +#192#16#134#196')'#248#128#235#232#1#240#137#7#131#199#5#136#216#226#217#141
+  +#190#0#208#0#0#139#7#9#192't<'#139'_'#4#141#132'0'#0#240#0#0#1#243'P'#131#199
+  +#8#255#150'<'#240#0#0#149#138#7'G'#8#192't'#220#137#249'WH'#242#174'U'#255
+  +#150'@'#240#0#0#9#192't'#7#137#3#131#195#4#235#225#255#150'P'#240#0#0#139#174
+  +'D'#240#0#0#141#190#0#240#255#255#187#0#16#0#0'PTj'#4'SW'#255#213#141#135#159
+  +#1#0#0#128' '#127#128'`('#127'XPTPSW'#255#213'Xa'#141'D$'#128'j'#0'9'#196'u'
+  +#250#131#236#128#233#240'!'#255#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  ,#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'`'#0#1#0'<'#0#1#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0'm'#0#1#0'X'#0#1#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'x'#0#1#0
+  +#134#0#1#0#150#0#1#0#166#0#1#0#180#0#1#0#194#0#1#0#0#0#0#0#208#0#1#0#0#0#0#0
+  +'KERNEL32.DLL'#0'USER32.DLL'#0#0#0'LoadLibraryA'#0#0'GetProcAddress'#0#0'Vir'
+  +'tualProtect'#0#0'VirtualAlloc'#0#0'VirtualFree'#0#0#0'ExitProcess'#0#0#0'Ch'
+  +'arUpperA'#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+]);
+LazarusResources.Add('hex2bin','EXE',[
+  'MZ'#144#0#3#0#0#0#4#0#0#0#255#255#0#0#184#0#0#0#0#0#0#0'@'#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#128#0#0#0#14#31#186#14#0
+  +#180#9#205'!'#184#1'L'#205'!This program cannot be run in DOS mode.'#13#13#10
+  +'$'#0#0#0#0#0#0#0'PE'#0#0'L'#1#5#0#158#128'd>'#0#0#0#0#0#0#0#0#224#0#15#2#11
+  +#1#2'8'#0#16#0#0#0#12#0#0#0#2#0#0#0#16#0#0#0#16#0#0#0' '#0#0#0#0'@'#0#0#16#0
+  +#0#0#2#0#0#4#0#0#0#1#0#0#0#4#0#0#0#0#0#0#0#0'`'#0#0#0#4#0#0#20#4#1#0#3#0#0#0
+  +#0#0' '#0#0#16#0#0#0#0#16#0#0#16#0#0#0#0#0#0#16#0#0#0#0#0#0#0#0#0#0#0#0'@'#0
+  +#0'\'#3#0#0#0'P'#0#0#212#5#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0'.text'#0#0#0'p'#15#0#0#0#16#0#0#0#16#0#0#0#4#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0' '#0#0'`.data'#0#0#0'`'#0#0#0#0' '#0#0#0#2#0#0#0#20#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0'@'#0#0#192'.bss'#0#0#0#0#176#0#0#0#0'0'#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#128#0#0#192'.idata'#0#0'\'#3#0#0#0'@'#0#0#0#4#0#0#0#22#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0'@'#0#0#192'.rsrc'#0#0#0#212#5#0#0#0'P'#0#0#0#6#0#0#0
+  +#26#0#0#0#0#0#0#0#0#0#0#0#0#0#0'@'#0#0#192#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0'U'#137#229#131#236#20'j'#1#255#21#228'@@'#0#232'm'
+  +#0#0#0#137#236'1'#192']'#195#141#180'&'#0#0#0#0'U'#137#229#131#236#20'j'#2
+  +#255#21#228'@@'#0#232'M'#0#0#0#137#236'1'#192']'#195#141#180'&'#0#0#0#0'U'
+  +#137#229#131#236#20#139'E'#8'P'#255#21#252'@@'#0#137#236']'#195#141#182#0#0#0
+  +#0#141#191#0#0#0#0'U'#137#229#131#236#20#139'E'#8'P'#255#21#244'@@'#0#137#236
+  +']'#195#141#182#0#0#0#0#141#191#0#0#0#0'U'#137#229'S'#131#236' h'#128#17'@'#0
+  +#232#175#14#0#0#131#196#12#232#215#11#0#0#161'  @'#0#131#236#12#141'U'#248
+  +#199'E'#248#0#0#0#0'R'#141'U'#244'PRh'#4' @'#0'h'#0' @'#0#232'`'#13#0#0#139
+  +#21'0 @'#0#131#196' '#133#210'tq'#161#240'@@'#0#137#21#16' @'#0#133#192't'#25
+  +'QQRP'#232#27#13#0#0#137#4'$'#232'#'#13#0#0#131#196#16#161#240'@@'#0#131#248
+  +#224't"'#139#13'0 @'#0'R'#131#192' RQP'#232#244#12#0#0#137#4'$'#232#252#12#0
+  +#0#131#196#16#161#240'@@'#0#131#248#192't'#29#139#29'0 @'#0'Q'#131#192'@QSP'
+  +#232#205#12#0#0#137#4'$'#232#213#12#0#0#131#196#16#232#173#12#0#0#139#13#16
+  +' @'#0#137#8#232#240#10#0#0#131#236#16#232'x'#12#0#0#139#21#4' @'#0#131#196
+  +#12#139#0'P'#161#0' @'#0'RP'#232#220#4#0#0#137#195#232'I'#12#0#0#137#28'$'
+  +#232#209#13#0#0#144'U'#137#229'VS1'#246#139'E'#8'1'#219#139#0#139#0'='#145#0
+  +#0#192#15#135#141#0#0#0'='#141#0#0#192'sE='#5#0#0#192't'#11#141'e'#248#137
+  +#216'[^]'#194#4#0'PPj'#0'j'#11#232'!'#12#0#0#131#196#16#131#248#1't'#19#133
+  +#192't'#222#131#236#12'j'#11#255#208#131#203#255#131#196#16#235#207'PPj'#1'j'
+  +#11#232#251#11#0#0#235#235#190#1#0#0#0'PPj'#0'j'#8#232#233#11#0#0#131#196#16
+  +#131#248#1't'#11#133#192't'#166#131#236#12'j'#8#235#198'PPj'#1'j'#8#232#203
+  +#11#0#0#131#196#16#133#246'u'#5#131#203#255#235#136#232'J'#10#0#0#235#244'='
+  +#147#0#0#192't'#184'='#148#0#0#192't'#182#233'n'#255#255#255#144#144#144#144
+  +#144#10'usage: hex2bin [-s xxxx] [-e extension] [-c] filename'#10'-s xxxx'#9
+  +'Starting address in hex'#10'-e extension'#9'output filename extension'#10'-'
+  +'c enable checksum verification'#10#10#0'U'#137#229#131#236#8#161#240'@@'#0
+  +#131#192'@Ph'#159#0#0#0'j'#1'h@'#18'@'#0#232'P'#11#0#0#199#4'$'#1#0#0#0#232
+  +#20#12#0#0'Can''t allocate memory.'#10#0'U'#137#229#131#236#20#255'u'#8#232
+  +#222#11#0#0#131#196#16#133#192't'#2#201#195#161#240'@@'#0#131#192'@Pj'#23'j'
+  +#1'h'#12#19'@'#0#232#254#10#0#0#199#4'$'#1#0#0#0#232#194#11#0#0'r'#0'Input f'
+  +'ile %s cannot be opened. Enter new filename: '#0#144#137#246'U'#137#229'SR'
+  +#139']'#8#131#236#8'h^'#19'@'#0'S'#232'R'#11#0#0#131#196#16#133#192#163'p0@'
+  +#0'u0PS'#161#240'@@'#0'h`'#19'@'#0#131#192'@P'#232'a'#11#0#0#131#196#12#255
+  +'5'#240'@@'#0'jQS'#232#16#11#0#0#131#196#16#128';'#0'u'#184#235#5#139']'#252
+  +#201#195#131#236#12'j'#1#232''''#11#0#0'w'#0#144#141't&'#0'Output file %s ca'
+  +'nnot be opened. Enter new file name: '#0#144'U'#137#229'SS'#139']'#8#131#236
+  +#8'h'#249#19'@'#0'S'#232#178#10#0#0#131#196#16#133#192#163'`0@'#0'u0QS'#161
+  ,#240'@@'#0'h'#0#20'@'#0#131#192'@P'#232#193#10#0#0#131#196#12#255'5'#240'@@'
+  +#0'jQS'#232'p'#10#0#0#131#196#16#128';'#0'u'#184#235#5#139']'#252#201#195#131
+  +#236#12'j'#1#232#135#10#0#0'.'#0#144#141't&'#0'Input and output filenames (%'
+  +'s) are the same.'#0#137#246'U'#137#229'WVS'#131#236#20'j.'#139']'#8'S'#139
+  +'}'#12#232#249#9#0#0#131#196#16#133#192't'#3#198#0#0#131#236#8'@PW'#232#212#9
+  +#0#0'1'#246#131#196#16#133#192'u'#5#190#1#0#0#0#131#236#8'h'#153#20'@'#0'S'
+  +#232#168#9#0#0'XZWS'#232#159#9#0#0#131#196#16#133#246'u'#8#141'e'#244'[^_'
+  +#201#195'VS'#161#240'@@'#0'h'#160#20'@'#0#131#192'@P'#232#235#9#0#0#199#4'$'
+  +#1#0#0#0#232#207#9#0#0#235#13#144#144#144#144#144#144#144#144#144#144#144#144
+  +#144'hex2bin v1.0.1, Copyright (C) 1999 Jacques Pelletier'#10#0':%2x%4x%2x%s'
+  +#0'%2x'#0'Lowest address = %08X'#10#0'Highest address = %08X'#10#0'Checksum '
+  +'error detected.'#10#0'Data record skipped at %8X'#10#0#144#144#144#144#144
+  +#144#144#144#144#144#144#144#144#144#144#144#144#144#144#144'Data record ski'
+  +'pped at %4X:%4X'#10#0'%4x%2x'#0'%x'#0#137#246'U'#137#229'WVS'#129#236'\'#8#0
+  +#0'1'#192#131#228#240#232#30#7#0#0#139'u'#12#232#166#6#0#0#161#240'@@'#0#131
+  +#192' Pj5j'#1'h`'#21'@'#0#199#133#200#247#255#255#0#0#0#0#199#133#196#247#255
+  +#255#0#0#0#0#199#133#180#247#255#255#0#0#0#0#199#133#176#247#255#255#0#0#0#0
+  +#232#167#7#0#0#131#196#16#131'}'#8#1#15#132'|'#5#0#0#187#1#0#0#0';]'#8#199#5
+  +#128'0@'#0'bin'#0'si'#137#246#139#4#158#137#133#164#247#255#255#137#194#138#0
+  +'<-t'#4'</uR'#131#133#164#247#255#255#2#139#189#164#247#255#255#128'?'#0'u'
+  +#10'C'#139#4#158#137#133#164#247#255#255#131#236#12#15#190'B'#1'P'#232#150#7
+  +#0#0#131#196#16#131#248'e'#15#132#194#4#0#0#131#248'e'#15#143'}'#4#0#0#131
+  +#248'c'#15#132'e'#4#0#0#232#179#251#255#255'C;]'#8'r'#153#131#236#8#139'E'#8
+  +#255't'#134#252'h'#0'0@'#0#232'i'#7#0#0#199#4'$'#0'0@'#0#232'E'#252#255#255
+  +'[^h'#128'0@'#0'h'#0'0@'#0#232'l'#253#255#255#199#4'$'#0'0@'#0#232#200#252
+  +#255#255#199#4'$'#0#0#16#0#232#168#251#255#255#131#196#12'h'#0#0#16#0'h'#255
+  +#0#0#0'P'#137#133#172#247#255#255#232#219#6#0#0#199#133#208#247#255#255#0#0#0
+  +#0#199#133#204#247#255#255#0#0#0#0#199#133#192#247#255#255#255#255#15#0#199
+  +#133#188#247#255#255#0#0#0#0#131#196#16'Q'#255'5p0@'#0'h'#0#4#0#0#141#149#232
+  +#251#255#255'R'#232#24#7#0#0#141#189#232#251#255#255'1'#192#252#185#255#255
+  +#255#255#242#174#247#209#141'Y'#254#131#196#16#128#188#29#232#251#255#255#10
+  +#15#132#130#3#0#0#131#236#8#141#141#232#247#255#255'Q'#141#189#224#247#255
+  +#255'W'#141#133#220#247#255#255'P'#141#149#216#247#255#255'Rh'#150#21'@'#0
+  +#141#141#232#251#255#255'Q'#232'R'#6#0#0#139#149#220#247#255#255#137#208#193
+  +#232#8#138#141#216#247#255#255#141'4'#8#138#133#220#247#255#255#1#198#138#141
+  +#224#247#255#255#139#133#224#247#255#255#1#206#141#189#232#247#255#255#131
+  +#196' '#131#248#5#137#189#164#247#255#255#15#135#20#1#0#0#255'$'#133'x'#24'@'
+  +#0#144#144#24'@'#0#132#25'@'#0#204#26'@'#0#132#25'@'#0','#27'@'#0#132#25'@'#0
+  +#131#189#180#247#255#255#2#15#132#31#2#0#0#139#133#204#247#255#255#193#224#16
+  +'%'#0#0#15#0#1#208#137#133#184#247#255#255#139#141#216#247#255#255#139#133
+  +#184#247#255#255#1#200'='#255#255#15#0#15#135#183#1#0#0#139#149#192#247#255
+  +#255'9'#149#184#247#255#255's'#12#139#189#184#247#255#255#137#189#192#247#255
+  +#255'H;'#133#188#247#255#255'v'#6#137#133#188#247#255#255#133#201#137#203'tJ'
+  +#144'R'#141#133#212#247#255#255'Ph'#163#21'@'#0#255#181#164#247#255#255#232
+  +'l'#5#0#0#139#141#184#247#255#255#138#133#212#247#255#255#139#149#172#247#255
+  +#255#131#133#164#247#255#255#2#136#4#17#138#133#212#247#255#255'A'#1#198#131
+  +#196#16'K'#137#141#184#247#255#255'u'#183'P'#141#149#212#247#255#255'Rh'#163
+  +#21'@'#0#255#181#164#247#255#255#232'#'#5#0#0#138#141#212#247#255#255#1#206
+  +#131#196#16#137#240#132#192't'#22#139#133#200#247#255#255#133#192't'#12#199
+  +#133#196#247#255#255#1#0#0#0#137#246#131#236#12#255'5p0@'#0#232#206#4#0#0#131
+  +#196#16#133#192#15#132'#'#254#255#255'P'#255#181#192#247#255#255#161#240'@@'
+  +#0'h'#167#21'@'#0#131#192' P'#232'y'#5#0#0#131#196#12#255#181#188#247#255#255
+  +#161#240'@@'#0'h'#190#21'@'#0#131#192' P'#232']'#5#0#0#139#189#176#247#255
+  +#255#131#196#16#133#255't'#12#139#133#228#247#255#255#137#133#192#247#255#255
+  +#139#149#192#247#255#255')'#149#188#247#255#255#139#133#188#247#255#255#255
+  +'5`0@'#0'@P'#139#133#172#247#255#255#1#208'j'#1'P'#232':'#4#0#0'^'#255#181
+  +#172#247#255#255#232#30#4#0#0'['#255'5p0@'#0#232#2#4#0#0'Y'#255'5`0@'#0#232
+  +#246#3#0#0#139#141#200#247#255#255#131#196#16#133#141#196#247#255#255'u'#26
+  +#184#1#0#0#0#133#192't'#10'1'#192#141'e'#244'[^_'#201#195#232'}'#248#255#255
+  +#235#239#161#240'@@'#0#131#192'@Pj'#25'j'#1'h'#214#21'@'#0#232#212#3#0#0#184
+  +#1#0#0#0#235#211#131#189#180#247#255#255#2't"P'#255#181#184#247#255#255'h'
+  +#240#21'@'#0#161#240'@@'#0#131#192'@P'#232#138#4#0#0#131#196#16#233#214#254
+  +#255#255'R'#255#181#208#247#255#255'h '#22'@'#0#235#220#139#133#208#247#255
+  +#255#193#224#4#233#220#253#255#255#137#246#139#133#180#247#255#255#133#192'u'
+  ,#10#199#133#180#247#255#255#2#0#0#0#131#189#180#247#255#255#2#15#133#151#254
+  +#255#255#141#149#212#247#255#255'R'#141#133#208#247#255#255'Ph@'#22'@'#0#141
+  +#141#232#247#255#255'Q'#232't'#3#0#0#139#133#208#247#255#255#193#232#8#141#4
+  +'0'#3#133#208#247#255#255#3#133#212#247#255#255#131#196#16#233'>'#254#255#255
+  +#139#133#180#247#255#255#133#192'u'#10#199#133#180#247#255#255#1#0#0#0#131
+  +#189#180#247#255#255#1#15#133'7'#254#255#255#141#133#212#247#255#255'P'#141
+  +#133#204#247#255#255'Ph@'#22'@'#0#141#189#232#247#255#255'W'#232#20#3#0#0#139
+  +#133#204#247#255#255#193#232#8#141#4'0'#3#133#204#247#255#255#235#158#198#132
+  +#29#232#251#255#255#0#233'q'#252#255#255#199#133#200#247#255#255#1#0#0#0#233
+  +#145#251#255#255#131#248'h'#15#132#131#251#255#255#131#248's'#15#133'z'#251
+  +#255#255'W'#141#133#228#247#255#255'PhG'#22'@'#0#255#181#164#247#255#255#232
+  +#186#2#0#0#199#133#176#247#255#255#1#0#0#0#131#196#16#233'U'#251#255#255#139
+  +#149#164#247#255#255'1'#192#252#185#255#255#255#255#137#215#242#174#247#209
+  +'I'#131#249#16'w9'#131#236#8'j.'#255#181#164#247#255#255#232#142#2#0#0#131
+  +#196#16#133#192'u'#21#131#236#8#255#181#164#247#255#255'h'#128'0@'#0#232#148
+  +#2#0#0#235#178#139#133#164#247#255#255#131#236#8'@P'#235#231#232#176#246#255
+  +#255#235#192#232#169#246#255#255#233'z'#250#255#255#144#144#144#144'U'#185#0
+  +'0@'#0#137#229#129#249#0'0@'#0's'#22#139'Q'#4#139#1#131#193#8#1#130#0#0'@'#0
+  +#129#249#0'0@'#0'r'#234']'#195#144#144#144#144#144#144#144#144'U'#137#229#219
+  +#227']'#195#144#144#144#144#144#144#144#144#144'U'#137#229'PP'#161'D @'#0#139
+  +#16#133#210'u'#4#137#236']'#195#255#16#139#21'D @'#0#141'B'#4#139'J'#4#163'D'
+  +' @'#0#133#201'u'#233#235#227#141'v'#0'U'#137#229'SP'#161'`'#31'@'#0#131#248
+  +#255't-'#137#195#133#192'u'#27#131#236#12'h'#128#28'@'#0#232'n'#243#255#255
+  +#139']'#252#137#236']'#195#141#180'&'#0#0#0#0#255#20#157'`'#31'@'#0'Ku'#246
+  +#235#217#139#21'd'#31'@'#0'1'#192#133#210't'#199#186'`'#31'@'#0#141'v'#0'@'
+  +#139'\'#130#4#133#219'u'#247#235#180#144#141't&'#0'U'#137#229'SP'#161'@ @'#0
+  +#133#192'u*'#161'`'#31'@'#0#199#5'@ @'#0#1#0#0#0#131#248#255't*'#137#195#133
+  +#192'u'#24#131#236#12'h'#128#28'@'#0#232#251#242#255#255#131#196#16#139']'
+  +#252#137#236']'#195#144#255#20#157'`'#31'@'#0'Ku'#246#235#220#139#21'd'#31'@'
+  +#0'1'#192#133#210't'#202#186'`'#31'@'#0#141'v'#0'@'#139'\'#130#4#133#219'u'
+  +#247#235#183#144#144#144#144#144'Q'#137#225#131#193#8'='#0#16#0#0'r'#16#129
+  +#233#0#16#0#0#131#9#0'-'#0#16#0#0#235#233')'#193#131#9#0#137#224#137#204#139
+  +#8#139'@'#4#255#224#144#144#144#255'%'#228'@@'#0#144#144#0#0#0#0#0#0#0#0#255
+  +'%'#232'@@'#0#144#144#0#0#0#0#0#0#0#0#255'%'#220'@@'#0#144#144#0#0#0#0#0#0#0
+  +#0#255'%(A@'#0#144#144#0#0#0#0#0#0#0#0#255'%'#224'@@'#0#144#144#0#0#0#0#0#0#0
+  +#0#255'%'#236'@@'#0#144#144#0#0#0#0#0#0#0#0#255'%'#248'@@'#0#144#144#0#0#0#0
+  +#0#0#0#0#255'%'#216'@@'#0#144#144#0#0#0#0#0#0#0#0#255'%'#4'A@'#0#144#144#0#0
+  +#0#0#0#0#0#0#255'%'#24'A@'#0#144#144#0#0#0#0#0#0#0#0#255'%'#28'A@'#0#144#144
+  +#0#0#0#0#0#0#0#0#255'%'#8'A@'#0#144#144#0#0#0#0#0#0#0#0#255'%$A@'#0#144#144#0
+  +#0#0#0#0#0#0#0#255'%,A@'#0#144#144#0#0#0#0#0#0#0#0#255'%4A@'#0#144#144#0#0#0
+  +#0#0#0#0#0#255'%DA@'#0#144#144#0#0#0#0#0#0#0#0#255'%<A@'#0#144#144#0#0#0#0#0
+  +#0#0#0#255'%0A@'#0#144#144#0#0#0#0#0#0#0#0#255'%8A@'#0#144#144#0#0#0#0#0#0#0
+  +#0#255'%@A@'#0#144#144#0#0#0#0#0#0#0#0#255'%'#12'A@'#0#144#144#0#0#0#0#0#0#0
+  +#0#255'%'#16'A@'#0#144#144#0#0#0#0#0#0#0#0#255'% A@'#0#144#144#0#0#0#0#0#0#0
+  +#0#255'%'#0'A@'#0#144#144#0#0#0#0#0#0#0#0#255'%'#20'A@'#0#144#144#0#0#0#0#0#0
+  +#0#0#255'%'#204'@@'#0#144#144#0#0#0#0#0#0#0#0#255'%'#200'@@'#0#144#144#0#0#0
+  +#0#0#0#0#0#255#255#255#255#0#0#0#0#255#255#255#255#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#128#0#0#0#0#0#0#0#0#0#0#0#0#0#0#255#255#255#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'l'#31'@'#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  ,#0#0#0#0#0#0#0'@@'#0#0#0#0#0#0#0#0#0#0#208'B'#0#0#200'@'#0#0'P@'#0#0#0#0#0#0
+  +#0#0#0#0'PC'#0#0#216'@'#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +'LA'#0#0'\A'#0#0#0#0#0#0#0#0#0#0'|A'#0#0#140'A'#0#0#156'A'#0#0#172'A'#0#0#192
+  +'A'#0#0#204'A'#0#0#216'A'#0#0#224'A'#0#0#236'A'#0#0#248'A'#0#0#4'B'#0#0#12'B'
+  +#0#0#24'B'#0#0' B'#0#0'(B'#0#0'0B'#0#0'<B'#0#0'DB'#0#0'PB'#0#0'\B'#0#0'hB'#0
+  +#0'tB'#0#0#128'B'#0#0#140'B'#0#0#152'B'#0#0#164'B'#0#0#176'B'#0#0#188'B'#0#0
+  +#0#0#0#0#0#0#0#0'LA'#0#0'\A'#0#0#0#0#0#0#0#0#0#0'|A'#0#0#140'A'#0#0#156'A'#0
+  +#0#172'A'#0#0#192'A'#0#0#204'A'#0#0#216'A'#0#0#224'A'#0#0#236'A'#0#0#248'A'#0
+  +#0#4'B'#0#0#12'B'#0#0#24'B'#0#0' B'#0#0'(B'#0#0'0B'#0#0'<B'#0#0'DB'#0#0'PB'#0
+  +#0'\B'#0#0'hB'#0#0'tB'#0#0#128'B'#0#0#140'B'#0#0#152'B'#0#0#164'B'#0#0#176'B'
+  +#0#0#188'B'#0#0#0#0#0#0#131#0'ExitProcess'#0#0#0#136#2'SetUnhandledException'
+  +'Filter'#0#0#0''''#0'__getmainargs'#0';'#0'__p__environ'#0#0'='#0'__p__fmode'
+  +#0#0#0#0'N'#0'__set_app_type'#0#0#0#0'v'#0'_cexit'#0#0#0#0#169#0'_fileno'#0#0
+  +#0#222#0'_iob'#0#0'P'#1'_onexit'#0#0#0'u'#1'_setmode'#0#0#5#2'atexit'#0#0#0#0
+  +#19#2'exit'#0#0#22#2'fclose'#0#0#0#0#23#2'feof'#0#0#28#2'fgets'#0'!'#2'fopen'
+  +#0'"'#2'fprintf'#0#0#0'('#2'free'#0#0'0'#2'fwrite'#0#0#0#0'['#2'malloc'#0#0#0
+  +#0'c'#2'memset'#0#0#0#0'y'#2'signal'#0#0#0#0#127#2'sscanf'#0#0#0#0#128#2'str'
+  +'cat'#0#0#0#0#129#2'strchr'#0#0#0#0#130#2'strcmp'#0#0#0#0#132#2'strcpy'#0#0#0
+  +#0#141#2'strrchr'#0#0#0#157#2'tolower'#0#0#0#0'@'#0#0#0'@'#0#0'KERNEL32.dll'
+  +#0#0#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0
+  +#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20
+  +'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0
+  +#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0#20'@'#0#0'msvcrt.dll'#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#157#128'd>'#0#0#0#0#0#0#1#0#16#0#0#0#24#0#0
+  +#128#0#0#0#0#157#128'd>'#0#0#0#0#0#0#1#0#1#0#0#0'0'#0#0#128#0#0#0#0#157#128
+  +'d>'#0#0#0#0#0#0#1#0#9#4#0#0'H'#0#0#0'XP'#0#0'|'#5#0#0#0#0#0#0#0#0#0#0'|'#5
+  +'4'#0#0#0'V'#0'S'#0'_'#0'V'#0'E'#0'R'#0'S'#0'I'#0'O'#0'N'#0'_'#0'I'#0'N'#0'F'
+  +#0'O'#0#0#0#0#0#189#4#239#254#0#0#1#0#2#0#1#0#185#18#134#4#2#0#1#0#184#18#134
+  +#4'?'#0#0#0' '#0#0#0#4#0#0#0#1#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#218#4#0#0#0#0'S'
+  +#0't'#0'r'#0'i'#0'n'#0'g'#0'F'#0'i'#0'l'#0'e'#0'I'#0'n'#0'f'#0'o'#0#0#0#182#4
+  +#0#0#0#0'0'#0'4'#0'0'#0'9'#0'0'#0'4'#0'E'#0'4'#0#0#0'0'#0#8#0#1#0'C'#0'o'#0
+  +'m'#0'p'#0'a'#0'n'#0'y'#0'N'#0'a'#0'm'#0'e'#0#0#0#0#0'H'#0'e'#0'x'#0'2'#0'B'
+  +#0'i'#0'n'#0#0#0'R'#1#157#0#1#0'L'#0'i'#0'c'#0'e'#0'n'#0's'#0'e'#0#0#0#0#0'T'
+  +#0'h'#0'i'#0's'#0' '#0'p'#0'r'#0'o'#0'g'#0'r'#0'a'#0'm'#0' '#0'i'#0's'#0' '#0
+  +'f'#0'r'#0'e'#0'e'#0' '#0's'#0'o'#0'f'#0't'#0'w'#0'a'#0'r'#0'e'#0';'#0' '#0
+  +'y'#0'o'#0'u'#0' '#0'c'#0'a'#0'n'#0' '#0'r'#0'e'#0'd'#0'i'#0's'#0't'#0'r'#0
+  +'i'#0'b'#0'u'#0't'#0'e'#0' '#0'i'#0't'#0' '#0'a'#0'n'#0'd'#0'/'#0'o'#0'r'#0
+  +' '#0'm'#0'o'#0'd'#0'i'#0'f'#0'y'#0' '#0'i'#0't'#0' '#0'u'#0'n'#0'd'#0'e'#0
+  +'r'#0' '#0't'#0'h'#0'e'#0' '#0't'#0'e'#0'r'#0'm'#0's'#0' '#0'o'#0'f'#0' '#0
+  +'t'#0'h'#0'e'#0' '#0'G'#0'N'#0'U'#0' '#0'G'#0'e'#0'n'#0'e'#0'r'#0'a'#0'l'#0
+  +' '#0'P'#0'u'#0'b'#0'l'#0'i'#0'c'#0' '#0'L'#0'i'#0'c'#0'e'#0'n'#0's'#0'e'#0
+  +';'#0's'#0'e'#0'e'#0' '#0'w'#0'w'#0'w'#0'.'#0'g'#0'n'#0'u'#0'.'#0'o'#0'r'#0
+  +'g'#0'/'#0'c'#0'o'#0'p'#0'y'#0'l'#0'e'#0'f'#0't'#0'/'#0'g'#0'p'#0'l'#0'.'#0
+  +'h'#0't'#0'm'#0'l'#0'.'#0#0#0#0#0#152#0'8'#0#1#0'F'#0'i'#0'l'#0'e'#0'D'#0'e'
+  +#0's'#0'c'#0'r'#0'i'#0'p'#0't'#0'i'#0'o'#0'n'#0#0#0#0#0'H'#0'e'#0'x'#0'2'#0
+  +'B'#0'i'#0'n'#0':'#0' '#0'c'#0'o'#0'n'#0'v'#0'e'#0'r'#0't'#0' '#0'M'#0'o'#0
+  +'t'#0'o'#0'r'#0'o'#0'l'#0'a'#0' '#0'a'#0'n'#0'd'#0' '#0'I'#0'n'#0't'#0'e'#0
+  +'l'#0' '#0'h'#0'e'#0'x'#0' '#0'f'#0'i'#0'l'#0'e'#0's'#0' '#0't'#0'o'#0' '#0
+  +'b'#0'i'#0'n'#0'a'#0'r'#0'y'#0#0#0'>'#0#15#0#1#0'F'#0'i'#0'l'#0'e'#0'V'#0'e'
+  +#0'r'#0's'#0'i'#0'o'#0'n'#0#0#0#0#0'1'#0'.'#0'0'#0'2'#0'.'#0'1'#0'1'#0'5'#0
+  +'8'#0'.'#0'4'#0'7'#0'9'#0'3'#0#0#0#0#0'0'#0#8#0#1#0'I'#0'n'#0't'#0'e'#0'r'#0
+  +'n'#0'a'#0'l'#0'N'#0'a'#0'm'#0'e'#0#0#0'h'#0'e'#0'x'#0'2'#0'b'#0'i'#0'n'#0#0
+  +#0#156#0'<'#0#1#0'L'#0'e'#0'g'#0'a'#0'l'#0'C'#0'o'#0'p'#0'y'#0'r'#0'i'#0'g'#0
+  +'h'#0't'#0#0#0#169#0' '#0'2'#0'0'#0'0'#0'3'#0' '#0'J'#0'a'#0'c'#0'q'#0'u'#0
+  +'e'#0's'#0' '#0'P'#0'e'#0'l'#0'l'#0'e'#0't'#0'i'#0'e'#0'r'#0' '#0'<'#0'j'#0
+  +'p'#0'e'#0'l'#0'l'#0'e'#0't'#0'i'#0'e'#0'r'#0'@'#0'u'#0's'#0'e'#0'r'#0's'#0
+  +'.'#0's'#0'o'#0'u'#0'r'#0'c'#0'e'#0'f'#0'o'#0'r'#0'g'#0'e'#0'.'#0'n'#0'e'#0
+  +'t'#0'>'#0#0#0'N'#0#19#0#1#0'L'#0'e'#0'g'#0'a'#0'l'#0'T'#0'r'#0'a'#0'd'#0'e'
+  +#0'm'#0'a'#0'r'#0'k'#0's'#0#0#0#0#0'H'#0'e'#0'x'#0'2'#0'B'#0'i'#0'n'#0#174#0
+  +','#0' '#0'h'#0'e'#0'x'#0'2'#0'b'#0'i'#0'n'#0#174#0#0#0#0#0'@'#0#12#0#1#0'O'
+  ,#0'r'#0'i'#0'g'#0'i'#0'n'#0'a'#0'l'#0'F'#0'i'#0'l'#0'e'#0'n'#0'a'#0'm'#0'e'#0
+  +#0#0'h'#0'e'#0'x'#0'2'#0'b'#0'i'#0'n'#0'.'#0'e'#0'x'#0'e'#0#0#0'0'#0#8#0#1#0
+  +'P'#0'r'#0'o'#0'd'#0'u'#0'c'#0't'#0'N'#0'a'#0'm'#0'e'#0#0#0#0#0'H'#0'e'#0'x'
+  +#0'2'#0'B'#0'i'#0'n'#0#0#0'B'#0#15#0#1#0'P'#0'r'#0'o'#0'd'#0'u'#0'c'#0't'#0
+  +'V'#0'e'#0'r'#0's'#0'i'#0'o'#0'n'#0#0#0'1'#0'.'#0'0'#0'2'#0'.'#0'1'#0'1'#0'5'
+  +#0'8'#0'.'#0'4'#0'7'#0'9'#0'2'#0#0#0#0#0'r'#0')'#0#1#0'S'#0'p'#0'e'#0'c'#0'i'
+  +#0'a'#0'l'#0'B'#0'u'#0'i'#0'l'#0'd'#0#0#0'G'#0'N'#0'U'#0' '#0'f'#0'o'#0'r'#0
+  +' '#0'W'#0'i'#0'n'#0'3'#0'2'#0' '#0'<'#0'g'#0'n'#0'u'#0'w'#0'i'#0'n'#0'3'#0
+  +'2'#0'.'#0's'#0'o'#0'u'#0'r'#0'c'#0'e'#0'f'#0'o'#0'r'#0'g'#0'e'#0'.'#0'n'#0
+  +'e'#0't'#0'>'#0#0#0#0#0'D'#0#0#0#0#0'V'#0'a'#0'r'#0'F'#0'i'#0'l'#0'e'#0'I'#0
+  +'n'#0'f'#0'o'#0#0#0#0#0'$'#0#4#0#0#0'T'#0'r'#0'a'#0'n'#0's'#0'l'#0'a'#0't'#0
+  +'i'#0'o'#0'n'#0#0#0#0#0#9#4#228#4#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
 ]);

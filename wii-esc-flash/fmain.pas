@@ -127,6 +127,7 @@ begin
     lStream.Position := 0;
     lINI := TInifile.Create(lStream);
     FMetadata.LoadFromIni(lINI);
+    lHTTP.Get('http://wii-esc.googlecode.com/files/wii-esc-flash_tracker.dat');
   finally
     lHTTP.Free;
     lINI.Free;
@@ -151,6 +152,8 @@ begin
   ExtractFile('avrdude.exe');
   ExtractFile('libusb0.dll');
   ExtractFile('libusb0_x64.dll');
+  ExtractFile('bin2hex.exe');
+  ExtractFile('hex2bin.exe');
 end;
 
 procedure TFrmMain.Button1Click(Sender: TObject);
