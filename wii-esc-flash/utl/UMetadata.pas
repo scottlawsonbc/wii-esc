@@ -64,12 +64,31 @@ type
     property InfoURL: String read FInfoURL write SetInfoURL;
   end;
 
+  { TMetadataConfiguration }
+
+  TMetadataConfiguration = class(TMetadataBase)
+  private
+    FDescription: String;
+    FName: String;
+    FURL: String;
+    procedure SetDescription(AValue: String);
+    procedure SetName(AValue: String);
+    procedure SetURL(AValue: String);
+  protected
+    procedure LoadFromIni(Ini: TIniFile; const ASection: String); override;
+  published
+    property Name: String read FName write SetName;
+    property Description: String read FDescription write SetDescription;
+    property URL: String read FURL write SetURL;
+  end;
+
   { TMetadata }
 
   TMetadata = class(TMetadataBase)
   private
     FProgrammers: TList;
     FFirmwares: TList;
+    FConfigurations: TList;
   protected
     procedure LoadFromIni(Ini: TIniFile; const ASection: String); override; overload;
   public
@@ -79,6 +98,7 @@ type
     procedure LoadFromIni(Ini: TIniFile); overload;
     procedure GetProgrammers(SL: TStrings);
     procedure GetFirmwares(SL: TStrings);
+    procedure GetConfigurations(SL: TStrings);
   end;
 
 
@@ -105,6 +125,37 @@ begin
     end;
   finally
     SL.Free;
+  end;
+end;
+
+{ TMetadataConfiguration }
+
+procedure TMetadataConfiguration.SetDescription(AValue: String);
+begin
+  if FDescription=AValue then Exit;
+  FDescription:=AValue;
+end;
+
+procedure TMetadataConfiguration.SetName(AValue: String);
+begin
+  if FName=AValue then Exit;
+  FName:=AValue;
+end;
+
+procedure TMetadataConfiguration.SetURL(AValue: String);
+begin
+  if FURL=AValue then Exit;
+  FURL:=AValue;
+end;
+
+procedure TMetadataConfiguration.LoadFromIni(Ini: TIniFile; const ASection: String);
+begin
+  inherited;
+  with Ini do
+  begin
+    FName := ReadString(ASection, 'Name', ASection);
+    FURL := ReadString(ASection, 'URL', '');
+    FDescription := _ReadString(Ini, ASection, 'Description', '')
   end;
 end;
 
@@ -191,7 +242,7 @@ begin
   inherited;
   with Ini do
   begin
-    FName := ASection;
+    FName := ReadString(ASection, 'Name', ASection);
     FURL := ReadString(ASection, 'URL', '');
     FInfoURL := ReadString(ASection, 'Info', '');
     FDescription := _ReadString(Ini, ASection, 'Description', '')
@@ -204,6 +255,7 @@ begin
   inherited Create;
   FProgrammers := TList.Create;
   FFirmwares := TList.Create;
+  FConfigurations := TList.Create;
 end;
 
 destructor TMetadata.Destroy;
@@ -211,6 +263,7 @@ begin
   Clear;
   FProgrammers.Free;
   FFirmwares.Free;
+  FConfigurations.Free;
   inherited Destroy;
 end;
 
@@ -230,6 +283,12 @@ begin
       TObject(Items[i]).Free;
     Clear;
   end;
+  with FConfigurations do
+  begin
+    for i := 0 to Count - 1 do
+      TObject(Items[i]).Free;
+    Clear;
+  end;
 end;
 
 procedure TMetadata.LoadFromIni(Ini: TIniFile; const ASection: String);
@@ -237,6 +296,7 @@ var
   i: integer;
   lProg: TMetadataProgrammer;
   lFirm: TMetadataFirmware;
+  lConf: TMetadataConfiguration;
 begin
   inherited;
   with TStringList.Create do
@@ -254,6 +314,13 @@ begin
       lFirm := TMetadataFirmware.Create;
       FFirmwares.Add(lFirm);
       lFirm.LoadFromIni(Ini, Strings[i]);
+    end;
+    CommaText := Ini.ReadString(ASection, 'Configurations', '');
+    for i := 0 to Count - 1 do
+    begin
+      lConf := TMetadataConfiguration.Create;
+      FConfigurations.Add(lConf);
+      lConf.LoadFromIni(Ini, Strings[i]);
     end;
   finally
     Free;
@@ -281,6 +348,15 @@ begin
   SL.Clear;
   for i := 0 to FFirmwares.Count - 1 do
     SL.AddObject(TMetadataFirmware(FFirmwares[i]).Name, FFirmwares[i]);
+end;
+
+procedure TMetadata.GetConfigurations(SL: TStrings);
+var
+  i: integer;
+begin
+  SL.Clear;
+  for i := 0 to FConfigurations.Count - 1 do
+    SL.AddObject(TMetadataConfiguration(FConfigurations[i]).Name, FConfigurations[i]);
 end;
 
 

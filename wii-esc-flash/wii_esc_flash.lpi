@@ -19,7 +19,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
       <RevisionNr Value="5"/>
-      <BuildNr Value="1"/>
+      <BuildNr Value="3"/>
       <StringTable CompanyName="GPL v3" FileDescription="Wii-ESC Flash Tool" InternalName="Wii-ESC YAFT" ProductName="Wii-ESC" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -35,12 +35,15 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="1">
+    <RequiredPackages Count="2">
       <Item1>
-        <PackageName Value="LCL"/>
+        <PackageName Value="FCL"/>
       </Item1>
+      <Item2>
+        <PackageName Value="LCL"/>
+      </Item2>
     </RequiredPackages>
-    <Units Count="5">
+    <Units Count="4">
       <Unit0>
         <Filename Value="wii_esc_flash.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -55,20 +58,15 @@
         <UnitName Value="FMain"/>
       </Unit1>
       <Unit2>
-        <Filename Value="utl\UWgetTask.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="UWgetTask"/>
-      </Unit2>
-      <Unit3>
         <Filename Value="utl\UComPort.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UComPort"/>
-      </Unit3>
-      <Unit4>
+      </Unit2>
+      <Unit3>
         <Filename Value="utl\UMetadata.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UMetadata"/>
-      </Unit4>
+      </Unit3>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

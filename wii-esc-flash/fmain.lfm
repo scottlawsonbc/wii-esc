@@ -1,80 +1,86 @@
 object FrmMain: TFrmMain
   Left = 614
-  Height = 485
+  Height = 505
   Top = 313
-  Width = 483
+  Width = 460
   Caption = 'WII-ESC Flash Tool'
-  ClientHeight = 485
-  ClientWidth = 483
+  ClientHeight = 505
+  ClientWidth = 460
+  Font.CharSet = RUSSIAN_CHARSET
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
+  SessionProperties = 'ActiveControl;Width;Height;Left;Top;CmbPgmType.ItemIndex;CmbPorts.Top;CmbPorts.Text;CmbTarget.ItemIndex'
   LCLVersion = '1.0.1.3'
   object gbProgrammer: TGroupBox
     Left = 8
-    Height = 73
+    Height = 72
     Top = 8
-    Width = 466
+    Width = 443
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Programmer Settings'
-    ClientHeight = 55
-    ClientWidth = 462
+    ClientHeight = 54
+    ClientWidth = 439
     TabOrder = 0
     object CmbPgmType: TComboBox
       Left = 6
       Height = 23
       Top = 24
-      Width = 274
+      Width = 251
       Anchors = [akTop, akLeft, akRight]
       Enabled = False
-      ItemHeight = 15
+      ItemHeight = 13
       OnChange = CmbPgmTypeChange
       Style = csDropDownList
       TabOrder = 0
     end
     object Label1: TLabel
       Left = 6
-      Height = 16
+      Height = 14
       Top = 6
-      Width = 27
+      Width = 25
       Caption = 'Type'
       ParentColor = False
     end
     object CmbPorts: TComboBox
-      Left = 284
+      Left = 261
       Height = 23
       Top = 24
       Width = 84
       Anchors = [akTop, akRight]
       Enabled = False
-      ItemHeight = 15
+      ItemHeight = 13
       TabOrder = 1
     end
     object Label2: TLabel
-      Left = 282
-      Height = 16
+      Left = 261
+      Height = 14
       Top = 8
-      Width = 23
+      Width = 21
       Anchors = [akTop, akRight]
       Caption = 'Port'
       ParentColor = False
     end
     object CmbBaud: TComboBox
-      Left = 372
+      Left = 349
       Height = 23
       Top = 24
       Width = 84
       Anchors = [akTop, akRight]
       Enabled = False
-      ItemHeight = 15
+      ItemHeight = 13
       TabOrder = 2
       Text = '57600'
     end
     object Label3: TLabel
-      Left = 370
-      Height = 16
+      Left = 349
+      Height = 14
       Top = 8
-      Width = 33
+      Width = 31
       Anchors = [akTop, akRight]
       Caption = 'Speed'
       ParentColor = False
@@ -83,8 +89,8 @@ object FrmMain: TFrmMain
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
-    Top = 462
-    Width = 483
+    Top = 482
+    Width = 460
     Panels = <    
       item
         Width = 50
@@ -96,122 +102,353 @@ object FrmMain: TFrmMain
   end
   object GroupBox1: TGroupBox
     Left = 8
-    Height = 113
+    Height = 112
     Top = 80
-    Width = 466
+    Width = 443
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Firmware'
-    ClientHeight = 95
-    ClientWidth = 462
+    ClientHeight = 94
+    ClientWidth = 439
     TabOrder = 2
     object CmbTarget: TComboBox
       Left = 6
       Height = 23
       Top = 24
-      Width = 274
+      Width = 315
       Anchors = [akTop, akLeft, akRight]
       Enabled = False
-      ItemHeight = 15
-      Items.Strings = (
-        'bs_nfet.hex'
-        'bs.hex'
-        'tp.hex'
-      )
+      ItemHeight = 13
+      OnChange = GlobChange
       Style = csDropDownList
       TabOrder = 0
     end
     object Label4: TLabel
       Left = 6
-      Height = 16
+      Height = 14
       Top = 6
-      Width = 35
+      Width = 33
       Caption = 'Target'
       ParentColor = False
     end
-    object Button1: TButton
-      Left = 284
+    object BtnLoadFirmware: TButton
+      Left = 349
       Height = 25
       Top = 22
       Width = 84
       Anchors = [akTop, akRight]
-      Caption = 'Information'
+      Caption = 'Download'
       Enabled = False
-      OnClick = Button1Click
+      OnClick = BtnLoadFirmwareClick
       TabOrder = 1
     end
-    object CmbPgmType4: TComboBox
+    object BtnFlashFirmware: TButton
       Left = 6
-      Height = 23
-      Top = 66
-      Width = 274
-      Anchors = [akTop, akLeft, akRight]
+      Height = 25
+      Top = 56
+      Width = 75
+      Caption = 'Write'
       Enabled = False
-      ItemHeight = 15
-      Items.Strings = (
-        'default'
-        'extended'
-        'free_flight'
-        'ultra_pwm'
-      )
-      Style = csDropDownList
       TabOrder = 2
     end
-    object Label5: TLabel
-      Left = 6
-      Height = 16
-      Top = 48
-      Width = 75
-      Caption = 'Configuration'
-      ParentColor = False
-    end
-    object Button2: TButton
-      Left = 284
+    object Button1: TButton
+      Left = 86
       Height = 25
-      Top = 64
-      Width = 84
-      Anchors = [akTop, akRight]
-      Caption = 'Information'
+      Top = 56
+      Width = 75
+      Caption = 'Open...'
       Enabled = False
       TabOrder = 3
     end
     object Button3: TButton
-      Left = 372
+      Left = 166
       Height = 25
-      Top = 22
-      Width = 84
-      Anchors = [akTop, akRight]
-      Caption = 'Write'
+      Top = 56
+      Width = 75
+      Caption = 'Save As..'
       Enabled = False
       TabOrder = 4
     end
-    object Button4: TButton
-      Left = 372
-      Height = 25
-      Top = 64
-      Width = 84
+    object BtnFirmwareInfo: TSpeedButton
+      Left = 321
+      Height = 23
+      Top = 23
+      Width = 25
       Anchors = [akTop, akRight]
-      Caption = 'Write'
       Enabled = False
-      TabOrder = 5
+      Flat = True
+      Glyph.Data = {
+        36050000424D3605000000000000360400002800000010000000100000000100
+        08000000000000010000330B0000330B00000001000000010000840000006B18
+        00008C21000084291000B54A10008C3921009C422100734A290094633900B563
+        390094634200CE734200CEAD8C00E7C6AD00FFDEB500FFE7CE00FFEFD600FFEF
+        E700FFF7EF00FF00FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00131313131313
+        1313131313131313131313131313080713131313131313131313131313131007
+        0713131313131313131313131313110C0707131313131313131313131313110F
+        0C070707070713131313131308070F10100E0E0F0C080707131313080D0D0F10
+        0A0504090F0E0C070713080D0F11101010050210100F0E0C07070D0F11101010
+        1005021010100F0E0C07121111101010030502101010100F0F07121211111010
+        0A0301101010100F0F070F12121111101010101010100F120C08130F12121111
+        11060B10100F120C081313130F141212120000100F100C081313131313130F12
+        1210100E0C081313131313131313131313131313131313131313
+      }
+      NumGlyphs = 0
+      OnClick = BtnFirmwareInfoClick
+    end
+    object Label6: TLabel
+      Cursor = crHandPoint
+      Left = 310
+      Height = 14
+      Top = 62
+      Width = 96
+      Anchors = [akTop, akRight]
+      Caption = 'RapidESC Database'
+      Font.CharSet = RUSSIAN_CHARSET
+      Font.Color = clHotLight
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsUnderline]
+      ParentColor = False
+      ParentFont = False
+      OnClick = Label6Click
     end
   end
   object MemLog: TMemo
     Left = 8
-    Height = 257
-    Top = 200
-    Width = 466
+    Height = 165
+    Top = 312
+    Width = 443
     Anchors = [akTop, akLeft, akRight, akBottom]
+    Font.CharSet = RUSSIAN_CHARSET
+    Font.Height = -11
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    ParentFont = False
     ReadOnly = True
     ScrollBars = ssBoth
     TabOrder = 3
     TabStop = False
     WordWrap = False
   end
+  object GroupBox2: TGroupBox
+    Left = 8
+    Height = 112
+    Top = 192
+    Width = 443
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'Configuration'
+    ClientHeight = 94
+    ClientWidth = 439
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    TabOrder = 4
+    object Label5: TLabel
+      Left = 6
+      Height = 14
+      Top = 8
+      Width = 142
+      Caption = 'Predefined throttle endpoints'
+      ParentColor = False
+    end
+    object CmbConfigurations: TComboBox
+      Left = 6
+      Height = 23
+      Top = 24
+      Width = 315
+      Anchors = [akTop, akLeft, akRight]
+      Enabled = False
+      ItemHeight = 13
+      Items.Strings = (
+        'default'
+        'extended'
+        'free_flight'
+        'ultra_pwm'
+      )
+      OnChange = GlobChange
+      Style = csDropDownList
+      TabOrder = 0
+    end
+    object BtnLoadConfiguration: TButton
+      Left = 349
+      Height = 25
+      Top = 23
+      Width = 84
+      Anchors = [akTop, akRight]
+      Caption = 'Download'
+      Enabled = False
+      OnClick = BtnLoadConfigurationClick
+      TabOrder = 1
+    end
+    object BtnFlashEEPROM: TButton
+      Left = 6
+      Height = 25
+      Top = 56
+      Width = 75
+      Caption = 'Write'
+      Enabled = False
+      TabOrder = 2
+    end
+    object BtnConfigurationInfo: TSpeedButton
+      Left = 321
+      Height = 23
+      Top = 23
+      Width = 25
+      Anchors = [akTop, akRight]
+      Enabled = False
+      Flat = True
+      Glyph.Data = {
+        36050000424D3605000000000000360400002800000010000000100000000100
+        08000000000000010000330B0000330B00000001000000010000840000006B18
+        00008C21000084291000B54A10008C3921009C422100734A290094633900B563
+        390094634200CE734200CEAD8C00E7C6AD00FFDEB500FFE7CE00FFEFD600FFEF
+        E700FFF7EF00FF00FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00131313131313
+        1313131313131313131313131313080713131313131313131313131313131007
+        0713131313131313131313131313110C0707131313131313131313131313110F
+        0C070707070713131313131308070F10100E0E0F0C080707131313080D0D0F10
+        0A0504090F0E0C070713080D0F11101010050210100F0E0C07070D0F11101010
+        1005021010100F0E0C07121111101010030502101010100F0F07121211111010
+        0A0301101010100F0F070F12121111101010101010100F120C08130F12121111
+        11060B10100F120C081313130F141212120000100F100C081313131313130F12
+        1210100E0C081313131313131313131313131313131313131313
+      }
+      NumGlyphs = 0
+      OnClick = BtnConfigurationInfoClick
+    end
+    object Button5: TButton
+      Left = 86
+      Height = 25
+      Top = 56
+      Width = 75
+      Caption = 'Open..'
+      Enabled = False
+      TabOrder = 3
+    end
+    object Button6: TButton
+      Left = 166
+      Height = 25
+      Top = 56
+      Width = 75
+      Caption = 'Save As...'
+      Enabled = False
+      TabOrder = 4
+    end
+    object Button7: TButton
+      Left = 246
+      Height = 25
+      Top = 56
+      Width = 75
+      Caption = 'Edit...'
+      Enabled = False
+      TabOrder = 5
+    end
+  end
   object TmLoadDelay: TTimer
     Enabled = False
     Interval = 500
     OnTimer = TmLoadDelayTimer
     left = 32
-    top = 208
+    top = 320
+  end
+  object ActionList1: TActionList
+    Images = ImageList1
+    left = 56
+    top = 320
+    object FileOpen1: TFileOpen
+      Category = 'File'
+      Caption = '&Open ...'
+      Hint = 'Open'
+      ShortCut = 16463
+    end
+  end
+  object ImageList1: TImageList
+    left = 80
+    top = 320
+  end
+  object PermStorage: TIniPropStorage
+    StoredValues = <>
+    IniSection = 'UI'
+    Active = False
+    OnRestoreProperties = PermStorageRestoreProperties
+    left = 104
+    top = 320
+  end
+  object AvrDude: TAsyncProcess
+    Active = False
+    Options = []
+    Priority = ppNormal
+    StartupOptions = []
+    ShowWindow = swoNone
+    WindowColumns = 0
+    WindowHeight = 0
+    WindowLeft = 0
+    WindowRows = 0
+    WindowTop = 0
+    WindowWidth = 0
+    FillAttribute = 0
+    left = 128
+    top = 320
   end
 end
