@@ -203,7 +203,7 @@ begin
   begin
     FBaudRates.CommaText := ReadString(ASection, 'Speed', '');
     FPort := ReadString(ASection, 'Port', '');
-    FName := ASection;
+    FName := ReadString(ASection, 'Name', ASection);
   end;
 end;
 
