@@ -14,14 +14,13 @@ type
   TFrmMain = class(TForm)
     ActionList1: TActionList;
     AvrDude: TAsyncProcess;
+    BtnBackup: TButton;
     BtnLoadFirmware: TButton;
     BtnFlashFirmware: TButton;
     Button1: TButton;
     BtnLoadConfiguration: TButton;
-    BtnPgmTest: TButton;
     Button3: TButton;
     BtnFlashEEPROM: TButton;
-    BtnBackup: TButton;
     Button5: TButton;
     Button6: TButton;
     BtnEditEEPROM: TButton;
@@ -30,7 +29,9 @@ type
     CmbPorts: TComboBox;
     CmbBaud: TComboBox;
     CmbTarget: TComboBox;
-    FileOpen1: TFileOpen;
+    ActOpenFirmware: TFileOpen;
+    ActSaveFirmware: TFileSaveAs;
+    ActOpenConfiguration: TFileOpen;
     gbProgrammer: TGroupBox;
     GrpFirmware: TGroupBox;
     GrpConfiguration: TGroupBox;
@@ -47,6 +48,9 @@ type
     BtnConfigurationInfo: TSpeedButton;
     Stb: TStatusBar;
     TmLoadDelay: TTimer;
+    procedure ActOpenConfigurationAccept(Sender: TObject);
+    procedure ActOpenFirmwareAccept(Sender: TObject);
+    procedure ActSaveFirmwareAccept(Sender: TObject);
     procedure AvrDudeReadData(Sender: TObject);
     procedure AvrDudeTerminate(Sender: TObject);
     procedure BtnConfigurationInfoClick(Sender: TObject);
@@ -80,6 +84,7 @@ type
     procedure ConvertConfiguration;
     procedure LoadFirmware(AFirmware: TMetadataFirmware); overload;
     procedure LoadFirmware(const AFileName: String); overload;
+    procedure SaveFirmware(const AFileName: String); overload;
     procedure LogMessage(const S: String);
     procedure LogRaw(const S: String);
     procedure ObjToControls;
@@ -100,6 +105,19 @@ implementation
 uses IniFiles, FConfigEditor, FPHttpClient;
 
 {$R *.lfm}
+
+resourcestring
+  rsAdditionalIn = 'Additional Information:';
+  rsUnpackingRes = 'Unpacking resources...';
+  rsLoadingMetad = 'Loading metadata...';
+  rsReady = 'Ready.';
+  rsDownloadingFileS = 'Downloading file: "%s"';
+  rs0nByteSDownloaded = '%.0n byte(s) downloaded.';
+  rs0nByteSBinary = '%.0n byte(s) binary.';
+  rsLoadingFileS = 'Loading file: "%s"';
+  rs0nByteSLoaded = '%.0n byte(s) loaded.';
+  rsSavingFileS = 'Saving file: "%s"';
+  rs0nByteSSaved = '%.0n byte(s) saved.';
 
 { TFrmMain }
 procedure TFrmMain.FormCreate(Sender: TObject);
@@ -138,13 +156,13 @@ end;
 procedure TFrmMain.BtnFirmwareInfoClick(Sender: TObject);
 begin
   if Assigned(CurrentFirmware) then
-    MessageDlg('Additional Information:', CurrentFirmware.Description, mtInformation, [mbOK], 0);
+    MessageDlg(rsAdditionalIn, CurrentFirmware.Description, mtInformation, [mbOK], 0);
 end;
 
 procedure TFrmMain.BtnConfigurationInfoClick(Sender: TObject);
 begin
   if Assigned(CurrentConfiguration) then
-    MessageDlg('Additional Information:', CurrentConfiguration.Description, mtInformation, [mbOK], 0);
+    MessageDlg(rsAdditionalIn, CurrentConfiguration.Description, mtInformation, [mbOK], 0);
 end;
 
 procedure TFrmMain.AvrDudeReadConsole;
@@ -174,9 +192,36 @@ begin
   AvrDudeReadConsole;
 end;
 
+procedure TFrmMain.ActOpenFirmwareAccept(Sender: TObject);
+begin
+  LoadFirmware(ActOpenFirmware.Dialog.FileName);
+  LogMessage('');
+  UpdateControls;
+end;
+
+procedure TFrmMain.ActOpenConfigurationAccept(Sender: TObject);
+begin
+  LoadConfiguration(ActOpenConfiguration.Dialog.FileName);
+  LogMessage('');
+  UpdateControls;
+end;
+
+procedure TFrmMain.ActSaveFirmwareAccept(Sender: TObject);
+var
+  lFile: String;
+begin
+  lFile := ActSaveFirmware.Dialog.FileName;
+  if ExtractFileExt(lFile) = '' then
+    lFile := ChangeFileExt(lFile, '.hex');
+  SaveFirmware(lFile);
+  LogMessage('');
+  UpdateControls;
+end;
+
 procedure TFrmMain.AvrDudeTerminate(Sender: TObject);
 begin
   AvrDudeReadConsole;
+  LogMessage('');
 end;
 
 procedure TFrmMain.BtnFlashFirmwareClick(Sender: TObject);
@@ -192,12 +237,12 @@ begin
   TmLoadDelay.Enabled := False;
   try
     Screen.Cursor := crHourGlass;
-    LogMessage('Unpacking resources...');
+    LogMessage(rsUnpackingRes);
     UnpackResources;
-    LogMessage('Loading metadata...');
+    LogMessage(rsLoadingMetad);
     LoadMetadata; ObjToControls;
     PermStorage.Restore;
-    LogMessage('Ready.');
+    LogMessage(rsReady);
     LogMessage('');
   finally
     Screen.Cursor := crDefault;
@@ -265,8 +310,10 @@ begin
   BtnConfigurationInfo.Enabled := Assigned(CurrentConfiguration);
   BtnFlashEEPROM.Enabled := FEEPROM.Size > 0;
   BtnEditEEPROM.Enabled := FEEPROM.Size > 0;
-  BtnPgmTest.Enabled := Assigned(CurrentProgrammer) and not FBusy;
   BtnBackup.Enabled := Assigned(CurrentProgrammer) and not FBusy;
+  ActOpenFirmware.Enabled := not FBusy;
+  ActSaveFirmware.Enabled := (FFirmware.Size > 0) and not FBusy;
+  ActOpenConfiguration.Enabled := not FBusy;
 end;
 
 procedure TFrmMain.LoadMetadata;
@@ -358,9 +405,9 @@ begin
   if Assigned(CurrentFirmware) and (CurrentFirmware.URL <> '') then
   try
     Screen.Cursor := crHourGlass;
-    LogMessage(Format('Downloading file: "%s"', [ExtractFileName(CurrentFirmware.URL)]));
+    LogMessage(Format(rsDownloadingFileS, [ExtractFileName(CurrentFirmware.URL)]));
     LoadFirmware(CurrentFirmware);
-    LogMessage(Format('%.0n byte(s) downloaded.', [Double(FFirmware.Size)]));
+    LogMessage(Format(rs0nByteSDownloaded, [Double(FFirmware.Size)]));
     LogMessage('');
   finally
     Screen.Cursor := crDefault;
@@ -378,11 +425,11 @@ begin
   if Assigned(CurrentConfiguration) and (CurrentConfiguration.URL <> '') then
   try
     Screen.Cursor := crHourGlass;
-    LogMessage(Format('Downloading file: "%s"', [ExtractFileName(CurrentConfiguration.URL)]));
+    LogMessage(Format(rsDownloadingFileS, [ExtractFileName(CurrentConfiguration.URL)]));
     LoadConfiguration(CurrentConfiguration);
-    LogMessage(Format('%.0n byte(s) downloaded.', [Double(FConfiguration.Size)]));
+    LogMessage(Format(rs0nByteSDownloaded, [Double(FConfiguration.Size)]));
     ConvertConfiguration;;
-    LogMessage(Format('%.0n byte(s) binary.', [Double(FEEPROM.Size)]));
+    LogMessage(Format(rs0nByteSBinary, [Double(FEEPROM.Size)]));
     LogMessage('');
   finally
     Screen.Cursor := crDefault;
@@ -397,7 +444,7 @@ begin
   if (CmbPgmType.ItemIndex >= 0) and Assigned(CmbPgmType.Items.Objects[CmbPgmType.ItemIndex]) then
   begin
     lProgrammer := TMetadataProgrammer(CmbPgmType.Items.Objects[CmbPgmType.ItemIndex]);
-    if lProgrammer.Port = '$com$' then
+    if lProgrammer.Port = '$(com)' then
       GetSerialPortRegNames(CmbPorts.Items)
     else
       CmbPorts.Items.CommaText := lProgrammer.Port;
@@ -410,20 +457,27 @@ end;
 
 procedure TFrmMain.LoadFirmware(const AFileName: String);
 begin
-  LogMessage(Format('Loading file: "%s"', [AFileName]));
+  LogMessage(Format(rsLoadingFileS, [AFileName]));
   FFirmware.Clear;
   FFirmware.LoadFromFile(AFileName);
-  LogMessage(Format('%.0n byte(s) loaded.', [Double(FFirmware.Size)]));
+  LogMessage(Format(rs0nByteSLoaded, [Double(FFirmware.Size)]));
+end;
+
+procedure TFrmMain.SaveFirmware(const AFileName: String);
+begin
+  LogMessage(Format(rsSavingFileS, [AFileName]));
+  FFirmware.SaveToFile(AFileName);
+  LogMessage(Format(rs0nByteSSaved, [Double(FileSize(AFileName))]));
 end;
 
 procedure TFrmMain.LoadConfiguration(const AFileName: String);
 begin
-  LogMessage(Format('Loading file: "%s"', [AFileName]));
+  LogMessage(Format(rsLoadingFileS, [AFileName]));
   FConfiguration.Clear;
   FConfiguration.LoadFromFile(AFileName);
   ConvertConfiguration;
-  LogMessage(Format('%.0n byte(s) loaded.', [Double(FConfiguration.Size)]));
-  LogMessage(Format('%.0n byte(s) binary.', [Double(FEEPROM.Size)]));
+  LogMessage(Format(rs0nByteSLoaded, [Double(FConfiguration.Size)]));
+  LogMessage(Format(rs0nByteSBinary, [Double(FEEPROM.Size)]));
 end;
 
 

@@ -7,6 +7,11 @@ object FrmConfigEditor: TFrmConfigEditor
   Caption = 'Configuration Editor'
   ClientHeight = 355
   ClientWidth = 293
+  Font.CharSet = RUSSIAN_CHARSET
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
   Position = poMainFormCenter
   LCLVersion = '1.0.1.3'
   object Bevel1: TBevel
@@ -23,7 +28,7 @@ object FrmConfigEditor: TFrmConfigEditor
     Top = 321
     Width = 75
     Anchors = [akRight, akBottom]
-    Caption = 'OK'
+    Caption = '&OK'
     ModalResult = 1
     TabOrder = 4
   end

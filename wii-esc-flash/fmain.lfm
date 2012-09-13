@@ -22,12 +22,12 @@ object FrmMain: TFrmMain
   LCLVersion = '1.0.1.3'
   object gbProgrammer: TGroupBox
     Left = 8
-    Height = 104
+    Height = 72
     Top = 8
     Width = 443
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Programmer Settings'
-    ClientHeight = 86
+    ClientHeight = 54
     ClientWidth = 439
     TabOrder = 0
     object CmbPgmType: TComboBox
@@ -89,24 +89,6 @@ object FrmMain: TFrmMain
       Caption = 'Speed'
       ParentColor = False
     end
-    object BtnPgmTest: TButton
-      Left = 6
-      Height = 25
-      Top = 55
-      Width = 75
-      Caption = 'Test'
-      Enabled = False
-      TabOrder = 3
-    end
-    object BtnBackup: TButton
-      Left = 86
-      Height = 25
-      Top = 55
-      Width = 75
-      Caption = 'Backup'
-      Enabled = False
-      TabOrder = 4
-    end
   end
   object Stb: TStatusBar
     Left = 0
@@ -125,13 +107,13 @@ object FrmMain: TFrmMain
   object GrpFirmware: TGroupBox
     Left = 8
     Height = 104
-    Top = 112
+    Top = 80
     Width = 443
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Firmware'
     ClientHeight = 86
     ClientWidth = 439
-    TabOrder = 2
+    TabOrder = 1
     object CmbTarget: TComboBox
       Left = 6
       Height = 21
@@ -178,8 +160,7 @@ object FrmMain: TFrmMain
       Height = 25
       Top = 56
       Width = 75
-      Caption = 'Open...'
-      Enabled = False
+      Action = ActOpenFirmware
       TabOrder = 3
     end
     object Button3: TButton
@@ -187,8 +168,7 @@ object FrmMain: TFrmMain
       Height = 25
       Top = 56
       Width = 75
-      Caption = 'Save As..'
-      Enabled = False
+      Action = ActSaveFirmware
       TabOrder = 4
     end
     object BtnFirmwareInfo: TSpeedButton
@@ -265,11 +245,20 @@ object FrmMain: TFrmMain
       ParentFont = False
       OnClick = Label6Click
     end
+    object BtnBackup: TButton
+      Left = 246
+      Height = 25
+      Top = 56
+      Width = 75
+      Caption = 'Backup'
+      Enabled = False
+      TabOrder = 5
+    end
   end
   object MemLog: TMemo
     Left = 8
-    Height = 209
-    Top = 328
+    Height = 241
+    Top = 296
     Width = 443
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.CharSet = RUSSIAN_CHARSET
@@ -287,7 +276,7 @@ object FrmMain: TFrmMain
   object GrpConfiguration: TGroupBox
     Left = 8
     Height = 104
-    Top = 216
+    Top = 184
     Width = 443
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Configuration'
@@ -298,7 +287,7 @@ object FrmMain: TFrmMain
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 2
     object Label5: TLabel
       Left = 6
       Height = 14
@@ -399,8 +388,7 @@ object FrmMain: TFrmMain
       Height = 25
       Top = 56
       Width = 75
-      Caption = 'Open..'
-      Enabled = False
+      Action = ActOpenConfiguration
       TabOrder = 3
     end
     object Button6: TButton
@@ -432,13 +420,35 @@ object FrmMain: TFrmMain
   end
   object ActionList1: TActionList
     Images = ImageList1
-    left = 56
+    left = 53
     top = 384
-    object FileOpen1: TFileOpen
+    object ActOpenFirmware: TFileOpen
       Category = 'File'
-      Caption = '&Open ...'
+      Caption = 'Open...'
+      Dialog.Title = 'Open existing Firmware file'
+      Dialog.Filter = 'Intel Hex Files|*.hex'
+      Enabled = False
       Hint = 'Open'
-      ShortCut = 16463
+      OnAccept = ActOpenFirmwareAccept
+    end
+    object ActSaveFirmware: TFileSaveAs
+      Category = 'File'
+      Caption = 'Save As...'
+      Dialog.Title = 'Save Firmware as'
+      Dialog.Filter = 'Intel Hex Files|*.hex'
+      Dialog.Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
+      Enabled = False
+      Hint = 'Save As'
+      OnAccept = ActSaveFirmwareAccept
+    end
+    object ActOpenConfiguration: TFileOpen
+      Category = 'File'
+      Caption = 'Open...'
+      Dialog.Title = 'Open existing Configuration file'
+      Dialog.Filter = 'EEPROM Files|*.eep|Binary Files|*.bin'
+      Enabled = False
+      Hint = 'Open'
+      OnAccept = ActOpenConfigurationAccept
     end
   end
   object ImageList1: TImageList
