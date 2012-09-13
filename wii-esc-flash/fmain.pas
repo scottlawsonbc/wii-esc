@@ -18,8 +18,10 @@ type
     BtnFlashFirmware: TButton;
     Button1: TButton;
     BtnLoadConfiguration: TButton;
+    BtnPgmTest: TButton;
     Button3: TButton;
     BtnFlashEEPROM: TButton;
+    BtnBackup: TButton;
     Button5: TButton;
     Button6: TButton;
     BtnEditEEPROM: TButton;
@@ -71,6 +73,7 @@ type
     procedure AvrDudeReadConsole;
     function GetCurrentConfiguration: TMetadataConfiguration;
     function GetCurrentFirmware: TMetadataFirmware;
+    function GetCurrentProgrammer: TMetadataProgrammer;
     procedure LoadConfiguration(AConfiguration: TMetadataConfiguration);
     procedure ConvertConfiguration;
     procedure LogMessage(const S: String);
@@ -81,6 +84,7 @@ type
     procedure LoadMetadata;
     procedure LoadFirmware(AFirmware: TMetadataFirmware);
     procedure UnpackResources;
+    property CurrentProgrammer: TMetadataProgrammer read GetCurrentProgrammer;
     property CurrentFirmware: TMetadataFirmware read GetCurrentFirmware;
     property CurrentConfiguration: TMetadataConfiguration read GetCurrentConfiguration;
   end; 
@@ -145,7 +149,9 @@ var
   Count : Integer;
   Buffer: Array[0..4096] of byte;
 begin
+  Buffer[0] := 0;
   repeat
+    FillChar(Buffer, SizeOf(Buffer), 0);
     Count := AvrDude.Output.Read(Buffer, SizeOf(Buffer));
     if (Count > 0) then
       with TStringStream.Create('') do
@@ -216,6 +222,13 @@ begin
     Result := TMetadataFirmware(CmbTarget.Items.Objects[CmbTarget.ItemIndex]);
 end;
 
+function TFrmMain.GetCurrentProgrammer: TMetadataProgrammer;
+begin
+  Result := nil;
+  if (CmbPgmType.ItemIndex >= 0) then
+    Result := TMetadataProgrammer(CmbPgmType.Items.Objects[CmbPgmType.ItemIndex]);
+end;
+
 function TFrmMain.GetCurrentConfiguration: TMetadataConfiguration;
 begin
   Result := nil;
@@ -248,6 +261,8 @@ begin
   BtnConfigurationInfo.Enabled := Assigned(CurrentConfiguration);
   BtnFlashEEPROM.Enabled := FEEPROM.Size > 0;
   BtnEditEEPROM.Enabled := FEEPROM.Size > 0;
+  BtnPgmTest.Enabled := Assigned(CurrentProgrammer) and not FBusy;
+  BtnBackup.Enabled := Assigned(CurrentProgrammer) and not FBusy;
 end;
 
 procedure TFrmMain.LoadMetadata;

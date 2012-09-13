@@ -8,11 +8,8 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Spin;
 
-
 type
-
   { TFrmConfigEditor }
-
   TFrmConfigEditor = class(TForm)
     Bevel1: TBevel;
     Button1: TButton;
@@ -47,7 +44,6 @@ function EditConfiguration(AData: Pointer): boolean;
 implementation
 
 {$R *.lfm}
-
 
 type
   TConfigData = packed record

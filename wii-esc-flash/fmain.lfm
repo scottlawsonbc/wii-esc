@@ -1,11 +1,13 @@
 object FrmMain: TFrmMain
   Left = 614
-  Height = 505
+  Height = 565
   Top = 313
   Width = 460
   Caption = 'WII-ESC Flash Tool'
-  ClientHeight = 505
+  ClientHeight = 565
   ClientWidth = 460
+  Constraints.MinHeight = 565
+  Constraints.MinWidth = 460
   Font.CharSet = RUSSIAN_CHARSET
   Font.Height = -11
   Font.Name = 'Tahoma'
@@ -18,12 +20,12 @@ object FrmMain: TFrmMain
   LCLVersion = '1.0.1.3'
   object gbProgrammer: TGroupBox
     Left = 8
-    Height = 72
+    Height = 104
     Top = 8
     Width = 443
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Programmer Settings'
-    ClientHeight = 54
+    ClientHeight = 86
     ClientWidth = 439
     TabOrder = 0
     object CmbPgmType: TComboBox
@@ -85,11 +87,29 @@ object FrmMain: TFrmMain
       Caption = 'Speed'
       ParentColor = False
     end
+    object BtnPgmTest: TButton
+      Left = 6
+      Height = 25
+      Top = 55
+      Width = 75
+      Caption = 'Test'
+      Enabled = False
+      TabOrder = 3
+    end
+    object BtnBackup: TButton
+      Left = 86
+      Height = 25
+      Top = 55
+      Width = 75
+      Caption = 'Backup'
+      Enabled = False
+      TabOrder = 4
+    end
   end
   object Stb: TStatusBar
     Left = 0
     Height = 20
-    Top = 485
+    Top = 545
     Width = 460
     Panels = <    
       item
@@ -102,12 +122,12 @@ object FrmMain: TFrmMain
   end
   object GroupBox1: TGroupBox
     Left = 8
-    Height = 112
-    Top = 80
+    Height = 104
+    Top = 112
     Width = 443
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Firmware'
-    ClientHeight = 94
+    ClientHeight = 86
     ClientWidth = 439
     TabOrder = 2
     object CmbTarget: TComboBox
@@ -226,12 +246,12 @@ object FrmMain: TFrmMain
     end
     object Label6: TLabel
       Cursor = crHandPoint
-      Left = 310
+      Left = 358
       Height = 14
-      Top = 62
-      Width = 96
+      Top = 0
+      Width = 69
       Anchors = [akTop, akRight]
-      Caption = 'RapidESC Database'
+      Caption = 'ESC Database'
       Font.CharSet = RUSSIAN_CHARSET
       Font.Color = clHotLight
       Font.Height = -11
@@ -246,8 +266,8 @@ object FrmMain: TFrmMain
   end
   object MemLog: TMemo
     Left = 8
-    Height = 165
-    Top = 312
+    Height = 209
+    Top = 328
     Width = 443
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.CharSet = RUSSIAN_CHARSET
@@ -264,12 +284,12 @@ object FrmMain: TFrmMain
   end
   object GroupBox2: TGroupBox
     Left = 8
-    Height = 112
-    Top = 192
+    Height = 104
+    Top = 216
     Width = 443
     Anchors = [akTop, akLeft, akRight]
     Caption = 'Configuration'
-    ClientHeight = 94
+    ClientHeight = 86
     ClientWidth = 439
     Font.Height = -11
     Font.Name = 'Tahoma'
@@ -405,13 +425,13 @@ object FrmMain: TFrmMain
     Enabled = False
     Interval = 500
     OnTimer = TmLoadDelayTimer
-    left = 32
-    top = 320
+    left = 24
+    top = 384
   end
   object ActionList1: TActionList
     Images = ImageList1
     left = 56
-    top = 320
+    top = 384
     object FileOpen1: TFileOpen
       Category = 'File'
       Caption = '&Open ...'
@@ -420,15 +440,15 @@ object FrmMain: TFrmMain
     end
   end
   object ImageList1: TImageList
-    left = 80
-    top = 320
+    left = 72
+    top = 384
   end
   object PermStorage: TIniPropStorage
     StoredValues = <>
     IniSection = 'UI'
     Active = False
-    left = 104
-    top = 320
+    left = 96
+    top = 384
   end
   object AvrDude: TAsyncProcess
     Active = False
@@ -445,7 +465,7 @@ object FrmMain: TFrmMain
     FillAttribute = 0
     OnReadData = AvrDudeReadData
     OnTerminate = AvrDudeTerminate
-    left = 128
-    top = 320
+    left = 120
+    top = 384
   end
 end

@@ -87,11 +87,23 @@ type
   TMetadata = class(TMetadataBase)
   private
     FMetadataVersion: integer;
+    FPgmBackupCmd: String;
+    FPgmReadEEPROMCmd: String;
+    FPgmReadFlashCmd: String;
+    FPgmTestCmd: String;
+    FPgmWriteEEPROMCmd: String;
+    FPgmWriteFlashCmd: String;
     FProgrammers: TList;
     FFirmwares: TList;
     FConfigurations: TList;
     FVersion: String;
     procedure SetMetadataVersion(AValue: integer);
+    procedure SetPgmBackupCmd(AValue: String);
+    procedure SetPgmReadEEPROMCmd(AValue: String);
+    procedure SetPgmReadFlashCmd(AValue: String);
+    procedure SetPgmTestCmd(AValue: String);
+    procedure SetPgmWriteEEPROMCmd(AValue: String);
+    procedure SetPgmWriteFlashCmd(AValue: String);
     procedure SetVersion(AValue: String);
   protected
     procedure LoadFromIni(Ini: TIniFile; const ASection: String); override; overload;
@@ -106,6 +118,12 @@ type
   published
     property MetadataVersion: integer read FMetadataVersion write SetMetadataVersion;
     property Version: String read FVersion write SetVersion;
+    property PgmWriteFlashCmd: String read FPgmWriteFlashCmd write SetPgmWriteFlashCmd;
+    property PgmWriteEEPROMCmd: String read FPgmWriteEEPROMCmd write SetPgmWriteEEPROMCmd;
+    property PgmReadFlashCmd: String read FPgmReadFlashCmd write SetPgmReadFlashCmd;
+    property PgmReadEEPROMCmd: String read FPgmReadEEPROMCmd write SetPgmReadEEPROMCmd;
+    property PgmBackupCmd: String read FPgmBackupCmd write SetPgmBackupCmd;
+    property PgmTestCmd: String read FPgmTestCmd write SetPgmTestCmd;
   end;
 
 
@@ -304,6 +322,42 @@ begin
   FMetadataVersion:=AValue;
 end;
 
+procedure TMetadata.SetPgmBackupCmd(AValue: String);
+begin
+  if FPgmBackupCmd=AValue then Exit;
+  FPgmBackupCmd:=AValue;
+end;
+
+procedure TMetadata.SetPgmReadEEPROMCmd(AValue: String);
+begin
+  if FPgmReadEEPROMCmd=AValue then Exit;
+  FPgmReadEEPROMCmd:=AValue;
+end;
+
+procedure TMetadata.SetPgmReadFlashCmd(AValue: String);
+begin
+  if FPgmReadFlashCmd=AValue then Exit;
+  FPgmReadFlashCmd:=AValue;
+end;
+
+procedure TMetadata.SetPgmTestCmd(AValue: String);
+begin
+  if FPgmTestCmd=AValue then Exit;
+  FPgmTestCmd:=AValue;
+end;
+
+procedure TMetadata.SetPgmWriteEEPROMCmd(AValue: String);
+begin
+  if FPgmWriteEEPROMCmd=AValue then Exit;
+  FPgmWriteEEPROMCmd:=AValue;
+end;
+
+procedure TMetadata.SetPgmWriteFlashCmd(AValue: String);
+begin
+  if FPgmWriteFlashCmd=AValue then Exit;
+  FPgmWriteFlashCmd:=AValue;
+end;
+
 procedure TMetadata.SetVersion(AValue: String);
 begin
   if FVersion=AValue then Exit;
@@ -318,8 +372,17 @@ var
   lConf: TMetadataConfiguration;
 begin
   inherited;
-  FMetadataVersion := Ini.ReadInteger(ASection, 'MetadataVersion', 999);
-  FVersion := Ini.ReadString(ASection, 'Version', '');
+  with Ini do
+  begin
+    FMetadataVersion := ReadInteger(ASection, 'MetadataVersion', 999);
+    FVersion := ReadString(ASection, 'Version', '');
+    FPgmWriteFlashCmd := ReadString(ASection, 'PgmWriteFlashCmd', '');
+    FPgmWriteEEPROMCmd := ReadString(ASection, 'PgmWriteEEPROMCmd', '');
+    FPgmReadFlashCmd := ReadString(ASection, 'PgmReadFlashCmd', '');
+    FPgmReadEEPROMCmd := ReadString(ASection, 'PgmReadEEPROMCmd', '');
+    FPgmBackupCmd := ReadString(ASection, 'PgmBackupCmd', '');
+    FPgmTestCmd := ReadString(ASection, 'PgmTestCmd', '');
+  end;
   with TStringList.Create do
   try
     CommaText := Ini.ReadString(ASection, 'Programmers', '');
