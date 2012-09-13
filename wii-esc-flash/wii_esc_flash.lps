@@ -65,10 +65,9 @@
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="44"/>
-        <CursorPos X="63" Y="63"/>
+        <CursorPos X="42" Y="63"/>
         <UsageCount Value="22"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -146,7 +145,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="892"/>
         <CursorPos X="17" Y="925"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit13>
       <Unit14>
@@ -242,7 +241,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="795"/>
         <CursorPos X="3" Y="815"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit24>
     </Units>
