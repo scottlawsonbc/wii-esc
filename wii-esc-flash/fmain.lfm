@@ -19,7 +19,7 @@ object FrmMain: TFrmMain
   OnDestroy = FormDestroy
   OnDropFiles = FormDropFiles
   OnShow = FormShow
-  SessionProperties = 'ActiveControl;CmbPgmType.ItemIndex;CmbPorts.Text;CmbPorts.Top;CmbTarget.ItemIndex;Height;Left;Top;Width;CmbConfigurations.ItemIndex'
+  SessionProperties = 'ActiveControl;CmbConfigurations.ItemIndex;CmbPgmType.ItemIndex;CmbPorts.Text;CmbPorts.Top;CmbTarget.ItemIndex;Height;Left;Top;Width;CmbBaud.Text'
   LCLVersion = '1.0.1.3'
   object gbProgrammer: TGroupBox
     Left = 8
@@ -79,7 +79,6 @@ object FrmMain: TFrmMain
       Enabled = False
       ItemHeight = 13
       TabOrder = 2
-      Text = '57600'
     end
     object Label3: TLabel
       Left = 349
