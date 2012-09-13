@@ -32,8 +32,8 @@ type
     CmbTarget: TComboBox;
     FileOpen1: TFileOpen;
     gbProgrammer: TGroupBox;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
+    GrpFirmware: TGroupBox;
+    GrpConfiguration: TGroupBox;
     ImageList1: TImageList;
     PermStorage: TIniPropStorage;
     Label1: TLabel;
@@ -55,6 +55,7 @@ type
     procedure BtnLoadFirmwareClick(Sender: TObject);
     procedure BtnEditEEPROMClick(Sender: TObject);
     procedure CmbPgmTypeChange(Sender: TObject);
+    procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure GlobChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -74,15 +75,17 @@ type
     function GetCurrentConfiguration: TMetadataConfiguration;
     function GetCurrentFirmware: TMetadataFirmware;
     function GetCurrentProgrammer: TMetadataProgrammer;
-    procedure LoadConfiguration(AConfiguration: TMetadataConfiguration);
+    procedure LoadConfiguration(AConfiguration: TMetadataConfiguration); overload;
+    procedure LoadConfiguration(const AFileName: String); overload;
     procedure ConvertConfiguration;
+    procedure LoadFirmware(AFirmware: TMetadataFirmware); overload;
+    procedure LoadFirmware(const AFileName: String); overload;
     procedure LogMessage(const S: String);
     procedure LogRaw(const S: String);
     procedure ObjToControls;
     procedure UpdateControls;
   public
     procedure LoadMetadata;
-    procedure LoadFirmware(AFirmware: TMetadataFirmware);
     procedure UnpackResources;
     property CurrentProgrammer: TMetadataProgrammer read GetCurrentProgrammer;
     property CurrentFirmware: TMetadataFirmware read GetCurrentFirmware;
@@ -178,6 +181,7 @@ end;
 
 procedure TFrmMain.BtnFlashFirmwareClick(Sender: TObject);
 begin
+  if GetKeyState(VK_SHIFT) < 0 then ShowMessage('VK_SHIFT');
   AvrDude.CommandLine := SysUtils.GetEnvironmentVariable('COMSPEC') + ' /c avrdude -v -v -v -?';
   LogMessage(AvrDude.CommandLine);
   AvrDude.Execute;
@@ -400,6 +404,48 @@ begin
     if (CmbPorts.Items.IndexOf(CmbPorts.Text) < 0) then
       CmbPorts.Text := CmbPorts.Items[0];
     CmbBaud.Items.Assign(lProgrammer.BaudRates);
+  end;
+  UpdateControls;
+end;
+
+procedure TFrmMain.LoadFirmware(const AFileName: String);
+begin
+  LogMessage(Format('Loading file: "%s"', [AFileName]));
+  FFirmware.Clear;
+  FFirmware.LoadFromFile(AFileName);
+  LogMessage(Format('%.0n byte(s) loaded.', [Double(FFirmware.Size)]));
+end;
+
+procedure TFrmMain.LoadConfiguration(const AFileName: String);
+begin
+  LogMessage(Format('Loading file: "%s"', [AFileName]));
+  FConfiguration.Clear;
+  FConfiguration.LoadFromFile(AFileName);
+  ConvertConfiguration;
+  LogMessage(Format('%.0n byte(s) loaded.', [Double(FConfiguration.Size)]));
+  LogMessage(Format('%.0n byte(s) binary.', [Double(FEEPROM.Size)]));
+end;
+
+
+procedure TFrmMain.FormDropFiles(Sender: TObject; const FileNames: array of String);
+var
+  i: integer;
+  lFile: String;
+begin
+  for i := Low(FileNames) to High(FileNames) do
+  begin
+    lFile := FileNames[i];
+    if (LowerCase(ExtractFileExt(lFile)) = '.hex') then
+    begin
+      LoadFirmware(lFile);
+      LogMessage('');
+    end;
+    if (LowerCase(ExtractFileExt(lFile)) = '.eep') then
+    begin
+      LoadConfiguration(lFile);
+      LogMessage('');
+    end;
+
   end;
   UpdateControls;
 end;
