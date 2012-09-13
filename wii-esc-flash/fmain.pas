@@ -45,7 +45,10 @@ type
     BtnConfigurationInfo: TSpeedButton;
     Stb: TStatusBar;
     TmLoadDelay: TTimer;
+    procedure AvrDudeReadData(Sender: TObject);
+    procedure AvrDudeTerminate(Sender: TObject);
     procedure BtnConfigurationInfoClick(Sender: TObject);
+    procedure BtnFlashFirmwareClick(Sender: TObject);
     procedure BtnLoadConfigurationClick(Sender: TObject);
     procedure BtnLoadFirmwareClick(Sender: TObject);
     procedure CmbPgmTypeChange(Sender: TObject);
@@ -64,11 +67,13 @@ type
     FFirmware: TMemoryStream;
     FConfiguration: TMemoryStream;
     FEEPROM: TMemoryStream;
+    procedure AvrDudeReadConsole;
     function GetCurrentConfiguration: TMetadataConfiguration;
     function GetCurrentFirmware: TMetadataFirmware;
     procedure LoadConfiguration(AConfiguration: TMetadataConfiguration);
     procedure ConvertConfiguration;
     procedure LogMessage(const S: String);
+    procedure LogRaw(const S: String);
     procedure ObjToControls;
     procedure UpdateControls;
   public
@@ -99,6 +104,7 @@ begin
   FHomePath := GetAppConfigDir(False);
   ForceDirectories(FWorkingPath);
   ForceDirectories(FHomePath);
+  AvrDude.CurrentDirectory := FWorkingPath;
   PermStorage.IniFileName := GetAppConfigFile(False);
   PermStorage.Active := True;
 end;
@@ -133,6 +139,43 @@ begin
     MessageDlg('Additional Information:', CurrentConfiguration.Description, mtInformation, [mbOK], 0);
 end;
 
+procedure TFrmMain.AvrDudeReadConsole;
+var
+  Count : Integer;
+  Buffer : Array[0..4096] of byte;
+begin
+  repeat
+    Count := AvrDude.Output.Read(Buffer,SizeOf(Buffer));
+    if (Count > 0) then
+      with TStringStream.Create('') do
+      try
+        Position := 0;
+        Write(Buffer, Count);
+        if (Count > 0) then
+          LogRaw(DataString);
+      finally
+        Free;
+      end;
+  until (Count = 0);
+end;
+
+procedure TFrmMain.AvrDudeReadData(Sender: TObject);
+begin
+  AvrDudeReadConsole;
+end;
+
+procedure TFrmMain.AvrDudeTerminate(Sender: TObject);
+begin
+  AvrDudeReadConsole;
+end;
+
+procedure TFrmMain.BtnFlashFirmwareClick(Sender: TObject);
+begin
+  AvrDude.CommandLine := SysUtils.GetEnvironmentVariable('COMSPEC') + ' /c avrdude -v -v -v -?';
+  LogMessage(AvrDude.CommandLine);
+  AvrDude.Execute;
+end;
+
 procedure TFrmMain.TmLoadDelayTimer(Sender: TObject);
 begin
   TmLoadDelay.Enabled := False;
@@ -154,6 +197,13 @@ end;
 procedure TFrmMain.LogMessage(const S: String);
 begin
   MemLog.Lines.Add(S);
+  MemLog.SelStart := MemLog.GetTextLen;
+  MemLog.SelLength := 0;
+end;
+
+procedure TFrmMain.LogRaw(const S: String);
+begin
+  MemLog.Lines.Text := MemLog.Lines.Text + S;
   MemLog.SelStart := MemLog.GetTextLen;
   MemLog.SelLength := 0;
 end;

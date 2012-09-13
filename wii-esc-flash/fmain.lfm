@@ -148,6 +148,7 @@ object FrmMain: TFrmMain
       Width = 75
       Caption = 'Write'
       Enabled = False
+      OnClick = BtnFlashFirmwareClick
       TabOrder = 2
     end
     object Button1: TButton
@@ -430,10 +431,10 @@ object FrmMain: TFrmMain
   end
   object AvrDude: TAsyncProcess
     Active = False
-    Options = []
+    Options = [poUsePipes, poStderrToOutPut]
     Priority = ppNormal
     StartupOptions = []
-    ShowWindow = swoNone
+    ShowWindow = swoHIDE
     WindowColumns = 0
     WindowHeight = 0
     WindowLeft = 0
@@ -441,6 +442,8 @@ object FrmMain: TFrmMain
     WindowTop = 0
     WindowWidth = 0
     FillAttribute = 0
+    OnReadData = AvrDudeReadData
+    OnTerminate = AvrDudeTerminate
     left = 128
     top = 320
   end
