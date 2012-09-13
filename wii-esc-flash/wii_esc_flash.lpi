@@ -43,7 +43,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="5">
       <Unit0>
         <Filename Value="wii_esc_flash.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -67,6 +67,14 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="UMetadata"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="FConfigEditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FrmConfigEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="FConfigEditor"/>
+      </Unit4>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

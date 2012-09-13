@@ -390,13 +390,14 @@ object FrmMain: TFrmMain
       Enabled = False
       TabOrder = 4
     end
-    object Button7: TButton
+    object BtnEditEEPROM: TButton
       Left = 246
       Height = 25
       Top = 56
       Width = 75
       Caption = 'Edit...'
       Enabled = False
+      OnClick = BtnEditEEPROMClick
       TabOrder = 5
     end
   end

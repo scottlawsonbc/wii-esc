@@ -22,7 +22,7 @@ type
     BtnFlashEEPROM: TButton;
     Button5: TButton;
     Button6: TButton;
-    Button7: TButton;
+    BtnEditEEPROM: TButton;
     CmbPgmType: TComboBox;
     CmbConfigurations: TComboBox;
     CmbPorts: TComboBox;
@@ -51,6 +51,7 @@ type
     procedure BtnFlashFirmwareClick(Sender: TObject);
     procedure BtnLoadConfigurationClick(Sender: TObject);
     procedure BtnLoadFirmwareClick(Sender: TObject);
+    procedure BtnEditEEPROMClick(Sender: TObject);
     procedure CmbPgmTypeChange(Sender: TObject);
     procedure GlobChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -89,7 +90,7 @@ var
 
 implementation
 
-uses IniFiles, FPHttpClient;
+uses IniFiles, FConfigEditor, FPHttpClient;
 
 {$R *.lfm}
 
@@ -142,10 +143,10 @@ end;
 procedure TFrmMain.AvrDudeReadConsole;
 var
   Count : Integer;
-  Buffer : Array[0..4096] of byte;
+  Buffer: Array[0..4096] of byte;
 begin
   repeat
-    Count := AvrDude.Output.Read(Buffer,SizeOf(Buffer));
+    Count := AvrDude.Output.Read(Buffer, SizeOf(Buffer));
     if (Count > 0) then
       with TStringStream.Create('') do
       try
@@ -246,6 +247,7 @@ begin
   BtnLoadConfiguration.Enabled := Assigned(CurrentConfiguration);
   BtnConfigurationInfo.Enabled := Assigned(CurrentConfiguration);
   BtnFlashEEPROM.Enabled := FEEPROM.Size > 0;
+  BtnEditEEPROM.Enabled := FEEPROM.Size > 0;
 end;
 
 procedure TFrmMain.LoadMetadata;
@@ -345,6 +347,11 @@ begin
     Screen.Cursor := crDefault;
   end;
   UpdateControls;
+end;
+
+procedure TFrmMain.BtnEditEEPROMClick(Sender: TObject);
+begin
+  EditConfiguration(FEEPROM.Memory);
 end;
 
 procedure TFrmMain.BtnLoadConfigurationClick(Sender: TObject);

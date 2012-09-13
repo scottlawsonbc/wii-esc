@@ -1,0 +1,195 @@
+object FrmConfigEditor: TFrmConfigEditor
+  Left = 597
+  Height = 355
+  Top = 332
+  Width = 293
+  BorderStyle = bsDialog
+  Caption = 'Configuration Editor'
+  ClientHeight = 355
+  ClientWidth = 293
+  Position = poMainFormCenter
+  LCLVersion = '1.0.1.3'
+  object Bevel1: TBevel
+    Left = 0
+    Height = 50
+    Top = 305
+    Width = 293
+    Align = alBottom
+    Shape = bsTopLine
+  end
+  object Button1: TButton
+    Left = 121
+    Height = 25
+    Top = 321
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Caption = 'OK'
+    ModalResult = 1
+    TabOrder = 4
+  end
+  object Button2: TButton
+    Left = 208
+    Height = 25
+    Top = 321
+    Width = 75
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 5
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Height = 80
+    Top = 8
+    Width = 275
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'PPM: Safety Margins'
+    ClientHeight = 62
+    ClientWidth = 271
+    TabOrder = 0
+    object EdtRcpMin: TSpinEdit
+      Left = 150
+      Height = 21
+      Top = 8
+      Width = 112
+      Anchors = [akTop, akRight]
+      MaxValue = 5000
+      TabOrder = 0
+    end
+    object Label1: TLabel
+      Left = 6
+      Height = 14
+      Top = 10
+      Width = 124
+      Caption = 'Minimum pulse length, us:'
+      ParentColor = False
+    end
+    object EdtRcpMax: TSpinEdit
+      Left = 150
+      Height = 21
+      Top = 36
+      Width = 112
+      Anchors = [akTop, akRight]
+      MaxValue = 5000
+      TabOrder = 1
+    end
+    object Label2: TLabel
+      Left = 6
+      Height = 14
+      Top = 38
+      Width = 128
+      Caption = 'Maximum pulse length, us:'
+      ParentColor = False
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 8
+    Height = 80
+    Top = 88
+    Width = 275
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'PPM: Working Range'
+    ClientHeight = 62
+    ClientWidth = 271
+    TabOrder = 1
+    object EdtRcpStart: TSpinEdit
+      Left = 150
+      Height = 21
+      Top = 8
+      Width = 112
+      Anchors = [akTop, akRight]
+      MaxValue = 5000
+      TabOrder = 0
+    end
+    object Label3: TLabel
+      Left = 6
+      Height = 14
+      Top = 10
+      Width = 60
+      Caption = 'Start at, us:'
+      ParentColor = False
+    end
+    object EdtRcpFull: TSpinEdit
+      Left = 150
+      Height = 21
+      Top = 36
+      Width = 112
+      Anchors = [akTop, akRight]
+      MaxValue = 5000
+      TabOrder = 1
+    end
+    object Label4: TLabel
+      Left = 6
+      Height = 14
+      Top = 38
+      Width = 52
+      Caption = 'Full at, us:'
+      ParentColor = False
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 8
+    Height = 80
+    Top = 168
+    Width = 275
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'PPM: Misc'
+    ClientHeight = 62
+    ClientWidth = 271
+    TabOrder = 2
+    object EdtRcpCal: TSpinEdit
+      Left = 150
+      Height = 21
+      Top = 8
+      Width = 112
+      Anchors = [akTop, akRight]
+      MaxValue = 5000
+      TabOrder = 0
+    end
+    object Label5: TLabel
+      Left = 6
+      Height = 14
+      Top = 10
+      Width = 127
+      Caption = 'Calibration Reference, us:'
+      ParentColor = False
+    end
+    object EdtRcpDB: TSpinEdit
+      Left = 150
+      Height = 21
+      Top = 36
+      Width = 112
+      Anchors = [akTop, akRight]
+      MaxValue = 250
+      TabOrder = 1
+    end
+    object Label6: TLabel
+      Left = 6
+      Height = 14
+      Top = 38
+      Width = 100
+      Caption = 'Start Hysteresis, us:'
+      ParentColor = False
+    end
+  end
+  object GroupBox4: TGroupBox
+    Left = 8
+    Height = 48
+    Top = 248
+    Width = 275
+    Anchors = [akTop, akLeft, akRight]
+    Caption = 'System'
+    ClientHeight = 30
+    ClientWidth = 271
+    TabOrder = 3
+    object CmbBraking: TCheckBox
+      Left = 6
+      Height = 17
+      Top = 8
+      Width = 90
+      Caption = 'Enable Braking'
+      TabOrder = 0
+    end
+  end
+end
