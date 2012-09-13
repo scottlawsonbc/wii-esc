@@ -14,6 +14,7 @@ object FrmMain: TFrmMain
   Font.Name = 'Tahoma'
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnDropFiles = FormDropFiles
@@ -92,8 +93,8 @@ object FrmMain: TFrmMain
   end
   object Stb: TStatusBar
     Left = 0
-    Height = 20
-    Top = 545
+    Height = 23
+    Top = 542
     Width = 460
     Panels = <    
       item
@@ -250,8 +251,7 @@ object FrmMain: TFrmMain
       Height = 25
       Top = 56
       Width = 75
-      Caption = 'Backup'
-      Enabled = False
+      Action = ActBackup
       TabOrder = 5
     end
   end
@@ -268,9 +268,10 @@ object FrmMain: TFrmMain
     Font.Quality = fqDraft
     ParentFont = False
     ReadOnly = True
-    ScrollBars = ssBoth
+    ScrollBars = ssAutoBoth
     TabOrder = 3
     TabStop = False
+    WantReturns = False
     WordWrap = False
   end
   object GrpConfiguration: TGroupBox
@@ -326,6 +327,7 @@ object FrmMain: TFrmMain
       Width = 75
       Caption = 'Write'
       Enabled = False
+      OnClick = BtnFlashEEPROMClick
       TabOrder = 2
     end
     object BtnConfigurationInfo: TSpeedButton
@@ -450,6 +452,14 @@ object FrmMain: TFrmMain
       Hint = 'Open'
       OnAccept = ActOpenConfigurationAccept
     end
+    object ActBackup: TFileSaveAs
+      Category = 'File'
+      Caption = 'Backup...'
+      Dialog.Filter = 'Intel HEX Files|*.hex'
+      Enabled = False
+      Hint = 'Save As'
+      OnAccept = ActBackupAccept
+    end
   end
   object ImageList1: TImageList
     left = 72
@@ -462,7 +472,7 @@ object FrmMain: TFrmMain
     left = 96
     top = 384
   end
-  object AvrDude: TAsyncProcess
+  object Programmer: TAsyncProcess
     Active = False
     Options = [poUsePipes, poStderrToOutPut]
     Priority = ppNormal
@@ -475,8 +485,8 @@ object FrmMain: TFrmMain
     WindowTop = 0
     WindowWidth = 0
     FillAttribute = 0
-    OnReadData = AvrDudeReadData
-    OnTerminate = AvrDudeTerminate
+    OnReadData = ProgrammerReadData
+    OnTerminate = ProgrammerTerminate
     left = 120
     top = 384
   end

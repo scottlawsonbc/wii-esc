@@ -13,7 +13,8 @@ type
   { TFrmMain }
   TFrmMain = class(TForm)
     ActionList1: TActionList;
-    AvrDude: TAsyncProcess;
+    ActBackup: TFileSaveAs;
+    Programmer: TAsyncProcess;
     BtnBackup: TButton;
     BtnLoadFirmware: TButton;
     BtnFlashFirmware: TButton;
@@ -48,11 +49,14 @@ type
     BtnConfigurationInfo: TSpeedButton;
     Stb: TStatusBar;
     TmLoadDelay: TTimer;
+    procedure ActBackupAccept(Sender: TObject);
     procedure ActOpenConfigurationAccept(Sender: TObject);
     procedure ActOpenFirmwareAccept(Sender: TObject);
     procedure ActSaveFirmwareAccept(Sender: TObject);
-    procedure AvrDudeReadData(Sender: TObject);
-    procedure AvrDudeTerminate(Sender: TObject);
+    procedure BtnFlashEEPROMClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure ProgrammerReadData(Sender: TObject);
+    procedure ProgrammerTerminate(Sender: TObject);
     procedure BtnConfigurationInfoClick(Sender: TObject);
     procedure BtnFlashFirmwareClick(Sender: TObject);
     procedure BtnLoadConfigurationClick(Sender: TObject);
@@ -89,13 +93,15 @@ type
     procedure LogRaw(const S: String);
     procedure ObjToControls;
     procedure UpdateControls;
+    procedure UpdateProgrammerSetting;
+    procedure StartProgrammer(const AProgrammer, AParams: String);
   public
     procedure LoadMetadata;
     procedure UnpackResources;
     property CurrentProgrammer: TMetadataProgrammer read GetCurrentProgrammer;
     property CurrentFirmware: TMetadataFirmware read GetCurrentFirmware;
     property CurrentConfiguration: TMetadataConfiguration read GetCurrentConfiguration;
-  end; 
+  end;
 
 var
   FrmMain: TFrmMain;
@@ -130,9 +136,10 @@ begin
   FHomePath := GetAppConfigDir(False);
   ForceDirectories(FWorkingPath);
   ForceDirectories(FHomePath);
-  AvrDude.CurrentDirectory := FWorkingPath;
+  Programmer.CurrentDirectory := FWorkingPath;
   PermStorage.IniFileName := GetAppConfigFile(False);
   PermStorage.Active := True;
+  DoubleBuffered := True;
 end;
 
 procedure TFrmMain.FormDestroy(Sender: TObject);
@@ -170,24 +177,19 @@ var
   Count : Integer;
   Buffer: Array[0..4096] of byte;
 begin
-  Buffer[0] := 0;
-  repeat
-    FillChar(Buffer, SizeOf(Buffer), 0);
-    Count := AvrDude.Output.Read(Buffer, SizeOf(Buffer));
-    if (Count > 0) then
-      with TStringStream.Create('') do
-      try
-        Position := 0;
-        Write(Buffer, Count);
-        if (Count > 0) then
-          LogRaw(DataString);
-      finally
-        Free;
-      end;
-  until (Count = 0);
+  Count := Programmer.Output.Read(Buffer, SizeOf(Buffer));
+  if (Count > 0) then
+    with TStringStream.Create('') do
+    try
+      Position := 0;
+      Write(Buffer, Count);
+      if (Count > 0) then LogRaw(DataString);
+    finally
+      Free;
+    end;
 end;
 
-procedure TFrmMain.AvrDudeReadData(Sender: TObject);
+procedure TFrmMain.ProgrammerReadData(Sender: TObject);
 begin
   AvrDudeReadConsole;
 end;
@@ -206,6 +208,13 @@ begin
   UpdateControls;
 end;
 
+procedure TFrmMain.ActBackupAccept(Sender: TObject);
+begin
+  if ExtractFileExt(ActBackup.Dialog.FileName) = '' then
+    ActBackup.Dialog.FileName := ChangeFileExt(ActBackup.Dialog.FileName, '.hex');
+  StartProgrammer(CurrentProgrammer.CmdLine, FMetadata.PgmBackupCmd);
+end;
+
 procedure TFrmMain.ActSaveFirmwareAccept(Sender: TObject);
 var
   lFile: String;
@@ -218,18 +227,30 @@ begin
   UpdateControls;
 end;
 
-procedure TFrmMain.AvrDudeTerminate(Sender: TObject);
+procedure TFrmMain.BtnFlashEEPROMClick(Sender: TObject);
+begin
+  StartProgrammer(CurrentProgrammer.CmdLine, FMetadata.PgmWriteEEPROMCmd);
+end;
+
+procedure TFrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if Programmer.Running then
+  begin
+    CanClose := False;
+    Programmer.Terminate(-1);
+  end;
+end;
+
+procedure TFrmMain.ProgrammerTerminate(Sender: TObject);
 begin
   AvrDudeReadConsole;
-  LogMessage('');
+  FBusy := False;
+  UpdateControls;
 end;
 
 procedure TFrmMain.BtnFlashFirmwareClick(Sender: TObject);
 begin
-  if GetKeyState(VK_SHIFT) < 0 then ShowMessage('VK_SHIFT');
-  AvrDude.CommandLine := SysUtils.GetEnvironmentVariable('COMSPEC') + ' /c avrdude -v -v -v -?';
-  LogMessage(AvrDude.CommandLine);
-  AvrDude.Execute;
+  StartProgrammer(CurrentProgrammer.CmdLine, FMetadata.PgmWriteFlashCmd);
 end;
 
 procedure TFrmMain.TmLoadDelayTimer(Sender: TObject);
@@ -240,7 +261,9 @@ begin
     LogMessage(rsUnpackingRes);
     UnpackResources;
     LogMessage(rsLoadingMetad);
-    LoadMetadata; ObjToControls;
+    LoadMetadata;
+    ObjToControls;
+    UpdateProgrammerSetting;
     PermStorage.Restore;
     LogMessage(rsReady);
     LogMessage('');
@@ -253,14 +276,16 @@ end;
 procedure TFrmMain.LogMessage(const S: String);
 begin
   MemLog.Lines.Add(S);
-  MemLog.SelStart := MemLog.GetTextLen;
+  MemLog.SelStart := MemLog.GetTextLen - 1;
   MemLog.SelLength := 0;
 end;
 
 procedure TFrmMain.LogRaw(const S: String);
 begin
-  MemLog.Lines.Text := MemLog.Lines.Text + S;
-  MemLog.SelStart := MemLog.GetTextLen;
+  MemLog.Lines.BeginUpdate;
+  MemLog.Lines[MemLog.Lines.Count - 1] := MemLog.Lines[MemLog.Lines.Count - 1] + S;
+  MemLog.Lines.EndUpdate;
+  MemLog.SelStart := MemLog.GetTextLen - 1;
   MemLog.SelLength := 0;
 end;
 
@@ -303,17 +328,18 @@ begin
   CmbPorts.Enabled := (CmbPgmType.ItemIndex >= 0) and not FBusy;
   CmbBaud.Enabled := (CmbBaud.Items.Count > 0) and not FBusy;
   CmbConfigurations.Enabled := (CmbConfigurations.Items.Count > 0) and not FBusy;
-  BtnLoadFirmware.Enabled := Assigned(CurrentFirmware);
-  BtnFlashFirmware.Enabled := FFirmware.Size > 0;
+  BtnLoadFirmware.Enabled := Assigned(CurrentFirmware) and not FBusy;
+  BtnFlashFirmware.Enabled := (FFirmware.Size > 0) and not FBusy;
   BtnFirmwareInfo.Enabled := Assigned(CurrentFirmware);
-  BtnLoadConfiguration.Enabled := Assigned(CurrentConfiguration);
+  BtnLoadConfiguration.Enabled := Assigned(CurrentConfiguration) and not FBusy;
   BtnConfigurationInfo.Enabled := Assigned(CurrentConfiguration);
-  BtnFlashEEPROM.Enabled := FEEPROM.Size > 0;
-  BtnEditEEPROM.Enabled := FEEPROM.Size > 0;
+  BtnFlashEEPROM.Enabled := (FEEPROM.Size > 0) and not FBusy;
+  BtnEditEEPROM.Enabled := (FEEPROM.Size > 0) and not FBusy;
   BtnBackup.Enabled := Assigned(CurrentProgrammer) and not FBusy;
   ActOpenFirmware.Enabled := not FBusy;
   ActSaveFirmware.Enabled := (FFirmware.Size > 0) and not FBusy;
   ActOpenConfiguration.Enabled := not FBusy;
+  ActBackup.Enabled := Assigned(CurrentProgrammer) and not FBusy;
 end;
 
 procedure TFrmMain.LoadMetadata;
@@ -361,22 +387,25 @@ end;
 
 procedure TFrmMain.ConvertConfiguration;
 begin
-  FConfiguration.SaveToFile(FWorkingPath + '___tmp___.hex');
-  with TProcess.Create(nil) do
   try
-    CurrentDirectory := FWorkingPath;
-    CommandLine := SysUtils.GetEnvironmentVariable('COMSPEC') + ' /c hex2bin.exe ___tmp___.hex';
-    Options := [poUsePipes, poStderrToOutPut];
-    ShowWindow := swoHIDE;
-    Execute;
-    WaitOnExit;
+    FConfiguration.SaveToFile(FWorkingPath + '___tmp___.hex');
+    with TProcess.Create(nil) do
+    try
+      CurrentDirectory := FWorkingPath;
+      CommandLine := SysUtils.GetEnvironmentVariable('COMSPEC') + ' /c hex2bin.exe ___tmp___.hex';
+      Options := [poUsePipes, poStderrToOutPut];
+      ShowWindow := swoHIDE;
+      Execute;
+      WaitOnExit;
+    finally
+      Free;
+    end;
+    FEEPROM.Clear;
+    FEEPROM.LoadFromFile(FWorkingPath + '___tmp___.bin');
   finally
-    Free;
+    SysUtils.DeleteFile(FWorkingPath + '___tmp___.hex');
+    SysUtils.DeleteFile(FWorkingPath + '___tmp___.bin');
   end;
-  FEEPROM.Clear;
-  FEEPROM.LoadFromFile(FWorkingPath + '___tmp___.bin');
-  SysUtils.DeleteFile(FWorkingPath + '___tmp___.hex');
-  SysUtils.DeleteFile(FWorkingPath + '___tmp___.bin');
 end;
 
 procedure TFrmMain.UnpackResources;
@@ -437,21 +466,53 @@ begin
   UpdateControls;
 end;
 
-procedure TFrmMain.CmbPgmTypeChange(Sender: TObject);
-var
-  lProgrammer: TMetadataProgrammer;
+procedure TFrmMain.UpdateProgrammerSetting;
 begin
-  if (CmbPgmType.ItemIndex >= 0) and Assigned(CmbPgmType.Items.Objects[CmbPgmType.ItemIndex]) then
+  if Assigned(CurrentProgrammer) then
   begin
-    lProgrammer := TMetadataProgrammer(CmbPgmType.Items.Objects[CmbPgmType.ItemIndex]);
-    if lProgrammer.Port = '$(com)' then
+    if CurrentProgrammer.Port = '$(com)' then
       GetSerialPortRegNames(CmbPorts.Items)
     else
-      CmbPorts.Items.CommaText := lProgrammer.Port;
-    if (CmbPorts.Items.IndexOf(CmbPorts.Text) < 0) then
+      CmbPorts.Items.CommaText := CurrentProgrammer.Port;
+    if (CmbPorts.Items.Count > 0) and (CmbPorts.Items.IndexOf(CmbPorts.Text) < 0) then
       CmbPorts.Text := CmbPorts.Items[0];
-    CmbBaud.Items.Assign(lProgrammer.BaudRates);
+    CmbBaud.Items.Assign(CurrentProgrammer.BaudRates);
   end;
+end;
+
+procedure TFrmMain.StartProgrammer(const AProgrammer, AParams: String);
+var
+  CmdLine: String;
+begin
+  CmdLine := AProgrammer;
+  CmdLine := StringReplace(CmdLine, '$(command)', AParams, [rfIgnoreCase, rfReplaceAll]);
+  CmdLine := StringReplace(CmdLine, '$(port)',    CmbPorts.Text, [rfIgnoreCase, rfReplaceAll]);
+  CmdLine := StringReplace(CmdLine, '$(baud)',    CmbBaud.Text, [rfIgnoreCase, rfReplaceAll]);
+  if (Pos('$(tmp_out_flash_hex)', CmdLine) > 0) then
+  begin
+    FFirmware.SaveToFile(FWorkingPath + '___tmp_out_flash_hex___.hex');
+    CmdLine := StringReplace(CmdLine, '$(tmp_out_flash_hex)', '___tmp_out_flash_hex___.hex', [rfIgnoreCase, rfReplaceAll]);
+  end;
+  if (Pos('$(tmp_out_eeprom_bin)', CmdLine) > 0) then
+  begin
+    FEEPROM.SaveToFile(FWorkingPath + '___tmp_out_eeprom_bin___.bin');
+    CmdLine := StringReplace(CmdLine, '$(tmp_out_eeprom_bin)', '___tmp_out_eeprom_bin___.bin', [rfIgnoreCase, rfReplaceAll]);
+  end;
+  CmdLine := StringReplace(CmdLine, '$(file)',        ActBackup.Dialog.FileName, [rfIgnoreCase, rfReplaceAll]);
+  CmdLine := StringReplace(CmdLine, '$(file_no_ext)', ExtractFileNameWithoutExt(ActBackup.Dialog.FileName), [rfIgnoreCase, rfReplaceAll]);
+
+  if GetKeyState(VK_SHIFT) < 0 then CmdLine := CmdLine + ' -v -v';
+  Programmer.CommandLine := Format('%s /c %s', [SysUtils.GetEnvironmentVariable('COMSPEC'), CmdLine]);
+  LogMessage(CmdLine);
+  LogMessage('');
+  FBusy := True;
+  UpdateControls;
+  Programmer.Execute;
+end;
+
+procedure TFrmMain.CmbPgmTypeChange(Sender: TObject);
+begin
+  UpdateProgrammerSetting;
   UpdateControls;
 end;
 
