@@ -4,7 +4,7 @@
     * [SupportedEscs Supported ESCs]   
     * [SupportedInput Supported Input Methods]   
     * [Safety]   
-    * [Wii-ESC v2.0.x FAQ]
+    * [WiiESCv20FAQ v2.0.x FAQ]
   * [GettingStarted Getting Started]
     * [SourceTree Project Structure] 
     * [HardwareConfiguration Hardware Configuration]
