@@ -1,0 +1,20 @@
+#summary Wii-ESC v2.0.x FAQ
+
+= Introduction =
+
+This page is collection of answers from different forums and thread. Main intention is to collect knowelege base here and than transform it to proper documentation later on.
+
+
+=Q: What is the difference (meaning of) RCP_MAX and RCP_FULL? =
+
+  * RCP_MIN/RCP_MAX - valid range, everything outsude is rejected
+  * RCP_START - where to start (with min. power)
+  * RCP_FULL - where to have full power
+  * RCP_DEADBAND - deadband for startup
+
+=Q: Do you have a link to compile/flashing instructions for v2 =
+
+The easiest way to build:
+  * Download Code::Blocks (in downloads)
+  * Open project wii-esc-ng.cbp
+  * Setup path to avr-gcc in Code::Blocks
