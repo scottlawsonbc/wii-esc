@@ -5,9 +5,9 @@ unit FMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ComCtrls, LResources, ExtCtrls, Buttons, ActnList, StdActns, IniPropStorage,
-  AsyncProcess, UComPort, Windows, ShellApi, process, UMetadata;
+  Windows, ShellApi, Classes, SysUtils, FileUtil, SynMemo,
+  synhighlighterunixshellscript, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls, LResources, ExtCtrls,
+  Buttons, ActnList, StdActns, IniPropStorage, AsyncProcess, UComPort, process, UMetadata;
 
 type
   { TFrmMain }
@@ -44,10 +44,11 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
-    MemLog: TMemo;
     BtnFirmwareInfo: TSpeedButton;
     BtnConfigurationInfo: TSpeedButton;
     Stb: TStatusBar;
+    MemLog: TSynMemo;
+    SynUNIXShellScriptSyn: TSynUNIXShellScriptSyn;
     TmLoadDelay: TTimer;
     procedure ActBackupAccept(Sender: TObject);
     procedure ActOpenConfigurationAccept(Sender: TObject);
@@ -274,19 +275,24 @@ begin
 end;
 
 procedure TFrmMain.LogMessage(const S: String);
+var
+  P: TPoint;
 begin
-  MemLog.Lines.Add(S);
-  MemLog.SelStart := MemLog.GetTextLen - 1;
-  MemLog.SelLength := 0;
+  P := Point(Length(MemLog.Lines[MemLog.Lines.Count - 1]) + 1, MemLog.Lines.Count);
+  MemLog.TextBetweenPoints[P, P] := S + #10;
+  MemLog.CaretY := MemLog.Lines.Count; MemLog.CaretX := 0;
+  MemLog.EnsureCursorPosVisible;
+  MemLog.Update;
 end;
 
 procedure TFrmMain.LogRaw(const S: String);
+var
+  P: TPoint;
 begin
-  MemLog.Lines.BeginUpdate;
-  MemLog.Lines[MemLog.Lines.Count - 1] := MemLog.Lines[MemLog.Lines.Count - 1] + S;
-  MemLog.Lines.EndUpdate;
-  MemLog.SelStart := MemLog.GetTextLen - 1;
-  MemLog.SelLength := 0;
+  P := Point(Length(MemLog.Lines[MemLog.Lines.Count - 1]) + 1, MemLog.Lines.Count);
+  MemLog.TextBetweenPoints[P, P] := S;
+  MemLog.CaretY := MemLog.Lines.Count; MemLog.CaretX := 0;
+  MemLog.EnsureCursorPosVisible;
 end;
 
 function TFrmMain.GetCurrentFirmware: TMetadataFirmware;
