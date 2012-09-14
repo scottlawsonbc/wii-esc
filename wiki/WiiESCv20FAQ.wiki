@@ -2,7 +2,7 @@
 
 = Introduction =
 
-This page is collection of answers from different forums and thread. Main intention is to collect knowelege base here and than transform it to proper documentation later on.
+This page is collection of answers from different forums and threads. Main intention is to collect knowelege base here and than transform it to proper documentation later on.
 
 
 ==Q: What is the difference (meaning of) RCP_MAX and RCP_FULL? ==
