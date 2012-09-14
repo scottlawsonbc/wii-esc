@@ -952,6 +952,11 @@ object FrmMain: TFrmMain
       Hint = 'Save As'
       OnAccept = ActBackupAccept
     end
+    object ActKillProgrammer: TAction
+      Caption = 'ActKillProgrammer'
+      OnExecute = ActKillProgrammerExecute
+      ShortCut = 27
+    end
   end
   object ImageList1: TImageList
     left = 72
@@ -966,7 +971,7 @@ object FrmMain: TFrmMain
   end
   object Programmer: TAsyncProcess
     Active = False
-    Options = [poUsePipes, poStderrToOutPut]
+    Options = [poUsePipes, poStderrToOutPut, poNewProcessGroup]
     Priority = ppNormal
     StartupOptions = []
     ShowWindow = swoHIDE

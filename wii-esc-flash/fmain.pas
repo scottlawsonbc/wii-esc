@@ -7,11 +7,12 @@ interface
 uses
   Windows, ShellApi, Classes, SysUtils, FileUtil, SynMemo,
   synhighlighterunixshellscript, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls, LResources, ExtCtrls,
-  Buttons, ActnList, StdActns, IniPropStorage, AsyncProcess, UComPort, process, UMetadata;
+  Buttons, ActnList, StdActns, IniPropStorage, AsyncProcess, UComPort, process, UMetadata, SynEditKeyCmds, SynEdit, LCLType;
 
 type
   { TFrmMain }
   TFrmMain = class(TForm)
+    ActKillProgrammer: TAction;
     ActionList1: TActionList;
     ActBackup: TFileSaveAs;
     BtnFirmwareWarn: TSpeedButton;
@@ -52,6 +53,7 @@ type
     SynUNIXShellScriptSyn: TSynUNIXShellScriptSyn;
     TmLoadDelay: TTimer;
     procedure ActBackupAccept(Sender: TObject);
+    procedure ActKillProgrammerExecute(Sender: TObject);
     procedure ActOpenConfigurationAccept(Sender: TObject);
     procedure ActOpenFirmwareAccept(Sender: TObject);
     procedure ActSaveFirmwareAccept(Sender: TObject);
@@ -112,7 +114,7 @@ var
 
 implementation
 
-uses IniFiles, FConfigEditor, FPHttpClient;
+uses IniFiles, FConfigEditor, FPHttpClient, jwatlhelp32;
 
 {$R *.lfm}
 
@@ -128,6 +130,27 @@ resourcestring
   rs0nByteSLoaded = '%.0n byte(s) loaded.';
   rsSavingFileS = 'Saving file: "%s"';
   rs0nByteSSaved = '%.0n byte(s) saved.';
+
+function KillTask(const ExeFileName: string): integer;
+const
+  PROCESS_TERMINATE=$0001;
+var
+  ContinueLoop: BOOL;
+  FSnapshotHandle: THandle;
+  FProcessEntry32: TProcessEntry32;
+begin
+  result := 0;
+  FSnapshotHandle := CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+  FProcessEntry32.dwSize := Sizeof(FProcessEntry32);
+  ContinueLoop := Process32First(FSnapshotHandle, FProcessEntry32);
+  while integer(ContinueLoop) <> 0 do
+  begin
+    if ((UpperCase(ExtractFileName(FProcessEntry32.szExeFile)) = UpperCase(ExeFileName)) or (UpperCase(FProcessEntry32.szExeFile) = UpperCase(ExeFileName))) then
+     Result := Integer(TerminateProcess(OpenProcess(PROCESS_TERMINATE, BOOL(0), FProcessEntry32.th32ProcessID), 0));
+     ContinueLoop := Process32Next(FSnapshotHandle, FProcessEntry32);
+ end;
+ CloseHandle(FSnapshotHandle);
+end;
 
 { TFrmMain }
 procedure TFrmMain.FormCreate(Sender: TObject);
@@ -224,6 +247,15 @@ begin
   StartProgrammer(CurrentProgrammer.CmdLine, FMetadata.PgmBackupCmd);
 end;
 
+procedure TFrmMain.ActKillProgrammerExecute(Sender: TObject);
+begin
+  if Programmer.Running then
+  begin
+    KillTask('avrdude.exe');
+    LogMessage('Programmer terminated..');
+  end;
+end;
+
 procedure TFrmMain.ActSaveFirmwareAccept(Sender: TObject);
 var
   lFile: String;
@@ -252,7 +284,7 @@ begin
   if Programmer.Running then
   begin
     CanClose := False;
-    Programmer.Terminate(-1);
+    KillTask('avrdude.exe');
   end;
 end;
 
@@ -362,6 +394,7 @@ begin
   ActBackup.Enabled := Assigned(CurrentProgrammer) and not FBusy;
   BtnFirmwareWarn.Visible := Assigned(CurrentFirmware) and (CurrentFirmware.WarnURL <> '');
   BtnFirmwareWarn.Enabled := not FBusy;
+  ActKillProgrammer.Enabled := FBusy;
 end;
 
 procedure TFrmMain.LoadMetadata;
