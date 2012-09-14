@@ -51,10 +51,12 @@ type
     FInfoURL: String;
     FName: String;
     FURL: String;
+    FWarnURL: String;
     procedure SetDescription(AValue: String);
     procedure SetInfoURL(AValue: String);
     procedure SetName(AValue: String);
     procedure SetURL(AValue: String);
+    procedure SetWarnURL(AValue: String);
   protected
     procedure LoadFromIni(Ini: TIniFile; const ASection: String); override;
   published
@@ -62,6 +64,7 @@ type
     property Description: String read FDescription write SetDescription;
     property URL: String read FURL write SetURL;
     property InfoURL: String read FInfoURL write SetInfoURL;
+    property WarnURL: String read FWarnURL write SetWarnURL;
   end;
 
   { TMetadataConfiguration }
@@ -262,6 +265,12 @@ begin
   FURL:=AValue;
 end;
 
+procedure TMetadataFirmware.SetWarnURL(AValue: String);
+begin
+  if FWarnURL=AValue then Exit;
+  FWarnURL:=AValue;
+end;
+
 procedure TMetadataFirmware.LoadFromIni(Ini: TIniFile; const ASection: String);
 begin
   inherited;
@@ -270,7 +279,8 @@ begin
     FName := ReadString(ASection, 'Name', ASection);
     FURL := ReadString(ASection, 'URL', '');
     FInfoURL := ReadString(ASection, 'Info', '');
-    FDescription := _ReadString(Ini, ASection, 'Description', '')
+    FDescription := _ReadString(Ini, ASection, 'Description', '');
+    FWarnURL := ReadString(ASection, 'Warning', '');
   end;
 end;
 

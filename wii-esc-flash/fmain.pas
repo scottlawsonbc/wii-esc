@@ -14,6 +14,7 @@ type
   TFrmMain = class(TForm)
     ActionList1: TActionList;
     ActBackup: TFileSaveAs;
+    BtnFirmwareWarn: TSpeedButton;
     Programmer: TAsyncProcess;
     BtnBackup: TButton;
     BtnLoadFirmware: TButton;
@@ -54,6 +55,7 @@ type
     procedure ActOpenConfigurationAccept(Sender: TObject);
     procedure ActOpenFirmwareAccept(Sender: TObject);
     procedure ActSaveFirmwareAccept(Sender: TObject);
+    procedure BtnFirmwareWarnClick(Sender: TObject);
     procedure BtnFlashEEPROMClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure ProgrammerReadData(Sender: TObject);
@@ -96,6 +98,7 @@ type
     procedure UpdateControls;
     procedure UpdateProgrammerSetting;
     procedure StartProgrammer(const AProgrammer, AParams: String);
+    procedure OpenURL(const AURL: String);
   public
     procedure LoadMetadata;
     procedure UnpackResources;
@@ -156,9 +159,14 @@ begin
   TmLoadDelay.Enabled := True;
 end;
 
+procedure TFrmMain.OpenURL(const AURL: String);
+begin
+  ShellExecute(0, 'open', PChar(AURL), '', nil, SW_SHOW);
+end;
+
 procedure TFrmMain.Label6Click(Sender: TObject);
 begin
-  ShellExecute(0, 'open', 'http://wiki.openpilot.org/display/Doc/RapidESC+Database', '', nil, SW_SHOW);
+  OpenURL('http://wiki.openpilot.org/display/Doc/RapidESC+Database');
 end;
 
 procedure TFrmMain.BtnFirmwareInfoClick(Sender: TObject);
@@ -226,6 +234,12 @@ begin
   SaveFirmware(lFile);
   LogMessage('');
   UpdateControls;
+end;
+
+procedure TFrmMain.BtnFirmwareWarnClick(Sender: TObject);
+begin
+  if Assigned(CurrentFirmware) and (CurrentFirmware.WarnURL <> '') then
+    OpenURL(CurrentFirmware.WarnURL);
 end;
 
 procedure TFrmMain.BtnFlashEEPROMClick(Sender: TObject);
@@ -346,6 +360,8 @@ begin
   ActSaveFirmware.Enabled := (FFirmware.Size > 0) and not FBusy;
   ActOpenConfiguration.Enabled := not FBusy;
   ActBackup.Enabled := Assigned(CurrentProgrammer) and not FBusy;
+  BtnFirmwareWarn.Visible := Assigned(CurrentFirmware) and (CurrentFirmware.WarnURL <> '');
+  BtnFirmwareWarn.Enabled := not FBusy;
 end;
 
 procedure TFrmMain.LoadMetadata;
