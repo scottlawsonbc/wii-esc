@@ -19,7 +19,7 @@
       <AutoIncrementBuild Value="True"/>
       <MinorVersionNr Value="1"/>
       <RevisionNr Value="5"/>
-      <BuildNr Value="15"/>
+      <BuildNr Value="18"/>
       <StringTable CompanyName="GPL v3" FileDescription="Wii-ESC Flash Tool" InternalName="Wii-ESC YAFT" ProductName="Wii-ESC" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -100,17 +100,12 @@
     </Parsing>
     <CodeGeneration>
       <SmartLinkUnit Value="True"/>
-      <Checks>
-        <IOChecks Value="True"/>
-        <RangeChecks Value="True"/>
-        <OverflowChecks Value="True"/>
-        <StackChecks Value="True"/>
-      </Checks>
-      <VerifyObjMethodCallValidity Value="True"/>
+      <SmallerCode Value="True"/>
       <TargetCPU Value="i386"/>
       <TargetOS Value="win32"/>
       <Optimizations>
-        <OptimizationLevel Value="3"/>
+        <VariablesInRegisters Value="True"/>
+        <OptimizationLevel Value="2"/>
       </Optimizations>
     </CodeGeneration>
     <Linking>
