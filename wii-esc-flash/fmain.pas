@@ -16,6 +16,7 @@ type
     ActionList1: TActionList;
     ActBackup: TFileSaveAs;
     BtnFirmwareWarn: TSpeedButton;
+    ActSaveConfiguration: TFileSaveAs;
     Programmer: TAsyncProcess;
     BtnBackup: TButton;
     BtnLoadFirmware: TButton;
@@ -56,6 +57,7 @@ type
     procedure ActKillProgrammerExecute(Sender: TObject);
     procedure ActOpenConfigurationAccept(Sender: TObject);
     procedure ActOpenFirmwareAccept(Sender: TObject);
+    procedure ActSaveConfigurationAccept(Sender: TObject);
     procedure ActSaveFirmwareAccept(Sender: TObject);
     procedure BtnFirmwareWarnClick(Sender: TObject);
     procedure BtnFlashEEPROMClick(Sender: TObject);
@@ -90,7 +92,8 @@ type
     function GetCurrentProgrammer: TMetadataProgrammer;
     procedure LoadConfiguration(AConfiguration: TMetadataConfiguration); overload;
     procedure LoadConfiguration(const AFileName: String); overload;
-    procedure ConvertConfiguration;
+    procedure ConvertConfigurationToBin;
+    procedure ConvertConfigurationToHex;
     procedure LoadFirmware(AFirmware: TMetadataFirmware); overload;
     procedure LoadFirmware(const AFileName: String); overload;
     procedure SaveFirmware(const AFileName: String); overload;
@@ -130,6 +133,8 @@ resourcestring
   rs0nByteSLoaded = '%.0n byte(s) loaded.';
   rsSavingFileS = 'Saving file: "%s"';
   rs0nByteSSaved = '%.0n byte(s) saved.';
+  rsConvertingConfigurat = 'Converting configuration to Intel HEX...';
+  rsProgrammerTerminated = 'Programmer terminated..';
 
 function KillTask(const ExeFileName: string): integer;
 const
@@ -233,6 +238,29 @@ begin
   UpdateControls;
 end;
 
+procedure TFrmMain.ActSaveConfigurationAccept(Sender: TObject);
+var
+  lFileName: String;
+begin
+  if ExtractFileExt(ActSaveConfiguration.Dialog.FileName) = '' then
+    ActSaveConfiguration.Dialog.FileName := ChangeFileExt(ActSaveConfiguration.Dialog.FileName, '.eep');
+  try
+    Screen.Cursor := crHourGlass;
+    LogMessage(rsConvertingConfigurat);
+    ConvertConfigurationToHex;
+    lFileName := ActSaveConfiguration.Dialog.FileName;
+    LogMessage(Format(rsSavingFileS, [lFileName]));
+    if UpperCase(ExtractFileExt(lFileName)) = '.BIN' then
+      FEEPROM.SaveToFile(lFileName)
+    else
+      FConfiguration.SaveToFile(lFileName);
+    LogMessage(Format(rs0nByteSSaved, [Double(FileSize(lFileName))]));
+    LogMessage('');
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
 procedure TFrmMain.ActOpenConfigurationAccept(Sender: TObject);
 begin
   LoadConfiguration(ActOpenConfiguration.Dialog.FileName);
@@ -252,7 +280,7 @@ begin
   if Programmer.Running then
   begin
     KillTask('avrdude.exe');
-    LogMessage('Programmer terminated..');
+    LogMessage(rsProgrammerTerminated);
   end;
 end;
 
@@ -395,6 +423,7 @@ begin
   BtnFirmwareWarn.Visible := Assigned(CurrentFirmware) and (CurrentFirmware.WarnURL <> '');
   BtnFirmwareWarn.Enabled := not FBusy;
   ActKillProgrammer.Enabled := FBusy;
+  ActSaveConfiguration.Enabled := (FEEPROM.Size > 0) and not FBusy;
 end;
 
 procedure TFrmMain.LoadMetadata;
@@ -440,7 +469,7 @@ begin
   end;
 end;
 
-procedure TFrmMain.ConvertConfiguration;
+procedure TFrmMain.ConvertConfigurationToBin;
 begin
   try
     FConfiguration.SaveToFile(FWorkingPath + '___tmp___.hex');
@@ -457,6 +486,29 @@ begin
     end;
     FEEPROM.Clear;
     FEEPROM.LoadFromFile(FWorkingPath + '___tmp___.bin');
+  finally
+    SysUtils.DeleteFile(FWorkingPath + '___tmp___.hex');
+    SysUtils.DeleteFile(FWorkingPath + '___tmp___.bin');
+  end;
+end;
+
+procedure TFrmMain.ConvertConfigurationToHex;
+begin
+  try
+    FEEPROM.SaveToFile(FWorkingPath + '___tmp___.bin');
+    with TProcess.Create(nil) do
+    try
+      CurrentDirectory := FWorkingPath;
+      CommandLine := SysUtils.GetEnvironmentVariable('COMSPEC') + ' /c bin2hex.exe  ___tmp___.bin ___tmp___.hex';
+      Options := [poUsePipes, poStderrToOutPut];
+      ShowWindow := swoHIDE;
+      Execute;
+      WaitOnExit;
+    finally
+      Free;
+    end;
+    FConfiguration.Clear;
+    FConfiguration.LoadFromFile(FWorkingPath + '___tmp___.hex');
   finally
     SysUtils.DeleteFile(FWorkingPath + '___tmp___.hex');
     SysUtils.DeleteFile(FWorkingPath + '___tmp___.bin');
@@ -512,7 +564,7 @@ begin
     LogMessage(Format(rsDownloadingFileS, [ExtractFileName(CurrentConfiguration.URL)]));
     LoadConfiguration(CurrentConfiguration);
     LogMessage(Format(rs0nByteSDownloaded, [Double(FConfiguration.Size)]));
-    ConvertConfiguration;;
+    ConvertConfigurationToBin;;
     LogMessage(Format(rs0nByteSBinary, [Double(FEEPROM.Size)]));
     LogMessage('');
   finally
@@ -591,7 +643,7 @@ begin
   LogMessage(Format(rsLoadingFileS, [AFileName]));
   FConfiguration.Clear;
   FConfiguration.LoadFromFile(AFileName);
-  ConvertConfiguration;
+  ConvertConfigurationToBin;
   LogMessage(Format(rs0nByteSLoaded, [Double(FConfiguration.Size)]));
   LogMessage(Format(rs0nByteSBinary, [Double(FEEPROM.Size)]));
 end;

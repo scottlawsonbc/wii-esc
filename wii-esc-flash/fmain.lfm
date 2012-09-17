@@ -4,7 +4,7 @@ object FrmMain: TFrmMain
   Top = 252
   Width = 460
   AllowDropFiles = True
-  Caption = 'WII-ESC Flash Tool 0.2'
+  Caption = 'WII-ESC Flash Tool 0.3'
   ClientHeight = 565
   ClientWidth = 460
   Constraints.MinHeight = 565
@@ -432,8 +432,7 @@ object FrmMain: TFrmMain
       Height = 25
       Top = 56
       Width = 75
-      Caption = 'Save As...'
-      Enabled = False
+      Action = ActSaveConfiguration
       TabOrder = 4
     end
     object BtnEditEEPROM: TButton
@@ -956,6 +955,15 @@ object FrmMain: TFrmMain
       Caption = 'ActKillProgrammer'
       OnExecute = ActKillProgrammerExecute
       ShortCut = 27
+    end
+    object ActSaveConfiguration: TFileSaveAs
+      Category = 'File'
+      Caption = 'Save As...'
+      Dialog.Filter = 'EEPROM Files|*.eep|Binary Files|*.bin'
+      Dialog.Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
+      Enabled = False
+      Hint = 'Save As'
+      OnAccept = ActSaveConfigurationAccept
     end
   end
   object ImageList1: TImageList
