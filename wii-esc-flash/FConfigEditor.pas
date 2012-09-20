@@ -15,6 +15,7 @@ type
     Button1: TButton;
     Button2: TButton;
     CmbBraking: TCheckBox;
+    CmbTimingAdv: TComboBox;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
@@ -31,6 +32,7 @@ type
     EdtRcpFull: TSpinEdit;
     EdtRcpCal: TSpinEdit;
     EdtRcpDB: TSpinEdit;
+    Label7: TLabel;
   private
     FData: Pointer;
   protected
@@ -54,6 +56,7 @@ type
      rcp_cal_us: Word;
      rcp_deadband_us: Byte;
      braking: Byte;
+     timing_adv: Shortint;
   end;
   TEEPROMLayout = packed record
     __ver_magic: Byte;
@@ -87,6 +90,8 @@ begin
     EdtRcpCal.Value := rcp_cal_us;
     EdtRcpDB.Value := rcp_deadband_us;
     CmbBraking.Checked := braking <> 0;
+    if (timing_adv < 0) or (timing_adv > 3) then timing_adv := 0;
+    CmbTimingAdv.ItemIndex := timing_adv;
   end;
 end;
 
@@ -101,6 +106,7 @@ begin
     rcp_cal_us := EdtRcpCal.Value;
     rcp_deadband_us := EdtRcpDB.Value;
     braking := Byte(CmbBraking.Checked);
+    timing_adv := CmbTimingAdv.ItemIndex;
   end;
 end;
 
