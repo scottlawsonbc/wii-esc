@@ -280,6 +280,7 @@ begin
   if Programmer.Running then
   begin
     KillTask('avrdude.exe');
+    KillTask('avrootloader_cli.exe');
     LogMessage(rsProgrammerTerminated);
   end;
 end;
@@ -313,6 +314,7 @@ begin
   begin
     CanClose := False;
     KillTask('avrdude.exe');
+    KillTask('avrootloader_cli.exe');
   end;
 end;
 

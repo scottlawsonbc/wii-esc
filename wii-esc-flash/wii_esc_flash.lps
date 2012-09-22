@@ -25,8 +25,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="302"/>
-        <CursorPos X="102" Y="315"/>
+        <TopLine Value="238"/>
+        <CursorPos X="1" Y="282"/>
         <UsageCount Value="88"/>
         <Bookmarks Count="1">
           <Item0 X="60" Y="248" ID="1"/>
@@ -349,7 +349,7 @@
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="26" HistoryIndex="25">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="FConfigEditor.pas"/>
         <Caret Line="83" Column="77" TopLine="57"/>
@@ -454,6 +454,18 @@
         <Filename Value="utl\UMetadata.pas"/>
         <Caret Line="249" Column="1" TopLine="224"/>
       </Position26>
+      <Position27>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="317" Column="1" TopLine="302"/>
+      </Position27>
+      <Position28>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position28>
+      <Position29>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="139" Column="16" TopLine="95"/>
+      </Position29>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
