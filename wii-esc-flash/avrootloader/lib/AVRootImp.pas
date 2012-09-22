@@ -181,6 +181,7 @@ end;
 procedure TAVRootApplication.Output(const Msg: WideString; Code: Integer);
 begin
   Writeln('AVRootLoader:  ', Msg);
+  System.Flush(System.Output);
 end;
 
 function TAVRootApplication.ProcessMessages: Bool;

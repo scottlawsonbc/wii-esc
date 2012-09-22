@@ -55,7 +55,7 @@ begin
     Exit;
   end;
   PrintGeeting;
-  Writeln('Waiting for device...');
+  Writeln('Waiting for device...'); Flush(Output);
   App.Connect;
   if EEPRomEraseReq then
     App.EraseEEPROM;
