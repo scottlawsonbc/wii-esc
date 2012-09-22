@@ -272,7 +272,7 @@ procedure TFrmMain.ActBackupAccept(Sender: TObject);
 begin
   if ExtractFileExt(ActBackup.Dialog.FileName) = '' then
     ActBackup.Dialog.FileName := ChangeFileExt(ActBackup.Dialog.FileName, '.hex');
-  StartProgrammer(CurrentProgrammer.CmdLine, FMetadata.PgmBackupCmd);
+  StartProgrammer(CurrentProgrammer.CmdLine, CurrentProgrammer.PgmBackupCmd);
 end;
 
 procedure TFrmMain.ActKillProgrammerExecute(Sender: TObject);
@@ -304,7 +304,7 @@ end;
 
 procedure TFrmMain.BtnFlashEEPROMClick(Sender: TObject);
 begin
-  StartProgrammer(CurrentProgrammer.CmdLine, FMetadata.PgmWriteEEPROMCmd);
+  StartProgrammer(CurrentProgrammer.CmdLine, CurrentProgrammer.PgmWriteEEPROMCmd);
 end;
 
 procedure TFrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -325,7 +325,7 @@ end;
 
 procedure TFrmMain.BtnFlashFirmwareClick(Sender: TObject);
 begin
-  StartProgrammer(CurrentProgrammer.CmdLine, FMetadata.PgmWriteFlashCmd);
+  StartProgrammer(CurrentProgrammer.CmdLine, CurrentProgrammer.PgmWriteFlashCmd);
 end;
 
 procedure TFrmMain.TmLoadDelayTimer(Sender: TObject);
@@ -534,6 +534,9 @@ begin
   ExtractFile('libusb0_x64.dll');
   ExtractFile('bin2hex.exe');
   ExtractFile('hex2bin.exe');
+  ExtractFile('AVRootloader.dev');
+  ExtractFile('AVRootloader.dll');
+  ExtractFile('avrootloader_cli.exe');
 end;
 
 procedure TFrmMain.BtnLoadFirmwareClick(Sender: TObject);

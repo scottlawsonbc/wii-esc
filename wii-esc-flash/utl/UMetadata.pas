@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, IniFiles;
 
 type
+  TMetadata = class;
 
   { TMetadataBase }
 
@@ -30,17 +31,34 @@ type
     FBaudRates: TStringList;
     FName: String;
     FPort: String;
-    procedure SetName(AValue: String);
-    procedure SetPort(AValue: String);
+    FMetadata: TMetadata;
+    FPgmBackupCmd: String;
+    FPgmReadEEPROMCmd: String;
+    FPgmReadFlashCmd: String;
+    FPgmTestCmd: String;
+    FPgmWriteEEPROMCmd: String;
+    FPgmWriteFlashCmd: String;
+    function GetPgmBackupCmd: String;
+    function GetPgmReadEEPROMCmd: String;
+    function GetPgmReadFlashCmd: String;
+    function GetPgmTestCmd: String;
+    function GetPgmWriteEEPROMCmd: String;
+    function GetPgmWriteFlashCmd: String;
   protected
     procedure LoadFromIni(Ini: TIniFile; const ASection: String); override;
   public
-    constructor Create; override;
+    constructor Create(AMetadata: TMetadata);
     destructor Destroy; override;
   published
-    property Name: String read FName write SetName;
-    property Port: String read FPort write SetPort;
+    property Name: String read FName;
+    property Port: String read FPort;
     property BaudRates: TStringList read FBaudRates;
+    property PgmWriteFlashCmd: String read GetPgmWriteFlashCmd;
+    property PgmWriteEEPROMCmd: String read GetPgmWriteEEPROMCmd;
+    property PgmReadFlashCmd: String read GetPgmReadFlashCmd;
+    property PgmReadEEPROMCmd: String read GetPgmReadEEPROMCmd;
+    property PgmBackupCmd: String read GetPgmBackupCmd;
+    property PgmTestCmd: String read GetPgmTestCmd;
   end;
 
   { TMetadataFirmware }
@@ -121,12 +139,6 @@ type
   published
     property MetadataVersion: integer read FMetadataVersion write SetMetadataVersion;
     property Version: String read FVersion write SetVersion;
-    property PgmWriteFlashCmd: String read FPgmWriteFlashCmd write SetPgmWriteFlashCmd;
-    property PgmWriteEEPROMCmd: String read FPgmWriteEEPROMCmd write SetPgmWriteEEPROMCmd;
-    property PgmReadFlashCmd: String read FPgmReadFlashCmd write SetPgmReadFlashCmd;
-    property PgmReadEEPROMCmd: String read FPgmReadEEPROMCmd write SetPgmReadEEPROMCmd;
-    property PgmBackupCmd: String read FPgmBackupCmd write SetPgmBackupCmd;
-    property PgmTestCmd: String read FPgmTestCmd write SetPgmTestCmd;
   end;
 
 
@@ -205,17 +217,48 @@ begin
 end;
 
 { TMetadataProgrammer }
-procedure TMetadataProgrammer.SetName(AValue: String);
+function TMetadataProgrammer.GetPgmBackupCmd: String;
 begin
-  if FName=AValue then Exit;
-  FName:=AValue;
+  Result := FPgmBackupCmd;
+  if (Result = '') then
+    Result := FMetadata.FPgmBackupCmd;
 end;
 
-procedure TMetadataProgrammer.SetPort(AValue: String);
+function TMetadataProgrammer.GetPgmReadEEPROMCmd: String;
 begin
-  if FPort=AValue then Exit;
-  FPort:=AValue;
+  Result := FPgmReadEEPROMCmd;
+  if (Result = '') then
+    Result := FMetadata.FPgmReadEEPROMCmd;
 end;
+
+function TMetadataProgrammer.GetPgmReadFlashCmd: String;
+begin
+  Result := FPgmReadFlashCmd;
+  if (Result = '') then
+    Result := FMetadata.FPgmReadFlashCmd;
+end;
+
+function TMetadataProgrammer.GetPgmTestCmd: String;
+begin
+  Result := FPgmTestCmd;
+  if (Result = '') then
+    Result := FMetadata.FPgmTestCmd;
+end;
+
+function TMetadataProgrammer.GetPgmWriteEEPROMCmd: String;
+begin
+  Result := FPgmWriteEEPROMCmd;
+  if (Result = '') then
+    Result := FMetadata.FPgmWriteEEPROMCmd;
+end;
+
+function TMetadataProgrammer.GetPgmWriteFlashCmd: String;
+begin
+  Result := FPgmWriteFlashCmd;
+  if (Result = '') then
+    Result := FMetadata.FPgmWriteFlashCmd;
+end;
+
 
 procedure TMetadataProgrammer.LoadFromIni(Ini: TIniFile; const ASection: String);
 begin
@@ -225,13 +268,20 @@ begin
     FBaudRates.CommaText := ReadString(ASection, 'Speed', '');
     FPort := ReadString(ASection, 'Port', '');
     FName := ReadString(ASection, 'Name', ASection);
+    FPgmWriteFlashCmd := ReadString(ASection, 'PgmWriteFlashCmd', '');
+    FPgmWriteEEPROMCmd := ReadString(ASection, 'PgmWriteEEPROMCmd', '');
+    FPgmReadFlashCmd := ReadString(ASection, 'PgmReadFlashCmd', '');
+    FPgmReadEEPROMCmd := ReadString(ASection, 'PgmReadEEPROMCmd', '');
+    FPgmBackupCmd := ReadString(ASection, 'PgmBackupCmd', '');
+    FPgmTestCmd := ReadString(ASection, 'PgmTestCmd', '');
   end;
 end;
 
-constructor TMetadataProgrammer.Create;
+constructor TMetadataProgrammer.Create(AMetadata: TMetadata);
 begin
   inherited Create;
   FBaudRates := TStringList.Create;
+  FMetadata := AMetadata;
 end;
 
 destructor TMetadataProgrammer.Destroy;
@@ -398,7 +448,7 @@ begin
     CommaText := Ini.ReadString(ASection, 'Programmers', '');
     for i := 0 to Count - 1 do
     begin
-      lProg := TMetadataProgrammer.Create;
+      lProg := TMetadataProgrammer.Create(Self);
       FProgrammers.Add(lProg);
       lProg.LoadFromIni(Ini, Strings[i]);
     end;

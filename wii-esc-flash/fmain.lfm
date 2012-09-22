@@ -4,7 +4,7 @@ object FrmMain: TFrmMain
   Top = 252
   Width = 460
   AllowDropFiles = True
-  Caption = 'WII-ESC Flash Tool 0.3'
+  Caption = 'WII-ESC Flash Tool 0.4'
   ClientHeight = 565
   ClientWidth = 460
   Constraints.MinHeight = 565
@@ -92,8 +92,8 @@ object FrmMain: TFrmMain
   end
   object Stb: TStatusBar
     Left = 0
-    Height = 20
-    Top = 545
+    Height = 23
+    Top = 542
     Width = 460
     Panels = <    
       item

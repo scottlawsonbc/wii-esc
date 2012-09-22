@@ -12,7 +12,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="34" Y="7"/>
-        <UsageCount Value="87"/>
+        <UsageCount Value="88"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -23,11 +23,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FMain"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="0"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="586"/>
-        <CursorPos X="24" Y="599"/>
-        <UsageCount Value="87"/>
+        <TopLine Value="302"/>
+        <CursorPos X="102" Y="315"/>
+        <UsageCount Value="88"/>
         <Bookmarks Count="1">
           <Item0 X="60" Y="248" ID="1"/>
         </Bookmarks>
@@ -39,11 +39,11 @@
         <Filename Value="utl\UComPort.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UComPort"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="46"/>
         <CursorPos X="11" Y="75"/>
-        <UsageCount Value="83"/>
+        <UsageCount Value="84"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
@@ -51,11 +51,11 @@
         <Filename Value="utl\UMetadata.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="UMetadata"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="262"/>
-        <CursorPos X="35" Y="283"/>
-        <UsageCount Value="82"/>
+        <TopLine Value="224"/>
+        <CursorPos X="49" Y="238"/>
+        <UsageCount Value="83"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
@@ -66,12 +66,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FConfigEditor"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="57"/>
-        <CursorPos X="77" Y="78"/>
-        <UsageCount Value="61"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -138,21 +139,17 @@
       <Unit12>
         <Filename Value="E:\lazarus\fpc\2.6.0\source\packages\fcl-process\src\process.pp"/>
         <UnitName Value="process"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="33"/>
         <CursorPos X="15" Y="54"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit12>
       <Unit13>
         <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1882"/>
         <CursorPos X="15" Y="1903"/>
         <UsageCount Value="15"/>
-        <Loaded Value="True"/>
       </Unit13>
       <Unit14>
         <Filename Value="D:\lazarus\lcl\lresources.pp"/>
@@ -250,12 +247,10 @@
       </Unit24>
       <Unit25>
         <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\win\wininc\func.inc"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="954"/>
         <CursorPos X="34" Y="975"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit25>
       <Unit26>
         <Filename Value="D:\lazarus\fpc\2.6.0\source\packages\fcl-process\src\pipes.pp"/>
@@ -286,209 +281,179 @@
       <Unit29>
         <Filename Value="E:\lazarus\components\synedit\synmemo.pas"/>
         <UnitName Value="SynMemo"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="49"/>
         <CursorPos X="15" Y="70"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
       </Unit29>
       <Unit30>
         <Filename Value="E:\lazarus\components\synedit\synedit.pp"/>
         <UnitName Value="SynEdit"/>
-        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1703"/>
         <CursorPos X="18" Y="1739"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
       </Unit30>
       <Unit31>
         <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\win\wininc\struct.inc"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="196"/>
         <CursorPos X="6" Y="217"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
       </Unit31>
       <Unit32>
         <Filename Value="E:\lazarus\fpc\2.6.0\source\packages\fcl-process\src\win\process.inc"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="284"/>
         <CursorPos X="18" Y="306"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit32>
       <Unit33>
         <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\win\wininc\base.inc"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="33"/>
         <CursorPos X="6" Y="54"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit33>
       <Unit34>
         <Filename Value="E:\lazarus\lcl\asyncprocess.pp"/>
         <UnitName Value="AsyncProcess"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="16"/>
         <CursorPos X="3" Y="37"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit34>
       <Unit35>
         <Filename Value="E:\lazarus\lcl\utf8process.pp"/>
         <UnitName Value="UTF8Process"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="33"/>
         <CursorPos X="3" Y="36"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit35>
       <Unit36>
         <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\win\wininc\defines.inc"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1309"/>
         <CursorPos X="6" Y="1330"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit36>
       <Unit37>
         <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\inc\systemh.inc"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="978"/>
         <CursorPos X="22" Y="999"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit37>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="26" HistoryIndex="25">
       <Position1>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="FConfigEditor.pas"/>
+        <Caret Line="83" Column="77" TopLine="57"/>
       </Position1>
       <Position2>
         <Filename Value="fmain.pas"/>
-        <Caret Line="613" Column="1" TopLine="588"/>
+        <Caret Line="60" Column="24" TopLine="40"/>
       </Position2>
       <Position3>
         <Filename Value="fmain.pas"/>
-        <Caret Line="93" Column="35" TopLine="63"/>
+        <Caret Line="153" Column="31" TopLine="109"/>
       </Position3>
       <Position4>
         <Filename Value="fmain.pas"/>
-        <Caret Line="94" Column="1" TopLine="72"/>
+        <Caret Line="245" Column="17" TopLine="201"/>
       </Position4>
       <Position5>
         <Filename Value="fmain.pas"/>
-        <Caret Line="482" Column="62" TopLine="456"/>
+        <Caret Line="253" Column="29" TopLine="209"/>
       </Position5>
       <Position6>
         <Filename Value="fmain.pas"/>
-        <Caret Line="483" Column="62" TopLine="457"/>
+        <Caret Line="273" Column="17" TopLine="229"/>
       </Position6>
       <Position7>
         <Filename Value="fmain.pas"/>
-        <Caret Line="45" Column="42" TopLine="22"/>
+        <Caret Line="292" Column="17" TopLine="248"/>
       </Position7>
       <Position8>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="406" Column="1" TopLine="384"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="283" Column="35" TopLine="262"/>
       </Position8>
       <Position9>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="242" Column="31" TopLine="228"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="40" Column="58" TopLine="1"/>
       </Position9>
       <Position10>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="127" Column="22" TopLine="105"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="60" Column="44" TopLine="20"/>
       </Position10>
       <Position11>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="553" Column="5" TopLine="543"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="230" Column="3" TopLine="228"/>
       </Position11>
       <Position12>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="206" Column="52" TopLine="206"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="52" Column="58" TopLine="26"/>
       </Position12>
       <Position13>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="526" Column="3" TopLine="524"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="309" Column="25" TopLine="305"/>
       </Position13>
       <Position14>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="554" Column="1" TopLine="544"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="494" Column="87" TopLine="450"/>
       </Position14>
       <Position15>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="239" Column="62" TopLine="239"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="110" Column="12" TopLine="73"/>
       </Position15>
       <Position16>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="131" Column="42" TopLine="106"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="52" Column="44" TopLine="19"/>
       </Position16>
       <Position17>
         <Filename Value="fmain.pas"/>
-        <Caret Line="243" Column="67" TopLine="221"/>
+        <Caret Line="519" Column="103" TopLine="494"/>
       </Position17>
       <Position18>
         <Filename Value="fmain.pas"/>
-        <Caret Line="242" Column="19" TopLine="221"/>
+        <Caret Line="275" Column="63" TopLine="249"/>
       </Position18>
       <Position19>
         <Filename Value="fmain.pas"/>
-        <Caret Line="419" Column="89" TopLine="411"/>
+        <Caret Line="307" Column="63" TopLine="281"/>
       </Position19>
       <Position20>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="631" Column="1" TopLine="590"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="322" Column="58" TopLine="305"/>
       </Position20>
       <Position21>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="58" Column="80" TopLine="27"/>
       </Position21>
       <Position22>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="263" Column="1" TopLine="228"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="462" Column="1" TopLine="462"/>
       </Position22>
       <Position23>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="631" Column="35" TopLine="611"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="320" Column="66" TopLine="300"/>
       </Position23>
       <Position24>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="55" Column="37" TopLine="22"/>
       </Position24>
       <Position25>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="134" Column="4" TopLine="100"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="220" Column="1" TopLine="194"/>
       </Position25>
       <Position26>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="630" Column="1" TopLine="593"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="249" Column="1" TopLine="224"/>
       </Position26>
-      <Position27>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="590" Column="1" TopLine="590"/>
-      </Position27>
-      <Position28>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="247" Column="92" TopLine="239"/>
-      </Position28>
-      <Position29>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="252" Column="65" TopLine="227"/>
-      </Position29>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
