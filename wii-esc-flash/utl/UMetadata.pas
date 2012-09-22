@@ -47,7 +47,7 @@ type
   protected
     procedure LoadFromIni(Ini: TIniFile; const ASection: String); override;
   public
-    constructor Create(AMetadata: TMetadata);
+    constructor Create(AMetadata: TMetadata); reintroduce;
     destructor Destroy; override;
   published
     property Name: String read FName;

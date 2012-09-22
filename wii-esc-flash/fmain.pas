@@ -610,6 +610,12 @@ begin
     FEEPROM.SaveToFile(FWorkingPath + '___tmp_out_eeprom_bin___.bin');
     CmdLine := StringReplace(CmdLine, '$(tmp_out_eeprom_bin)', '___tmp_out_eeprom_bin___.bin', [rfIgnoreCase, rfReplaceAll]);
   end;
+  if (Pos('$(tmp_out_eeprom_hex)', CmdLine) > 0) then
+  begin
+    ConvertConfigurationToHex;
+    FConfiguration.SaveToFile(FWorkingPath + '___tmp_out_eeprom_hex___.hex');
+    CmdLine := StringReplace(CmdLine, '$(tmp_out_eeprom_hex)', '___tmp_out_eeprom_hex___.hex', [rfIgnoreCase, rfReplaceAll]);
+  end;
   CmdLine := StringReplace(CmdLine, '$(file)',        ActBackup.Dialog.FileName, [rfIgnoreCase, rfReplaceAll]);
   CmdLine := StringReplace(CmdLine, '$(file_no_ext)', ExtractFileNameWithoutExt(ActBackup.Dialog.FileName), [rfIgnoreCase, rfReplaceAll]);
 

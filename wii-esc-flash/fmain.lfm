@@ -1006,6 +1006,9 @@ object FrmMain: TFrmMain
     SecondKeyAttri.Style = [fsBold]
     SecondKeyWords.Strings = (
       'AVRDUDE'
+      'AVROOT'
+      'AVROOTLOADER'
+      'AVROOTLOADER_CLI'
     )
     NumberAttri.FrameEdges = sfeAround
     SpaceAttri.FrameEdges = sfeAround
