@@ -340,8 +340,8 @@ begin
     LogMessage(rsLoadingMetad);
     LoadMetadata;
     ObjToControls;
-    UpdateProgrammerSetting;
     PermStorage.Restore;
+    UpdateProgrammerSetting;
     LogMessage(rsReady);
     LogMessage('');
   finally
@@ -417,11 +417,10 @@ begin
   BtnConfigurationInfo.Enabled := Assigned(CurrentConfiguration);
   BtnFlashEEPROM.Enabled := (FEEPROM.Size > 0) and not FBusy;
   BtnEditEEPROM.Enabled := (FEEPROM.Size > 0) and not FBusy;
-  BtnBackup.Enabled := Assigned(CurrentProgrammer) and not FBusy;
   ActOpenFirmware.Enabled := not FBusy;
   ActSaveFirmware.Enabled := (FFirmware.Size > 0) and not FBusy;
   ActOpenConfiguration.Enabled := not FBusy;
-  ActBackup.Enabled := Assigned(CurrentProgrammer) and not FBusy;
+  ActBackup.Enabled := Assigned(CurrentProgrammer) and (Trim(StringReplace(CurrentProgrammer.PgmBackupCmd, '"', '', [rfReplaceAll])) <> '') and not FBusy;
   BtnFirmwareWarn.Visible := Assigned(CurrentFirmware) and (CurrentFirmware.WarnURL <> '');
   BtnFirmwareWarn.Enabled := not FBusy;
   ActKillProgrammer.Enabled := FBusy;
