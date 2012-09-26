@@ -15,7 +15,7 @@ var
 
 procedure Init;
 begin
-  App := TAVRootApplication.Create(nil);
+  App := TAVRootApplication.Create();
   App.Init;
 end;
 

@@ -5,7 +5,7 @@ interface
 uses SysUtils, Classes, AVRootIntf, Windows;
 
 type
-  TAVRootApplication = class(TComponent, IApplication)
+  TAVRootApplication = class(TInterfacedObject, IApplication)
   private
     FFlashFileName: TFileName;
     FEEPROMFileName: TFileName;
