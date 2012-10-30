@@ -1,11 +1,11 @@
 object FrmConfigEditor: TFrmConfigEditor
   Left = 597
-  Height = 382
+  Height = 400
   Top = 332
   Width = 293
   BorderStyle = bsDialog
   Caption = 'Configuration Editor'
-  ClientHeight = 382
+  ClientHeight = 400
   ClientWidth = 293
   Font.CharSet = RUSSIAN_CHARSET
   Font.Height = -11
@@ -17,7 +17,7 @@ object FrmConfigEditor: TFrmConfigEditor
   object Bevel1: TBevel
     Left = 0
     Height = 50
-    Top = 332
+    Top = 350
     Width = 293
     Align = alBottom
     Shape = bsTopLine
@@ -25,7 +25,7 @@ object FrmConfigEditor: TFrmConfigEditor
   object Button1: TButton
     Left = 121
     Height = 25
-    Top = 348
+    Top = 366
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = '&OK'
@@ -35,7 +35,7 @@ object FrmConfigEditor: TFrmConfigEditor
   object Button2: TButton
     Left = 208
     Height = 25
-    Top = 348
+    Top = 366
     Width = 75
     Anchors = [akRight, akBottom]
     Cancel = True
@@ -180,12 +180,12 @@ object FrmConfigEditor: TFrmConfigEditor
   end
   object GroupBox4: TGroupBox
     Left = 8
-    Height = 80
+    Height = 96
     Top = 248
     Width = 275
     Anchors = [akTop, akLeft, akRight]
     Caption = 'System'
-    ClientHeight = 62
+    ClientHeight = 78
     ClientWidth = 271
     TabOrder = 3
     object CmbBraking: TCheckBox
@@ -218,6 +218,14 @@ object FrmConfigEditor: TFrmConfigEditor
       )
       Style = csDropDownList
       TabOrder = 0
+    end
+    object CmbStickCal: TCheckBox
+      Left = 6
+      Height = 17
+      Top = 56
+      Width = 131
+      Caption = 'Enable Stick Calibration'
+      TabOrder = 2
     end
   end
 end

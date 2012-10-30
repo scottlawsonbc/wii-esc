@@ -22,17 +22,15 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="569"/>
-        <CursorPos X="84" Y="596"/>
+        <CursorPos X="58" Y="585"/>
         <UsageCount Value="89"/>
         <Bookmarks Count="1">
           <Item0 X="60" Y="248" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -66,13 +64,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FConfigEditor"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <TopLine Value="78"/>
+        <CursorPos X="31" Y="113"/>
         <UsageCount Value="63"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -352,123 +350,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="52" Column="58" TopLine="26"/>
+        <Caret Line="494" Column="87" TopLine="450"/>
       </Position1>
       <Position2>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="309" Column="25" TopLine="305"/>
+        <Caret Line="110" Column="12" TopLine="73"/>
       </Position2>
       <Position3>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="494" Column="87" TopLine="450"/>
+        <Caret Line="52" Column="44" TopLine="19"/>
       </Position3>
       <Position4>
-        <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="110" Column="12" TopLine="73"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="519" Column="103" TopLine="494"/>
       </Position4>
       <Position5>
-        <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="52" Column="44" TopLine="19"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="275" Column="63" TopLine="249"/>
       </Position5>
       <Position6>
         <Filename Value="fmain.pas"/>
-        <Caret Line="519" Column="103" TopLine="494"/>
+        <Caret Line="307" Column="63" TopLine="281"/>
       </Position6>
       <Position7>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="275" Column="63" TopLine="249"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="322" Column="58" TopLine="305"/>
       </Position7>
       <Position8>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="307" Column="63" TopLine="281"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="58" Column="80" TopLine="27"/>
       </Position8>
       <Position9>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="322" Column="58" TopLine="305"/>
+        <Caret Line="462" Column="1" TopLine="462"/>
       </Position9>
       <Position10>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="58" Column="80" TopLine="27"/>
+        <Caret Line="320" Column="66" TopLine="300"/>
       </Position10>
       <Position11>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="462" Column="1" TopLine="462"/>
+        <Caret Line="55" Column="37" TopLine="22"/>
       </Position11>
       <Position12>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="320" Column="66" TopLine="300"/>
+        <Caret Line="220" Column="1" TopLine="194"/>
       </Position12>
       <Position13>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="55" Column="37" TopLine="22"/>
+        <Caret Line="249" Column="1" TopLine="224"/>
       </Position13>
       <Position14>
-        <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="220" Column="1" TopLine="194"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="317" Column="1" TopLine="302"/>
       </Position14>
       <Position15>
-        <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="249" Column="1" TopLine="224"/>
+        <Filename Value="fmain.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position15>
       <Position16>
         <Filename Value="fmain.pas"/>
-        <Caret Line="317" Column="1" TopLine="302"/>
+        <Caret Line="139" Column="16" TopLine="95"/>
       </Position16>
       <Position17>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="238" Column="49" TopLine="224"/>
       </Position17>
       <Position18>
-        <Filename Value="fmain.pas"/>
-        <Caret Line="139" Column="16" TopLine="95"/>
+        <Filename Value="utl\UMetadata.pas"/>
+        <Caret Line="59" Column="84" TopLine="24"/>
       </Position18>
       <Position19>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="238" Column="49" TopLine="224"/>
+        <Caret Line="482" Column="1" TopLine="431"/>
       </Position19>
       <Position20>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="59" Column="84" TopLine="24"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position20>
       <Position21>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="482" Column="1" TopLine="431"/>
+        <Caret Line="36" Column="19" TopLine="1"/>
       </Position21>
       <Position22>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="39" Column="20" TopLine="1"/>
       </Position22>
       <Position23>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="36" Column="19" TopLine="1"/>
+        <Caret Line="42" Column="30" TopLine="1"/>
       </Position23>
       <Position24>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="39" Column="20" TopLine="1"/>
+        <Caret Line="45" Column="31" TopLine="1"/>
       </Position24>
       <Position25>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="42" Column="30" TopLine="1"/>
+        <Caret Line="57" Column="62" TopLine="13"/>
       </Position25>
       <Position26>
         <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="45" Column="31" TopLine="1"/>
+        <Caret Line="59" Column="27" TopLine="15"/>
       </Position26>
       <Position27>
-        <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="57" Column="62" TopLine="13"/>
-      </Position27>
-      <Position28>
-        <Filename Value="utl\UMetadata.pas"/>
-        <Caret Line="59" Column="27" TopLine="15"/>
-      </Position28>
-      <Position29>
         <Filename Value="fmain.pas"/>
         <Caret Line="265" Column="102" TopLine="265"/>
-      </Position29>
-      <Position30>
+      </Position27>
+      <Position28>
         <Filename Value="fmain.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
+      </Position28>
+      <Position29>
+        <Filename Value="FConfigEditor.pas"/>
+        <Caret Line="59" Column="43" TopLine="75"/>
+      </Position29>
+      <Position30>
+        <Filename Value="FConfigEditor.pas"/>
+        <Caret Line="111" Column="39" TopLine="77"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

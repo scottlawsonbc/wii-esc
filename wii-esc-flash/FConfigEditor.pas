@@ -15,6 +15,7 @@ type
     Button1: TButton;
     Button2: TButton;
     CmbBraking: TCheckBox;
+    CmbStickCal: TCheckBox;
     CmbTimingAdv: TComboBox;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
@@ -57,6 +58,7 @@ type
      rcp_deadband_us: Byte;
      braking: Byte;
      timing_adv: Shortint;
+     stick_cal_dis: Byte;
   end;
   TEEPROMLayout = packed record
     __ver_magic: Byte;
@@ -92,6 +94,7 @@ begin
     CmbBraking.Checked := braking <> 0;
     if (timing_adv < 0) or (timing_adv > 3) then timing_adv := 0;
     CmbTimingAdv.ItemIndex := timing_adv;
+    CmbStickCal.Checked := stick_cal_dis = 0;
   end;
 end;
 
@@ -107,6 +110,7 @@ begin
     rcp_deadband_us := EdtRcpDB.Value;
     braking := Byte(CmbBraking.Checked);
     timing_adv := CmbTimingAdv.ItemIndex;
+    stick_cal_dis := Byte(not CmbStickCal.Checked);
   end;
 end;
 
