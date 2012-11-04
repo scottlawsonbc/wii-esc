@@ -4,7 +4,7 @@
     <PathDelim Value="\"/>
     <Version Value="9"/>
     <BuildModes Active="Default"/>
-    <Units Count="38">
+    <Units Count="11">
       <Unit0>
         <Filename Value="wii_esc_flash.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -12,7 +12,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="34" Y="7"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="275"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit0>
       <Unit1>
@@ -22,15 +22,17 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="569"/>
-        <CursorPos X="58" Y="585"/>
-        <UsageCount Value="89"/>
+        <CursorPos X="91" Y="604"/>
+        <UsageCount Value="275"/>
         <Bookmarks Count="1">
           <Item0 X="60" Y="248" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit1>
       <Unit2>
@@ -41,7 +43,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="46"/>
         <CursorPos X="11" Y="75"/>
-        <UsageCount Value="85"/>
+        <UsageCount Value="271"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit2>
@@ -53,7 +55,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="15"/>
         <CursorPos X="60" Y="59"/>
-        <UsageCount Value="84"/>
+        <UsageCount Value="270"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit3>
@@ -64,13 +66,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="FConfigEditor"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="78"/>
-        <CursorPos X="31" Y="113"/>
-        <UsageCount Value="63"/>
+        <TopLine Value="68"/>
+        <CursorPos X="48" Y="79"/>
+        <UsageCount Value="249"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit4>
       <Unit5>
@@ -79,7 +81,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="115"/>
         <CursorPos X="19" Y="115"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="23"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit5>
       <Unit6>
@@ -88,266 +90,45 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="17" Y="11"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit6>
       <Unit7>
-        <Filename Value="F:\FPC\fpc\2.4.3\Source\packages\fcl-process\src\process.pp"/>
-        <UnitName Value="process"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="236"/>
-        <CursorPos X="133" Y="115"/>
-        <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit7>
-      <Unit8>
-        <Filename Value="F:\FPC\fpc\2.4.3\Source\rtl\objpas\classes\classesh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="281"/>
-        <CursorPos X="52" Y="110"/>
-        <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit8>
-      <Unit9>
-        <Filename Value="F:\FPC\vgscene\vg_scene.pas"/>
-        <UnitName Value="vg_scene"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="17996"/>
-        <CursorPos X="81" Y="18001"/>
-        <UsageCount Value="8"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit9>
-      <Unit10>
-        <Filename Value="payload.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit10>
-      <Unit11>
-        <Filename Value="F:\FPC\fpc\2.4.3\Source\rtl\win32\classes.pp"/>
-        <UnitName Value="Classes"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit11>
-      <Unit12>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\packages\fcl-process\src\process.pp"/>
-        <UnitName Value="process"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="33"/>
-        <CursorPos X="15" Y="54"/>
-        <UsageCount Value="13"/>
-      </Unit12>
-      <Unit13>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\objpas\classes\classesh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1882"/>
-        <CursorPos X="15" Y="1903"/>
-        <UsageCount Value="15"/>
-      </Unit13>
-      <Unit14>
-        <Filename Value="D:\lazarus\lcl\lresources.pp"/>
-        <UnitName Value="LResources"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="5250"/>
-        <CursorPos X="33" Y="5253"/>
-        <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit14>
-      <Unit15>
-        <Filename Value="D:\lazarus\fpc\2.6.0\source\rtl\objpas\sysutils\sysutilh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="223"/>
-        <CursorPos X="3" Y="251"/>
-        <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit15>
-      <Unit16>
-        <Filename Value="D:\lazarus\fpc\2.6.0\source\rtl\win64\system.pp"/>
-        <UnitName Value="System"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="10"/>
-        <CursorPos X="2" Y="38"/>
-        <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit16>
-      <Unit17>
-        <Filename Value="D:\lazarus\lcl\dialogs.pp"/>
-        <UnitName Value="Dialogs"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="14"/>
-        <CursorPos X="38" Y="38"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit17>
-      <Unit18>
-        <Filename Value="D:\lazarus\lcl\propertystorage.pas"/>
-        <UnitName Value="PropertyStorage"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="71"/>
-        <CursorPos X="15" Y="98"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit18>
-      <Unit19>
-        <Filename Value="D:\lazarus\lcl\inipropstorage.pas"/>
-        <UnitName Value="IniPropStorage"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="244"/>
-        <CursorPos X="76" Y="250"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit19>
-      <Unit20>
-        <Filename Value="D:\lazarus\fpc\2.6.0\source\rtl\objpas\sysutils\osutilsh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="32" Y="23"/>
-        <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit20>
-      <Unit21>
-        <Filename Value="D:\lazarus\fpc\2.6.0\source\rtl\objpas\sysutils\osutil.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="83"/>
-        <CursorPos X="10" Y="109"/>
-        <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit21>
-      <Unit22>
-        <Filename Value="D:\lazarus\fpc\2.6.0\source\rtl\win\sysutils.pp"/>
-        <UnitName Value="sysutils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="967"/>
-        <CursorPos X="3" Y="972"/>
-        <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit22>
-      <Unit23>
         <Filename Value="D:\lazarus\fpc\2.6.0\source\packages\fcl-process\src\process.pp"/>
         <UnitName Value="process"/>
         <WindowIndex Value="0"/>
         <TopLine Value="103"/>
         <CursorPos X="14" Y="129"/>
-        <UsageCount Value="22"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit23>
-      <Unit24>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\objpas\classes\streams.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="795"/>
-        <CursorPos X="3" Y="815"/>
-        <UsageCount Value="11"/>
-      </Unit24>
-      <Unit25>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\win\wininc\func.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="954"/>
-        <CursorPos X="34" Y="975"/>
-        <UsageCount Value="13"/>
-      </Unit25>
-      <Unit26>
+        <UsageCount Value="3"/>
+      </Unit7>
+      <Unit8>
         <Filename Value="D:\lazarus\fpc\2.6.0\source\packages\fcl-process\src\pipes.pp"/>
         <UnitName Value="Pipes"/>
         <WindowIndex Value="0"/>
         <TopLine Value="5"/>
         <CursorPos X="33" Y="42"/>
-        <UsageCount Value="22"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit26>
-      <Unit27>
+        <UsageCount Value="3"/>
+      </Unit8>
+      <Unit9>
         <Filename Value="D:\lazarus\lcl\stdctrls.pp"/>
         <UnitName Value="StdCtrls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="708"/>
         <CursorPos X="15" Y="734"/>
-        <UsageCount Value="21"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit27>
-      <Unit28>
+        <UsageCount Value="2"/>
+      </Unit9>
+      <Unit10>
         <Filename Value="D:\lazarus\lcl\include\customedit.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="127"/>
         <CursorPos X="3" Y="139"/>
-        <UsageCount Value="21"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit28>
-      <Unit29>
-        <Filename Value="E:\lazarus\components\synedit\synmemo.pas"/>
-        <UnitName Value="SynMemo"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="49"/>
-        <CursorPos X="15" Y="70"/>
-        <UsageCount Value="14"/>
-      </Unit29>
-      <Unit30>
-        <Filename Value="E:\lazarus\components\synedit\synedit.pp"/>
-        <UnitName Value="SynEdit"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1703"/>
-        <CursorPos X="18" Y="1739"/>
-        <UsageCount Value="14"/>
-      </Unit30>
-      <Unit31>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\win\wininc\struct.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="196"/>
-        <CursorPos X="6" Y="217"/>
-        <UsageCount Value="14"/>
-      </Unit31>
-      <Unit32>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\packages\fcl-process\src\win\process.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="284"/>
-        <CursorPos X="18" Y="306"/>
-        <UsageCount Value="13"/>
-      </Unit32>
-      <Unit33>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\win\wininc\base.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="33"/>
-        <CursorPos X="6" Y="54"/>
-        <UsageCount Value="13"/>
-      </Unit33>
-      <Unit34>
-        <Filename Value="E:\lazarus\lcl\asyncprocess.pp"/>
-        <UnitName Value="AsyncProcess"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="16"/>
-        <CursorPos X="3" Y="37"/>
-        <UsageCount Value="13"/>
-      </Unit34>
-      <Unit35>
-        <Filename Value="E:\lazarus\lcl\utf8process.pp"/>
-        <UnitName Value="UTF8Process"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="33"/>
-        <CursorPos X="3" Y="36"/>
-        <UsageCount Value="13"/>
-      </Unit35>
-      <Unit36>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\win\wininc\defines.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1309"/>
-        <CursorPos X="6" Y="1330"/>
-        <UsageCount Value="12"/>
-      </Unit36>
-      <Unit37>
-        <Filename Value="E:\lazarus\fpc\2.6.0\source\rtl\inc\systemh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="978"/>
-        <CursorPos X="22" Y="999"/>
-        <UsageCount Value="12"/>
-      </Unit37>
+        <UsageCount Value="2"/>
+      </Unit10>
     </Units>
     <General>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="utl\UMetadata.pas"/>
         <Caret Line="494" Column="87" TopLine="450"/>
@@ -462,12 +243,8 @@
       </Position28>
       <Position29>
         <Filename Value="FConfigEditor.pas"/>
-        <Caret Line="59" Column="43" TopLine="75"/>
-      </Position29>
-      <Position30>
-        <Filename Value="FConfigEditor.pas"/>
         <Caret Line="111" Column="39" TopLine="77"/>
-      </Position30>
+      </Position29>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>
