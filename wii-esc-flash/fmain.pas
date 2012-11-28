@@ -15,8 +15,15 @@ type
     ActKillProgrammer: TAction;
     ActionList1: TActionList;
     ActBackup: TFileSaveAs;
+    BtnFuseInfo: TSpeedButton;
     BtnFirmwareWarn: TSpeedButton;
     ActSaveConfiguration: TFileSaveAs;
+    BtnFirmwareWarn1: TSpeedButton;
+    BtnFlashFuse: TButton;
+    BtnLoadHFuse: TButton;
+    CmbHFuse: TComboBox;
+    GrpFuses: TGroupBox;
+    Label7: TLabel;
     Programmer: TAsyncProcess;
     BtnBackup: TButton;
     BtnLoadFirmware: TButton;
@@ -61,6 +68,8 @@ type
     procedure ActSaveFirmwareAccept(Sender: TObject);
     procedure BtnFirmwareWarnClick(Sender: TObject);
     procedure BtnFlashEEPROMClick(Sender: TObject);
+    procedure BtnFuseInfoClick(Sender: TObject);
+    procedure BtnLoadHFuseClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure ProgrammerReadData(Sender: TObject);
     procedure ProgrammerTerminate(Sender: TObject);
@@ -84,11 +93,13 @@ type
     FWorkingPath: String;
     FHomePath: String;
     FFirmware: TMemoryStream;
+    FHFuse: TMemoryStream;
     FConfiguration: TMemoryStream;
     FEEPROM: TMemoryStream;
     procedure AvrDudeReadConsole;
     function GetCurrentConfiguration: TMetadataConfiguration;
     function GetCurrentFirmware: TMetadataFirmware;
+    function GetCurrentHFuse: TMetadataHFuse;
     function GetCurrentProgrammer: TMetadataProgrammer;
     procedure LoadConfiguration(AConfiguration: TMetadataConfiguration); overload;
     procedure LoadConfiguration(const AFileName: String); overload;
@@ -97,6 +108,8 @@ type
     procedure LoadFirmware(AFirmware: TMetadataFirmware); overload;
     procedure LoadFirmware(const AFileName: String); overload;
     procedure SaveFirmware(const AFileName: String); overload;
+    procedure LoadHFuse(AFuse: TMetadataHFuse); overload;
+    procedure LoadHFuse(const AFileName: String); overload;
     procedure LogMessage(const S: String);
     procedure LogRaw(const S: String);
     procedure ObjToControls;
@@ -110,6 +123,7 @@ type
     property CurrentProgrammer: TMetadataProgrammer read GetCurrentProgrammer;
     property CurrentFirmware: TMetadataFirmware read GetCurrentFirmware;
     property CurrentConfiguration: TMetadataConfiguration read GetCurrentConfiguration;
+    property CurrentHFuse: TMetadataHFuse read GetCurrentHFuse;
   end;
 
 var
@@ -164,6 +178,7 @@ begin
   FFirmware := TMemoryStream.Create;
   FEEPROM := TMemoryStream.Create;
   FConfiguration := TMemoryStream.Create;
+  FHFuse := TMemoryStream.Create;
   FWorkingPath := GetTempDir(False) + 'wii_esc_flash_tool' + DirectorySeparator;
   FHomePath := GetAppConfigDir(False);
   ForceDirectories(FWorkingPath);
@@ -179,6 +194,7 @@ begin
   FFirmware.Free;
   FEEPROM.Free;
   FConfiguration.Free;
+  FHFuse.Free;
   DeleteDirectory(FWorkingPath, False);
 end;
 
@@ -308,6 +324,27 @@ begin
   StartProgrammer(CurrentProgrammer.CmdLine, CurrentProgrammer.PgmWriteEEPROMCmd);
 end;
 
+procedure TFrmMain.BtnFuseInfoClick(Sender: TObject);
+begin
+  if Assigned(CurrentHFuse) then
+    MessageDlg(rsAdditionalIn, CurrentHFuse.Description, mtInformation, [mbOK], 0);
+end;
+
+procedure TFrmMain.BtnLoadHFuseClick(Sender: TObject);
+begin
+  if Assigned(CurrentHFuse) and (CurrentFirmware.URL <> '') then
+  try
+    Screen.Cursor := crHourGlass;
+    LogMessage(Format(rsDownloadingFileS, [ExtractFileName(CurrentHFuse.URL)]));
+    LoadHFuse(CurrentHFuse);
+    LogMessage(Format(rs0nByteSDownloaded, [Double(FHFuse.Size)]));
+    LogMessage('');
+  finally
+    Screen.Cursor := crDefault;
+  end;
+  UpdateControls;
+end;
+
 procedure TFrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   if Programmer.Running then
@@ -378,6 +415,13 @@ begin
     Result := TMetadataFirmware(CmbTarget.Items.Objects[CmbTarget.ItemIndex]);
 end;
 
+function TFrmMain.GetCurrentHFuse: TMetadataHFuse;
+begin
+  Result := nil;
+  if (CmbHFuse.ItemIndex >= 0) then
+    Result := TMetadataHFuse(CmbHFuse.Items.Objects[CmbHFuse.ItemIndex]);
+end;
+
 function TFrmMain.GetCurrentProgrammer: TMetadataProgrammer;
 begin
   Result := nil;
@@ -397,9 +441,11 @@ begin
   FMetadata.GetProgrammers(CmbPgmType.Items);
   FMetadata.GetFirmwares(CmbTarget.Items);
   FMetadata.GetConfigurations(CmbConfigurations.Items);
+  FMetadata.GetFuses(CmbHFuse.Items);
   if (CmbPgmType.Items.Count > 0) then CmbPgmType.ItemIndex := 0;
   if (CmbTarget.Items.Count > 0) then CmbTarget.ItemIndex := 0;
   if (CmbConfigurations.Items.Count > 0) then CmbConfigurations.ItemIndex := 0;
+  if (CmbHFuse.Items.Count > 0) then CmbHFuse.ItemIndex := 0;
   Stb.Panels[0].Text := FMetadata.Version;
 end;
 
@@ -410,9 +456,12 @@ begin
   CmbPorts.Enabled := (CmbPgmType.ItemIndex >= 0) and not FBusy;
   CmbBaud.Enabled := (CmbBaud.Items.Count > 0) and not FBusy;
   CmbConfigurations.Enabled := (CmbConfigurations.Items.Count > 0) and not FBusy;
+  CmbHFuse.Enabled := (CmbHFuse.Items.Count > 0) and not FBusy;
   BtnLoadFirmware.Enabled := Assigned(CurrentFirmware) and not FBusy;
   BtnFlashFirmware.Enabled := (FFirmware.Size > 0) and not FBusy;
   BtnFirmwareInfo.Enabled := Assigned(CurrentFirmware);
+  BtnFuseInfo.Enabled := Assigned(CurrentHFuse);
+  BtnLoadHFuse.Enabled := Assigned(CurrentHFuse) and not FBusy;
   BtnLoadConfiguration.Enabled := Assigned(CurrentConfiguration) and not FBusy;
   BtnConfigurationInfo.Enabled := Assigned(CurrentConfiguration);
   BtnFlashEEPROM.Enabled := (FEEPROM.Size > 0) and not FBusy;
@@ -646,6 +695,25 @@ begin
   LogMessage(Format(rsSavingFileS, [AFileName]));
   FFirmware.SaveToFile(AFileName);
   LogMessage(Format(rs0nByteSSaved, [Double(FileSize(AFileName))]));
+end;
+
+procedure TFrmMain.LoadHFuse(AFuse: TMetadataHFuse);
+begin
+  FHFuse.Clear;;
+  with TFPHTTPClient.Create(nil) do
+  try
+    Get(AFuse.URL, FHFuse);
+  finally
+    Free;
+  end;
+end;
+
+procedure TFrmMain.LoadHFuse(const AFileName: String);
+begin
+  LogMessage(Format(rsLoadingFileS, [AFileName]));
+  FHFuse.Clear;
+  FHFuse.LoadFromFile(AFileName);
+  LogMessage(Format(rs0nByteSLoaded, [Double(FHFuse.Size)]));
 end;
 
 procedure TFrmMain.LoadConfiguration(const AFileName: String);

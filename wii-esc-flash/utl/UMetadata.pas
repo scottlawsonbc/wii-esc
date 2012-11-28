@@ -85,6 +85,30 @@ type
     property WarnURL: String read FWarnURL write SetWarnURL;
   end;
 
+  { TMetadataHFuse }
+
+  TMetadataHFuse = class(TMetadataBase)
+  private
+    FDescription: String;
+    FInfoURL: String;
+    FName: String;
+    FURL: String;
+    FWarnURL: String;
+    procedure SetDescription(AValue: String);
+    procedure SetInfoURL(AValue: String);
+    procedure SetName(AValue: String);
+    procedure SetURL(AValue: String);
+    procedure SetWarnURL(AValue: String);
+  protected
+    procedure LoadFromIni(Ini: TIniFile; const ASection: String); override;
+  published
+    property Name: String read FName write SetName;
+    property Description: String read FDescription write SetDescription;
+    property URL: String read FURL write SetURL;
+    property InfoURL: String read FInfoURL write SetInfoURL;
+    property WarnURL: String read FWarnURL write SetWarnURL;
+  end;
+
   { TMetadataConfiguration }
 
   TMetadataConfiguration = class(TMetadataBase)
@@ -117,6 +141,7 @@ type
     FProgrammers: TList;
     FFirmwares: TList;
     FConfigurations: TList;
+    FFuses: TList;
     FVersion: String;
     procedure SetMetadataVersion(AValue: integer);
     procedure SetPgmBackupCmd(AValue: String);
@@ -136,6 +161,7 @@ type
     procedure GetProgrammers(SL: TStrings);
     procedure GetFirmwares(SL: TStrings);
     procedure GetConfigurations(SL: TStrings);
+    procedure GetFuses(SL: TStrings);
   published
     property MetadataVersion: integer read FMetadataVersion write SetMetadataVersion;
     property Version: String read FVersion write SetVersion;
@@ -165,6 +191,51 @@ begin
     end;
   finally
     SL.Free;
+  end;
+end;
+
+{ TMetadataHFuse }
+
+procedure TMetadataHFuse.SetDescription(AValue: String);
+begin
+  if FDescription=AValue then Exit;
+  FDescription:=AValue;
+end;
+
+procedure TMetadataHFuse.SetInfoURL(AValue: String);
+begin
+  if FInfoURL=AValue then Exit;
+  FInfoURL:=AValue;
+end;
+
+procedure TMetadataHFuse.SetName(AValue: String);
+begin
+  if FName=AValue then Exit;
+  FName:=AValue;
+end;
+
+procedure TMetadataHFuse.SetURL(AValue: String);
+begin
+  if FURL=AValue then Exit;
+  FURL:=AValue;
+end;
+
+procedure TMetadataHFuse.SetWarnURL(AValue: String);
+begin
+  if FWarnURL=AValue then Exit;
+  FWarnURL:=AValue;
+end;
+
+procedure TMetadataHFuse.LoadFromIni(Ini: TIniFile; const ASection: String);
+begin
+  inherited LoadFromIni(Ini, ASection);
+  with Ini do
+  begin
+    FName := ReadString(ASection, 'Name', ASection);
+    FURL := ReadString(ASection, 'URL', '');
+    FInfoURL := ReadString(ASection, 'Info', '');
+    FDescription := _ReadString(Ini, ASection, 'Description', '');
+    FWarnURL := ReadString(ASection, 'Warning', '');
   end;
 end;
 
@@ -341,6 +412,7 @@ begin
   FProgrammers := TList.Create;
   FFirmwares := TList.Create;
   FConfigurations := TList.Create;
+  FFuses := TList.Create;
 end;
 
 destructor TMetadata.Destroy;
@@ -369,6 +441,12 @@ begin
     Clear;
   end;
   with FConfigurations do
+  begin
+    for i := 0 to Count - 1 do
+      TObject(Items[i]).Free;
+    Clear;
+  end;
+  with FFuses do
   begin
     for i := 0 to Count - 1 do
       TObject(Items[i]).Free;
@@ -430,6 +508,7 @@ var
   lProg: TMetadataProgrammer;
   lFirm: TMetadataFirmware;
   lConf: TMetadataConfiguration;
+  lFuse: TMetadataHFuse;
 begin
   inherited;
   with Ini do
@@ -466,6 +545,13 @@ begin
       FConfigurations.Add(lConf);
       lConf.LoadFromIni(Ini, Strings[i]);
     end;
+    CommaText := Ini.ReadString(ASection, 'FuseSettings', '');
+    for i := 0 to Count - 1 do
+    begin
+      lFuse := TMetadataHFuse.Create;
+      FFuses.Add(lFuse);
+      lFuse.LoadFromIni(Ini, Strings[i]);
+    end;
   finally
     Free;
   end;
@@ -501,6 +587,15 @@ begin
   SL.Clear;
   for i := 0 to FConfigurations.Count - 1 do
     SL.AddObject(TMetadataConfiguration(FConfigurations[i]).Name, FConfigurations[i]);
+end;
+
+procedure TMetadata.GetFuses(SL: TStrings);
+var
+  i: integer;
+begin
+  SL.Clear;
+  for i := 0 to FFuses.Count - 1 do
+    SL.AddObject(TMetadataHFuse(FFuses[i]).Name, FFuses[i]);
 end;
 
 
