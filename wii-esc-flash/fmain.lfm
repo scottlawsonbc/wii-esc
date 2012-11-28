@@ -322,7 +322,7 @@ object FrmMain: TFrmMain
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
-    TabOrder = 2
+    TabOrder = 3
     object Label5: TLabel
       Left = 6
       Height = 14
@@ -461,7 +461,7 @@ object FrmMain: TFrmMain
     Font.Quality = fqDraft
     ParentColor = False
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 5
     Gutter.Width = 4
     Gutter.MouseActions = <>
     HideSelection = True
@@ -913,7 +913,7 @@ object FrmMain: TFrmMain
     Caption = 'Fuses'
     ClientHeight = 70
     ClientWidth = 439
-    TabOrder = 5
+    TabOrder = 2
     object CmbHFuse: TComboBox
       Left = 6
       Height = 21
