@@ -467,7 +467,7 @@ begin
   BtnFlashFirmware.Enabled := (FFirmware.Size > 0) and not FBusy;
   BtnFirmwareInfo.Enabled := Assigned(CurrentFirmware);
   BtnFuseInfo.Enabled := Assigned(CurrentHFuse);
-  BtnFlashFuse.Enabled := (FHFuse.Size > 0) and not FBusy;
+  BtnFlashFuse.Enabled := (FHFuse.Size > 0) and (Trim(StringReplace(CurrentProgrammer.PgmWriteHFuseCmd, '"', '', [rfReplaceAll])) <> '') and not FBusy;
   BtnLoadHFuse.Enabled := Assigned(CurrentHFuse) and not FBusy;
   BtnLoadConfiguration.Enabled := Assigned(CurrentConfiguration) and not FBusy;
   BtnConfigurationInfo.Enabled := Assigned(CurrentConfiguration);
