@@ -38,12 +38,14 @@ type
     FPgmTestCmd: String;
     FPgmWriteEEPROMCmd: String;
     FPgmWriteFlashCmd: String;
+    FPgmWriteHFuseCmd: String;
     function GetPgmBackupCmd: String;
     function GetPgmReadEEPROMCmd: String;
     function GetPgmReadFlashCmd: String;
     function GetPgmTestCmd: String;
     function GetPgmWriteEEPROMCmd: String;
     function GetPgmWriteFlashCmd: String;
+    function GetPgmWriteHFuseCmd: String;
   protected
     procedure LoadFromIni(Ini: TIniFile; const ASection: String); override;
   public
@@ -59,6 +61,7 @@ type
     property PgmReadEEPROMCmd: String read GetPgmReadEEPROMCmd;
     property PgmBackupCmd: String read GetPgmBackupCmd;
     property PgmTestCmd: String read GetPgmTestCmd;
+    property PgmWriteHFuseCmd: String read GetPgmWriteHFuseCmd;
   end;
 
   { TMetadataFirmware }
@@ -138,6 +141,7 @@ type
     FPgmTestCmd: String;
     FPgmWriteEEPROMCmd: String;
     FPgmWriteFlashCmd: String;
+    FPgmWriteHFuseCmd: String;
     FProgrammers: TList;
     FFirmwares: TList;
     FConfigurations: TList;
@@ -330,6 +334,13 @@ begin
     Result := FMetadata.FPgmWriteFlashCmd;
 end;
 
+function TMetadataProgrammer.GetPgmWriteHFuseCmd: String;
+begin
+  Result := FPgmWriteHFuseCmd;
+  if (Result = '') then
+    Result := FMetadata.FPgmWriteHFuseCmd;
+end;
+
 
 procedure TMetadataProgrammer.LoadFromIni(Ini: TIniFile; const ASection: String);
 begin
@@ -345,6 +356,7 @@ begin
     FPgmReadEEPROMCmd := ReadString(ASection, 'PgmReadEEPROMCmd', '');
     FPgmBackupCmd := ReadString(ASection, 'PgmBackupCmd', '');
     FPgmTestCmd := ReadString(ASection, 'PgmTestCmd', '');
+    FPgmWriteHFuseCmd := ReadString(ASection, 'PgmWriteHFuseCmd', '');
   end;
 end;
 
@@ -521,6 +533,7 @@ begin
     FPgmReadEEPROMCmd := ReadString(ASection, 'PgmReadEEPROMCmd', '');
     FPgmBackupCmd := ReadString(ASection, 'PgmBackupCmd', '');
     FPgmTestCmd := ReadString(ASection, 'PgmTestCmd', '');
+    FPgmWriteHFuseCmd := ReadString(ASection, 'PgmWriteHFuseCmd', '');
   end;
   with TStringList.Create do
   try

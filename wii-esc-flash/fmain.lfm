@@ -92,8 +92,8 @@ object FrmMain: TFrmMain
   end
   object Stb: TStatusBar
     Left = 0
-    Height = 20
-    Top = 545
+    Height = 23
+    Top = 542
     Width = 460
     Panels = <    
       item
@@ -449,7 +449,7 @@ object FrmMain: TFrmMain
   inline MemLog: TSynMemo
     Cursor = crIBeam
     Left = 8
-    Height = 160
+    Height = 152
     Top = 384
     Width = 443
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -953,6 +953,7 @@ object FrmMain: TFrmMain
       Anchors = [akTop, akRight]
       Caption = 'Write'
       Enabled = False
+      OnClick = BtnFlashFuseClick
       TabOrder = 2
     end
     object BtnFuseInfo: TSpeedButton

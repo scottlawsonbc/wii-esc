@@ -68,6 +68,7 @@ type
     procedure ActSaveFirmwareAccept(Sender: TObject);
     procedure BtnFirmwareWarnClick(Sender: TObject);
     procedure BtnFlashEEPROMClick(Sender: TObject);
+    procedure BtnFlashFuseClick(Sender: TObject);
     procedure BtnFuseInfoClick(Sender: TObject);
     procedure BtnLoadHFuseClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -324,6 +325,11 @@ begin
   StartProgrammer(CurrentProgrammer.CmdLine, CurrentProgrammer.PgmWriteEEPROMCmd);
 end;
 
+procedure TFrmMain.BtnFlashFuseClick(Sender: TObject);
+begin
+  StartProgrammer(CurrentProgrammer.CmdLine, CurrentProgrammer.PgmWriteHFuseCmd);
+end;
+
 procedure TFrmMain.BtnFuseInfoClick(Sender: TObject);
 begin
   if Assigned(CurrentHFuse) then
@@ -461,6 +467,7 @@ begin
   BtnFlashFirmware.Enabled := (FFirmware.Size > 0) and not FBusy;
   BtnFirmwareInfo.Enabled := Assigned(CurrentFirmware);
   BtnFuseInfo.Enabled := Assigned(CurrentHFuse);
+  BtnFlashFuse.Enabled := (FHFuse.Size > 0) and not FBusy;
   BtnLoadHFuse.Enabled := Assigned(CurrentHFuse) and not FBusy;
   BtnLoadConfiguration.Enabled := Assigned(CurrentConfiguration) and not FBusy;
   BtnConfigurationInfo.Enabled := Assigned(CurrentConfiguration);
@@ -663,6 +670,11 @@ begin
     ConvertConfigurationToHex;
     FConfiguration.SaveToFile(FWorkingPath + '___tmp_out_eeprom_hex___.hex');
     CmdLine := StringReplace(CmdLine, '$(tmp_out_eeprom_hex)', '___tmp_out_eeprom_hex___.hex', [rfIgnoreCase, rfReplaceAll]);
+  end;
+  if (Pos('$(tmp_out_hfuse_hex)', CmdLine) > 0) then
+  begin
+    FHFuse.SaveToFile(FWorkingPath + '___tmp_out_hfuse_hex___.hf');
+    CmdLine := StringReplace(CmdLine, '$(tmp_out_hfuse_hex)', '___tmp_out_hfuse_hex___.hf', [rfIgnoreCase, rfReplaceAll]);
   end;
   CmdLine := StringReplace(CmdLine, '$(file)',        ActBackup.Dialog.FileName, [rfIgnoreCase, rfReplaceAll]);
   CmdLine := StringReplace(CmdLine, '$(file_no_ext)', ExtractFileNameWithoutExt(ActBackup.Dialog.FileName), [rfIgnoreCase, rfReplaceAll]);
