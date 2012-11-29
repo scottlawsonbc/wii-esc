@@ -1,13 +1,16 @@
 #summary Information about this project.
 
 = Introduction =
-The wii-esc firmware for brushless DC motor controllers written by D. Kayukov is a further development of the well known [http://home.versanet.de/~b-konze quax] firmware by B. Konze. It was started with the goal to increase the input resolution and optimize the response time for better flight stability of multi copters.
+The wii-esc firmware for sensorles brushless DC motor controllers written by D. Kayukov is a further development of the well known [http://home.versanet.de/~b-konze quax] firmware by B. Konze. It was started with the goal to increase the input resolution and optimize the response time for better flight stability of multi copters.
 Initial idea was to resolve couple of issues of original firmware (which looked insignificant at that time) and add some small features. This goal was archived with V 1 release at the end of the 2011. The main highlights:
  * Improved startup 
  * "Penalty" based non-linear zero crossing filer (which currently also used projects: RapidESC and BLHeli)
  * Complimentary PWM support
  * Sync recovery.
  * Good power linearity.
+
+= V2 =
+V2 started as prototype project for testing of overheads of the "prothothreads": C hackery library for implementing cooperative multi-tasking in restricted environment. Originally I was using spare ESC as an prototyping board to test idea generating PWM without any hardware, except "systick" timer. After couble of successfull tests, I have added commutation routines, then ZC detector and then, sudenlly, I had a pretty much working ESC firmware.. 
  
 = History =
 
