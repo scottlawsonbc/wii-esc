@@ -10,7 +10,7 @@
 ; even to an armed ESC, as long as the low end has not been calibrated
 ; or set to start at pulses shorter than the linker timing.
 ;
-; All transmissions have a leader of three 0xff bytes plus one 0-bit.
+; All transmissions have a leader of 23 1-bits followed by 1 0-bit.
 ; Bit encoding starts at the least significant bit and is 8 bits wide.
 ; 1-bits are encoded as 64.0us high, 72.8us low (135.8us total).
 ; 0-bits are encoded as 27.8us high, 34.5us low, 34.4us high, 37.9 low
@@ -36,7 +36,7 @@
 ; of using a lookup table. However, avrdude uses CMD_SPI_MULTI to get
 ; these, which is for direct SPI access. We have to catch this and fake
 ; the response. We respond to CMD_SIGN_ON with "AVRISP_2", which keeps
-; all messaes in the same format and with xor-checksums. We could say
+; all messages in the same format and with xor-checksums. We could say
 ; "AVRISP_MK2" and drop the message structure after sign-on, but then
 ; there is nothing to synchronize messages or do checksums.
 ;
@@ -154,7 +154,7 @@
 .endif
 
 ; THIRDBOOTSTART on the ATmega8 is 0xe00.
-; Fuses shold have BOOTSZ1 set, BOOTSZ0 unset, BOOTRST set.
+; Fuses should have BOOTSZ1 set, BOOTSZ0 unset, BOOTRST set.
 ; Last nibble of hfuse should be A or 2 to save EEPROM on chip erase.
 ; Do not set WTDON. Implementing support for it here is big/difficult.
 .equ BOOT_START = THIRDBOOTSTART
@@ -190,14 +190,14 @@ boot_rx_no_tx:	sbic	PIND, rcp_in
 boot_rx_time2:	in	r14, TIFR
 		sbrc	r14, TOV2
 boot_exit:	rjmp	FLASHEND + 1		; Low too long -- exit boot loader
-		sbis	PIND, rcp_in		; Loop whlle low
+		sbis	PIND, rcp_in		; Loop while low
 		rjmp	boot_rx_time2
 		out	TCNT2, r16
 		out	TIFR, r20		; Start measuring high time
 boot_rx_time3:	in	r14, TIFR
 		sbrc	r14, TOV2
 		rjmp	boot_rx_time		; High too long, start over
-		sbic	PIND, rcp_in		; Loop whlle high, waiting for low edge
+		sbic	PIND, rcp_in		; Loop while high, waiting for low edge
 		rjmp	boot_rx_time3
 		in	r3, TCNT2		; Save learned high time
 		out	TCNT2, r16
@@ -205,7 +205,7 @@ boot_rx_time3:	in	r14, TIFR
 boot_rx_time4:	in	r14, TIFR
 		sbrc	r14, TOV2
 		rjmp	FLASHEND + 1		; Low too long, exit boot loader
-		sbis	PIND, rcp_in		; Loop whlle low, waiting for high edge
+		sbis	PIND, rcp_in		; Loop while low, waiting for high edge
 		rjmp	boot_rx_time4
 		in	r2, TCNT2		; Save learned low time
 		mov	r0, r2
@@ -236,7 +236,7 @@ boot_rx0:	in	r14, TIFR
 		rjmp	FLASHEND + 1		; Low too long, exit boot loader
 		sbis	PIND, rcp_in
 		rjmp	boot_rx0
-		out	TCNT2, r8		; Count falling edges for 75% of one bit time
+		out	TCNT2, r8		; Count falling edges for 7/8th of one bit time
 		out	TIFR, r20
 boot_rx1:	in	r14, TIFR
 		sbrc	r14, TOV2
@@ -263,7 +263,7 @@ boot_rx4:	in	r14, TIFR
 
 boot_tx_bytes:
 		out	OCR2, r4		; Set OCF2 at quarter timing
-		ldi	r24, 24			; Leader is 24 1-bits, 1 0-bit
+		ldi	r24, 23			; Leader is 23 1-bits, 1 0-bit
 boot_tx_leader:
 		sbi	RCP_PORT, rcp_in	; Drive high
 		sbi	RCP_DDR, rcp_in
@@ -423,7 +423,7 @@ stk_rx:
 		cpi	r22, CMD_SIGN_ON
 		brne	scmd1			; Inverted tests for branch reach
 		ldi	r24, SIGNATURE_LENGTH + 3
-		std	Z+3, r24		; Messsage body size low
+		std	Z+3, r24		; Message body size low
 		ldi	r24, SIGNATURE_LENGTH
 		st	X+, r24			; Signature size
 		movw	YL, ZL
@@ -445,7 +445,7 @@ chksum1:	ld	r22, Z+
 		rjmp	stk_rx_restart
 scmd1:		cpi	r22, CMD_SPI_MULTI
 		brne	scmd2
-	; avrdude uses spi_multi spi passthrough mode to check fuse bytes,
+	; avrdude uses spi_multi spi pass-through mode to check fuse bytes,
 	; so we emulate this. Constants from the Arduino stk500v2 example
 	; boot loader.
 		mov	r23, r25		; Save NumTx in r23
@@ -454,7 +454,7 @@ scmd1:		cpi	r22, CMD_SPI_MULTI
 		std	Z+3, r24		; Message body size low
 		std	Z+2, r25		; Message body size high
 		sbiw	r24, 3			; Back to just byte count
-scmd_multi1:	st	X+, r16			; Fill return bufferwith zeroes
+scmd_multi1:	st	X+, r16			; Fill return buffer with zeroes
 		dec	r24
 		brne	scmd_multi1
 	; Check for signature probe
@@ -548,7 +548,7 @@ scmd_get_parameter:
 scmd_get_parameter_good:
 		st	X+, r24
 		ldi	r24, 3
-		std	Z+3, r24		; Messsage body size low
+		std	Z+3, r24		; Message body size low
 		rjmp	scmd_send_chksum
 
 scmd_read_flash:
