@@ -1,0 +1,16 @@
+#summary Using Bootloader with ESC.
+
+= Introduction =
+
+The bootloader is a small piece of software that can be flashed onto the ESC MCU. It allows you to upload firmware to the board without external ISP programmer. The Bootloaders used with ESC's usually communicates with host computer using single-wire communication protocol, which allows updating firmware, using only existing servo connector. 
+ 
+When you reset the ESC board, it runs the bootloader (if present). The bootloader then waits a few moments for commands or data to arrive from the the computer. Usually, this is a firmware that the bootloader writes to the flash memory on the ATmega8 chip. A few seconds later, the bootloader launches the newly-uploaded program. If no data arrives from the computer, the bootloader launches whatever program was last uploaded onto the chip. If the chip is still "virgin" the bootloader is the only program in memory and will start itself again.
+ 
+
+= Why are we using a bootloader? =
+
+The use of a bootloader allows us to avoid the use of external ISP  programmers. (Burning the bootloader onto the chip, however, requires one of these external programmers.) 
+
+= Not using a bootloader =
+
+To update firmware using bootloader, you need to supply power to the MCU. Without additional arrangements, it is only possible using main battery plug. On other hand, ISP programmers usually supply power to target MCU through ISP connector, which allows flashing without main battery
