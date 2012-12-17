@@ -16,12 +16,3 @@ These are the basic steps to update an ESC with the wii-esc firmware:
  # Choose the input method ([InputConfiguration Input Configuration])
  # Assemble the firmware ([FirmwareAssembling Firmware Assembling])
  # Flash the ESC ([FirmwareFlashing Firmware Flashing])
-
-
-== Source Tree ==
-
- * *./:* batch files for assembly
- * *./bin:* assembly output directory
- * *./core:* main source files
- * *./hw:* hardware configuration files
- * *./input:* input configuration files
