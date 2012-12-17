@@ -17,7 +17,31 @@ To update firmware using bootloader, you need to supply power to the MCU. Withou
 
 = Bootloader Activation =
 
-Normally, after reset or power-up ATmega8 MCU starts execution for zero address. Programming of the BOOTRST can change that. This fuse tells the chip to jump to the bootloader section (at higher address) after a reset or power up.
+Normally, after reset or power-up ATmega8 MCU starts execution for zero address. Programming of the BOOTRST can change that. This fuse tells the chip to jump to the bootloader section (at higher address) after a reset or power up. There are another 2 fuse bits, related to the bootloader: BOOTSZ0, BOOTSZ1.  Those 2 bits define  bootloader size (address to start). The usual value is 2kb bootloader, which means both bits should be programmed. (Start adress 0x0c00).
+
+= Bootloader types =
+
+There are 2 commonly used bootloaders used with ESC boards:
+
+== AvRootLoader ==
+
+Universal high speed bootloader for AVR microcontrollers. It uses simple 1-wire serial adapter with one resistor on Tx line.
+
+Main Site: http://www.mikrocontroller.net/topic/avr-bootloader-mit-verschluesselung
+Pre-compilled binary: http://wii-esc.googlecode.com/svn/release/_boot/ESCBL1.hex
+Protocol: Custom-binary
+
+
+== USB Linker ==
+
+This bootloader was created by Simon.K, author of the RapidESC firmware. It is designed to utilize of-the-shelf "Turnigy USB Linker"
+
+Main Site: https://github.com/sim-/tgy
+Pre-compilled binary: http://wii-esc.googlecode.com/svn/release/_boot/USBLinker.hex
+Protocol: STK500v2
+
+
+
 
 = Bootloader Interesting facts =
 
