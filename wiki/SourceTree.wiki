@@ -1,7 +1,9 @@
 #summary Project Structure
 
- * *./:* batch files for assembly
- * *./bin:* assembly output directory
- * *./core:* main source files
- * *./hw:* hardware configuration files
- * *./input:* input configuration files
+  * *./:* make file and Code::Blocks project
+  * *./bin:* binary output directory
+  * *./lib:* Cross-platform libraries 
+  * *./lib-avr:* AVR-specific libraries 
+  * *./obj:* Object files
+  * *./src:* Main sources
+  * *./src/hal:* HAL (board-specific definitions)
