@@ -23,7 +23,7 @@ Normally, after reset or power-up ATmega8 MCU starts execution for zero address.
 
 There are 2 commonly used bootloaders used with ESC boards:
 
-== AvRootLoader ==
+== AvrootLoader ==
 
 Universal high speed bootloader for AVR microcontrollers. It uses simple 1-wire serial adapter with one resistor on Tx line.
 
