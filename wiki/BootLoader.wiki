@@ -21,5 +21,5 @@ Normally, after reset or power-up ATmega8 MCU starts execution for zero address.
 
 = Bootloader Interesting facts =
 
-  *  Programming BOOTRST is actually safe even without flashing bootloader (in case user program is smaller than 6k). The MCU just NOP-saliging to the user program.
+  *  Programming BOOTRST is actually safe even without flashing bootloader (in case user program is smaller than 6k). The MCU just NOP-sliding to the user program.
   *  Flashing bootloader, but not setting BOOTRST may appear to be working. The MCU starts from 0, but because of clean flash it nop-sliding to the bootloader. But would stop working as soon, as you flashed actual firmware.
