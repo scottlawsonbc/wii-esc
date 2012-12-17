@@ -12,7 +12,5 @@ Although it's called wii-esc ([http://www.multiwii.com/ MultiWii] project), this
 These are the basic steps to update an ESC with the wii-esc firmware:
 
  # Identify the ESC ([SupportedEscs Supported ESCs])
- # Configure the hardware ([HardwareConfiguration Hardware Configuration])
- # Choose the input method ([InputConfiguration Input Configuration])
- # Assemble the firmware ([FirmwareAssembling Firmware Assembling])
  # Flash the ESC ([FirmwareFlashing Firmware Flashing])
+ # Configure firmware ([UserLevelConfig User Level Configuration])
