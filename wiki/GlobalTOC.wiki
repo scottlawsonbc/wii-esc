@@ -7,4 +7,4 @@
   * [GettingStarted Getting Started]
     * [SourceTree Project Structure] 
     * [FirmwareFlashing  Firmware Flashing]
-    ** [BootLoader Using Bootloader]
+      * [BootLoader Using Bootloader]
