@@ -219,6 +219,12 @@ init:	cli
 
 		ldi		cmdl, byte1(RamEnd)
 		xout	SPL, cmdl
+                
+                
+                ldi             cmdl, 255
+                xout            OSCCAL, cmdl 
+                
+                
 .ifdef SPH
 		ldi		cmdl, byte2(RamEnd)
 		xout	SPH, cmdl
