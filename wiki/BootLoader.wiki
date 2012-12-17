@@ -14,3 +14,12 @@ The use of a bootloader allows us to avoid the use of external ISP  programmers.
 = Not using a bootloader =
 
 To update firmware using bootloader, you need to supply power to the MCU. Without additional arrangements, it is only possible using main battery plug. On other hand, ISP programmers usually supply power to target MCU through ISP connector, which allows flashing without main battery
+
+= Bootloader Activation =
+
+Normally, after reset or power-up ATmega8 MCU starts execution for zero address. Programming of the BOOTRST can change that. This fuse tells the chip to jump to the bootloader section (at higher address) after a reset or power up.
+
+= Bootloader Interesting facts =
+
+* Programming BOOTRST is actually safe even without flashing bootloader (in case user program is smaller than 6k). The MCU just NOP-saliging to the user program.
+* Flashing bootloader, but not setting BOOTRST may appear to be working. The MCU starts from 0, but because of clean flash it nop-sliding to the bootloader. But would stop working as soon, as you flashed actual firmware.
