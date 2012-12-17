@@ -1,4 +1,4 @@
-#summary Using Bootloader with ESC.
+#summary Using Bootloader with ESC board.
 
 = Introduction =
 
