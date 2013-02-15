@@ -16,6 +16,7 @@ type
     Button2: TButton;
     CmbBraking: TCheckBox;
     CmbStickCal: TCheckBox;
+    CmbRev: TCheckBox;
     CmbTimingAdv: TComboBox;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
@@ -59,6 +60,7 @@ type
      braking: Byte;
      timing_adv: Shortint;
      stick_cal_dis: Byte;
+     rev: Byte;
   end;
   TEEPROMLayout = packed record
     __ver_magic: Byte;
@@ -95,6 +97,7 @@ begin
     if (timing_adv < 0) or (timing_adv > 3) then timing_adv := 0;
     CmbTimingAdv.ItemIndex := timing_adv;
     CmbStickCal.Checked := stick_cal_dis = 0;
+    CmbRev.Checked := rev <> 0;
   end;
 end;
 
@@ -111,6 +114,7 @@ begin
     braking := Byte(CmbBraking.Checked);
     timing_adv := CmbTimingAdv.ItemIndex;
     stick_cal_dis := Byte(not CmbStickCal.Checked);
+    rev := Byte(CmbRev.Checked);
   end;
 end;
 
