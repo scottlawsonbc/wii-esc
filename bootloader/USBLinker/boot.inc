@@ -159,7 +159,9 @@
 ; Fuses should have BOOTSZ1 set, BOOTSZ0 unset, BOOTRST set.
 ; Last nibble of hfuse should be A or 2 to save EEPROM on chip erase.
 ; Do not set WTDON. Implementing support for it here is big/difficult.
+.if !defined(BOOT_START)
 .equ BOOT_START = THIRDBOOTSTART
+.endif
 .org BOOT_START
 boot_reset:	ldi	ZL, high(RAMEND)	; Set up stack
 		ldi	ZH, low(RAMEND)
@@ -584,6 +586,7 @@ scmd_read_ee1:	rcall	boot_eeprom_rw		; Uses and increments byte address
 ; For chip erase, clear the flash before the boot loader and nuke the EEPROM.
 scmd_chip_erase:
 		rcall	boot_clear_flash	; Also clears r12:r13 for EEPROM address
+		nop
 		ldi	r24, low(EEPROMEND+1)
 		ldi	r25, high(EEPROMEND+1)
 		set
@@ -675,6 +678,26 @@ boot_clear_fl1:	sbiw	ZL, PAGESIZE
 		movw	r12, ZL			; Zero r12:r13 (for EEPROM address later)
 		movw	ZL, r14			; Restore Z
 		ret
+
+; Pad out the boot loader to work around avrdude verifying gaps
+		nop
+		nop
+		nop
+
+		nop
+		nop
+		nop
+		nop
+
+		nop
+		nop
+		nop
+		nop
+
+		nop
+		nop
+		nop
+		nop
 
 ; Keep these addresses within a page so that we can self-update.
 .org FLASHEND + 1 - 32
